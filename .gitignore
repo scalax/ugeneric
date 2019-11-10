@@ -1,0 +1,7 @@
+*target
+*/.idea
+/.idea
+/logs
+/sbt
+/sbt.bat
+/sbt-launch.jar
