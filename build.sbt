@@ -8,7 +8,8 @@ resolvers += Resolver.bintrayRepo("scalax", "asuna")
 
 libraryDependencies ++= Seq("org.scalax" %% "asuna-macros"      % "0.0.2-SNAP20191109.1")
 libraryDependencies ++= Seq("org.scalax" %% "asuna-scala-tuple" % "0.0.2-SNAP20191109.1")
-
+libraryDependencies ++= Seq("org.scalax" %% "asuna-scala-tuple" % "0.0.2-SNAP20191109.1")
+libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.3"
 val circeVersion = "0.12.2"
 
 val circeDependencies = ("io.circe" %% "circe-derivation" % "0.12.0-M7") +: Seq(
