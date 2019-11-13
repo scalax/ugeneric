@@ -1,8 +1,10 @@
 val currentScalaVersion = "2.13.0"
 val scala_2_12_Version  = "2.12.10"
 
-scalaVersion := currentScalaVersion
+scalaVersion := scala_2_12_Version
 crossScalaVersions := Seq(scala_2_12_Version, currentScalaVersion)
+
+transitiveClassifiers := Seq("sources")
 
 resolvers += Resolver.bintrayRepo("scalax", "asuna")
 
@@ -19,5 +21,5 @@ val circeDependencies = ("io.circe" %% "circe-derivation" % "0.12.0-M7") +: Seq(
 
 libraryDependencies ++= circeDependencies
 
-val scalaTestVersion    = "3.1.0-RC3"
+val scalaTestVersion = "3.1.0-RC3"
 libraryDependencies ++= Seq("org.scalatest" %% "scalatest" % scalaTestVersion)
