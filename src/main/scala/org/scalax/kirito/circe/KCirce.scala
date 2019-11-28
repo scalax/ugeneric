@@ -1,6 +1,6 @@
 package org.scalax.kirito.circe
 
-import asuna.macros.{AsunaGeneric, AsunaGetterGeneric, AsunaLabelledGeneric}
+import asuna.macros.single.{AsunaGeneric, AsunaGetterGeneric, AsunaLabelledGeneric}
 import asuna.{Application2, TupleTag}
 import io.circe.{CirceUtils, Encoder, Json, JsonObject}
 import org.scalax.kirito.circe.encoder.{JsonObjectAppender, JsonObjectContext}

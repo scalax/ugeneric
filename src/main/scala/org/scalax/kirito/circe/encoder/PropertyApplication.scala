@@ -3,7 +3,7 @@ package org.scalax.kirito.circe.encoder
 import java.util
 
 import asuna.{Application2, Context2}
-import asuna.macros.PropertyTag
+import asuna.macros.single.PropertyTag
 import io.circe.Json
 
 trait PropertyApplication[T] extends Application2[JsonObjectAppender, PropertyTag[T], T, String] {
