@@ -1,7 +1,8 @@
 package org.scalax.kirito.circe.encoder
 
 import asuna.{Application2, Context2}
-import asuna.macros.{ByNameImplicit, PropertyTag}
+import asuna.macros.ByNameImplicit
+import asuna.macros.single.PropertyTag
 import io.circe.{Encoder, Json}
 
 trait JsonObjectAppender[T, II] extends Any {
