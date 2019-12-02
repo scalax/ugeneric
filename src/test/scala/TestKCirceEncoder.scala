@@ -8,14 +8,19 @@ import org.scalax.kirito.circe.encoder.PropertyApplication
 import shapeless._
 import shapeless.tag._
 
-class TestKCirce extends AnyFunSpec with Matchers {
+class TestKCirceEncoder extends AnyFunSpec with Matchers {
+
   trait IntTag
+
   val IntTag = tag[IntTag]
 
   trait LongTag
+
   val LongTag = tag[LongTag]
 
   case class Test04(i1: String, i2: String, i3: Int @@ IntTag, i4: Long @@ LongTag)
+
+  case class Test04Compare(i1: String, i2: String, `被改过的 key：i3`: String, i4: String)
 
   implicit val longTagEncoder: Encoder[Long @@ LongTag] = Encoder.instance(s => Json.fromString("长整型值是：" + String.valueOf(s)))
 
@@ -27,7 +32,9 @@ class TestKCirce extends AnyFunSpec with Matchers {
   describe("A case class") {
     it("should encode to a json") {
       val test04 = Test04(i1 = "pro1", i2 = "pro2", i3 = IntTag(3), i4 = LongTag(4L))
-      println(test04.asJson.noSpaces)
+      val test04Compare = Test04Compare(i1 = "pro1", i2 = "pro2", `被改过的 key：i3` = "3", i4 = "长整型值是：4")
+      test04.asJson shouldEqual test04Compare.asJson
+      println(test04Compare.asJson)
     }
   }
 }
