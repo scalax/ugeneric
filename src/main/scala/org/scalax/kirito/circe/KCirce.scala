@@ -43,7 +43,7 @@ object KCirce {
     val name2              = cv2.names()
     val applicationEncoder = app.application(encoder.SealedContext[H])
     Encoder.AsObject.instance { o: H =>
-      JsonObject.fromIterable(applicationEncoder.p(o, name2, name1))
+      JsonObject.fromIterable(applicationEncoder.appendField(o, name2, name1))
     }
   }
 

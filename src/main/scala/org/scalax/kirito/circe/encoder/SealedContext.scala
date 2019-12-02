@@ -10,9 +10,9 @@ class SealedContext[H] extends Context2[SealedTraitSelector[H]#JsonEncoder] {
   ): SealedTraitSelector[H]#JsonEncoder[Z1, Z2] = {
     val con = SealedTraitSelector[H]
     new con.JsonEncoder[Z1, Z2] {
-      override def p(model: H, classTags: Z1, labelled: Z2): Option[(String, Json)] = {
-        val a = x.p(model, plus.takeHead1(classTags), plus.takeHead2(labelled))
-        a.orElse(y.p(model, plus.takeTail1(classTags), plus.takeTail2(labelled)))
+      override def appendField(model: H, classTags: Z1, labelled: Z2): Option[(String, Json)] = {
+        val a = x.appendField(model, plus.takeHead1(classTags), plus.takeHead2(labelled))
+        a.orElse(y.appendField(model, plus.takeTail1(classTags), plus.takeTail2(labelled)))
       }
     }
 
@@ -21,7 +21,7 @@ class SealedContext[H] extends Context2[SealedTraitSelector[H]#JsonEncoder] {
   override final val start: SealedTraitSelector[H]#JsonEncoder[AsunaTuple0, AsunaTuple0] = {
     val con = SealedTraitSelector[H]
     new con.JsonEncoder[AsunaTuple0, AsunaTuple0] {
-      override def p(model: H, classTags: AsunaTuple0, labelled: AsunaTuple0): Option[(String, Json)] = Option.empty
+      override def appendField(model: H, classTags: AsunaTuple0, labelled: AsunaTuple0): Option[(String, Json)] = Option.empty
     }
   }
 
