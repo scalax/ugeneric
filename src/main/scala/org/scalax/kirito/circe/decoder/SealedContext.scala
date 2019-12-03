@@ -10,13 +10,13 @@ class SealedContext[P] extends Context2[SealedTraitSelector[P]#JsonDecoder] {
   ): SealedTraitSelector[P]#JsonDecoder[Z1, Z2] = {
     val con = SealedTraitSelector[P]
     new con.JsonDecoder[Z1, Z2] {
-      override def to(name: Z1, toAbs: Z2): Decoder[P] = {
+      override def getValue(name: Z1, toAbs: Z2): Decoder[P] = {
         val a1       = p.takeHead1(name)
         val y1       = p.takeTail1(name)
         val a2       = p.takeHead2(toAbs)
         val y2       = p.takeTail2(toAbs)
-        val decoderX = x.to(a1, a2)
-        val decoderY = y.to(y1, y2)
+        val decoderX = x.getValue(a1, a2)
+        val decoderY = y.getValue(y1, y2)
         decoderX.or(decoderY)
       }
     }
@@ -26,7 +26,7 @@ class SealedContext[P] extends Context2[SealedTraitSelector[P]#JsonDecoder] {
   override def start: SealedTraitSelector[P]#JsonDecoder[AsunaTuple0, AsunaTuple0] = {
     val con = SealedTraitSelector[P]
     new con.JsonDecoder[AsunaTuple0, AsunaTuple0] {
-      override def to(name: AsunaTuple0, tran: AsunaTuple0): Decoder[P] = {
+      override def getValue(name: AsunaTuple0, tran: AsunaTuple0): Decoder[P] = {
         Decoder.failedWithMessage("Your sealed trait have no sub class")
       }
     }

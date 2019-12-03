@@ -22,7 +22,7 @@ object KCirce {
     cv1: AsunaLabelledGeneric[H, Na],
     cv2: AsunaGetterGeneric[H, Obj]
   ): Encoder.AsObject[H] = {
-    val names              = cv1.names
+    val names              = cv1.names()
     val applicationEncoder = app.application(JsonObjectContext)
     Encoder.AsObject.instance { o: H =>
       val linkedMap = new java.util.LinkedHashMap[String, Json]
@@ -49,12 +49,12 @@ object KCirce {
 
   def decodeCaseClass[T, R <: TupleTag, Model, Nam, DefVal](
     implicit ll: AsunaGeneric.Aux[T, R],
-    app: Application3[decoder.JsonDecoderPro, R, Model, Nam, DefVal],
+    app: Application3[decoder.DecodeContent, R, Model, Nam, DefVal],
     cv1: AsunaLabelledGeneric[T, Nam],
     cv3: AsunaSetterGeneric[T, Model],
     cv4: AsunaDefaultValueGeneric[T, DefVal]
   ): Decoder[T] = {
-    app.application(decoder.DecoderContext).to(cv1.names, cv4.defaultValues).map(mm => cv3.setter(mm))
+    app.application(decoder.DecodeContext).getValue(cv1.names, cv4.defaultValues).map(mm => cv3.setter(mm))
   }
 
   def decodeSealed[H, R <: TupleTag, Nam, Tran](
@@ -63,8 +63,8 @@ object KCirce {
     cv1: AsunaSealedLabelledGeneric[H, Nam],
     cv2: AsunaSealedToAbsGeneric[H, Tran]
   ): Decoder[H] = {
-    val names = cv1.names
-    app.application(decoder.SealedContext[H]).to(names, cv2.names)
+    val names = cv1.names()
+    app.application(decoder.SealedContext[H]).getValue(names, cv2.names)
   }
 
 }
