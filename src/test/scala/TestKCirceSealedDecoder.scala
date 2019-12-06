@@ -4,11 +4,7 @@ import io.circe.Decoder
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 import io.circe.syntax._
-import org.scalax.kirito.circe.decoder.DecodeCaseClassApplication
-import shapeless._
-import shapeless.tag._
 
-import scala.util.Try
 
 class TestKCirceSealedDecoder extends AnyFunSpec with Matchers {
 
