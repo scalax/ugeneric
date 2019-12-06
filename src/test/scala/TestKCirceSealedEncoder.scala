@@ -1,12 +1,9 @@
 package org.scalax.kirito.circe
 
-import io.circe.{Encoder, Json}
+import io.circe.Encoder
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 import io.circe.syntax._
-import org.scalax.kirito.circe.encoder.EncodeCaseClassApplication
-import shapeless._
-import shapeless.tag._
 
 class TestKCirceSealedEncoder extends AnyFunSpec with Matchers {
 
