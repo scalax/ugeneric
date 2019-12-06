@@ -3,12 +3,12 @@ package org.scalax.kirito.circe.decoder
 import asuna.{AsunaTuple0, Context2, Plus2}
 import io.circe.Decoder
 
-class SealedContext[P] extends Context2[SealedTraitSelector[P]#JsonDecoder] {
+class DecodeSealedContext[P] extends Context2[DecodeSealedTraitSelector[P]#JsonDecoder] {
 
-  override def append[X1, X2, Y1, Y2, Z1, Z2](x: SealedTraitSelector[P]#JsonDecoder[X1, X2], y: SealedTraitSelector[P]#JsonDecoder[Y1, Y2])(
+  override def append[X1, X2, Y1, Y2, Z1, Z2](x: DecodeSealedTraitSelector[P]#JsonDecoder[X1, X2], y: DecodeSealedTraitSelector[P]#JsonDecoder[Y1, Y2])(
     p: Plus2[X1, X2, Y1, Y2, Z1, Z2]
-  ): SealedTraitSelector[P]#JsonDecoder[Z1, Z2] = {
-    val con = SealedTraitSelector[P]
+  ): DecodeSealedTraitSelector[P]#JsonDecoder[Z1, Z2] = {
+    val con = DecodeSealedTraitSelector[P]
     new con.JsonDecoder[Z1, Z2] {
       override def getValue(name: Z1, toAbs: Z2): Decoder[P] = {
         val a1       = p.takeHead1(name)
@@ -23,8 +23,8 @@ class SealedContext[P] extends Context2[SealedTraitSelector[P]#JsonDecoder] {
 
   }
 
-  override def start: SealedTraitSelector[P]#JsonDecoder[AsunaTuple0, AsunaTuple0] = {
-    val con = SealedTraitSelector[P]
+  override def start: DecodeSealedTraitSelector[P]#JsonDecoder[AsunaTuple0, AsunaTuple0] = {
+    val con = DecodeSealedTraitSelector[P]
     new con.JsonDecoder[AsunaTuple0, AsunaTuple0] {
       override def getValue(name: AsunaTuple0, tran: AsunaTuple0): Decoder[P] = {
         Decoder.failedWithMessage("Your sealed trait have no sub class")
@@ -33,7 +33,7 @@ class SealedContext[P] extends Context2[SealedTraitSelector[P]#JsonDecoder] {
   }
 }
 
-object SealedContext {
-  val value    = new SealedContext[Any]
-  def apply[T] = value.asInstanceOf[SealedContext[T]]
+object DecodeSealedContext {
+  private val value                    = new DecodeSealedContext[Any]
+  def apply[T]: DecodeSealedContext[T] = value.asInstanceOf[DecodeSealedContext[T]]
 }
