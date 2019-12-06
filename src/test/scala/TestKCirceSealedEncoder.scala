@@ -10,34 +10,39 @@ import shapeless.tag._
 
 class TestKCirceSealedEncoder extends AnyFunSpec with Matchers {
 
-  trait IntTag
+  sealed trait ParentTrait
+  case class Test01(i1: String, i2: Int)  extends ParentTrait
+  case object Test02                      extends ParentTrait
+  case class Test03(i1: String, i2: Long) extends ParentTrait
 
-  val IntTag = tag[IntTag]
-
-  trait LongTag
-
-  val LongTag = tag[LongTag]
-
-  case class Test04(i1: String, i2: String, i3: Int @@ IntTag, i4: Long @@ LongTag)
-
-  case class Test04Compare(i1: String, i2: String, `被改过的 key：i3`: String, i4: String)
-
-  implicit val longTagEncoder: Encoder[Long @@ LongTag] = Encoder.instance(s => Json.fromString("长整型值是：" + String.valueOf(s)))
-
-  implicit val proImplicit: EncodeCaseClassApplication[Int @@ IntTag] =
-    new EncodeCaseClassApplication[Int @@ IntTag]((name, t) => ("被改过的 key：" + name, Json.fromString("value 是：" + String.valueOf(t))))
-
-  implicit val encoderTest04: Encoder[Test04] = KCirce.encodeCaseClass
+  val encodeParentTrait: Encoder[ParentTrait] = {
+    implicit val decodeTest01: Encoder[Test01]      = KCirce.encodeCaseClass
+    implicit val decodeTest02: Encoder[Test02.type] = KCirce.encodeCaseObject
+    implicit val decodeTest03: Encoder[Test03]      = KCirce.encodeCaseClass
+    KCirce.encodeSealed
+  }
 
   describe("A case class") {
     it("should encode to a json") {
-      val test04        = Test04(i1 = "pro1", i2 = "pro2", i3 = IntTag(3), i4 = LongTag(4L))
-      val test04Compare = Test04Compare(i1 = "pro1", i2 = "pro2", `被改过的 key：i3` = "value 是：3", i4 = "长整型值是：4")
-      val test04CompareJson = {
+      val test01: ParentTrait = Test01(i1 = "pro1", i2 = 2)
+      val test02: ParentTrait = Test02
+      val test03: ParentTrait = Test03(i1 = "pro1-test03", i2 = 4)
+
+      val test01Json = {
         import io.circe.generic.auto._
-        test04Compare.asJson
+        (test01: ParentTrait).asJson
       }
-      test04.asJson shouldEqual test04CompareJson
+      val test02Json = {
+        import io.circe.generic.auto._
+        (Test02: ParentTrait).asJson
+      }
+      val test03Json = {
+        import io.circe.generic.auto._
+        (test03: ParentTrait).asJson
+      }
+      test01.asJson(encodeParentTrait) shouldEqual test01Json
+      test02.asJson(encodeParentTrait) shouldEqual test02Json
+      test03.asJson(encodeParentTrait) shouldEqual test03Json
     }
   }
 }
