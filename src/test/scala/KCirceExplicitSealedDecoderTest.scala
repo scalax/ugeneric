@@ -25,9 +25,9 @@ package deImpl2 {
 class KCirceExplicitSealedDecoderTest extends AnyFunSpec with Matchers {
 
   val decodeParentTrait: Decoder[deImpl2.ParentTrait2] = {
-    implicit val decodeTest01: Decoder[deImpl2.Test01]       = KCirce.decodeCaseClass
+    implicit val decodeTest01: Decoder[deImpl2.Test01]       = KCirce.decodeCaseClassWithTable(EmptyTable.value)
     implicit val decodeTest02: Decoder[deImpl2.Test02.type]  = Decoder.instance(_ => Right(deImpl2.Test02))
-    implicit val decodeTest04: Decoder[deImpl2.ParentTest04] = KCirce.decodeCaseClass
+    implicit val decodeTest04: Decoder[deImpl2.ParentTest04] = KCirce.decodeCaseClassWithTable(EmptyTable.value)
     implicit val decodeTest03: DecodeSealedApplication[deImpl2.ParentTest03, deImpl2.ParentTrait2] = new DecodeSealedApplication(
       (name, cursor) => cursor.get("Test03")(decodeTest04).map(s => ParentTest03(s.i1, s.i2.toLong))
     )
