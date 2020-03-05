@@ -13,9 +13,9 @@ class TestKCirceSealedEncoder extends AnyFunSpec with Matchers {
   case class Test03(i1: String, i2: Long) extends ParentTrait
 
   val encodeParentTrait: Encoder[ParentTrait] = {
-    implicit val decodeTest01: Encoder[Test01]      = KCirce.encodeCaseClass
+    implicit val decodeTest01: Encoder[Test01]      = KCirce.encodeCaseClassWithTable(EmptyTable.value)
     implicit val decodeTest02: Encoder[Test02.type] = KCirce.encodeCaseObject
-    implicit val decodeTest03: Encoder[Test03]      = KCirce.encodeCaseClass
+    implicit val decodeTest03: Encoder[Test03]      = KCirce.encodeCaseClassWithTable(EmptyTable.value)
     KCirce.encodeSealed
   }
 

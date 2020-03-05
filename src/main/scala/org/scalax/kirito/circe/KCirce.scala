@@ -1,8 +1,8 @@
 package org.scalax.kirito.circe
 
+import asuna.macros.multiply.{AsunaMultiplyGeneric, AsunaMultiplyRepGeneric}
 import asuna.macros.single.{
   AsunaDefaultValueGeneric,
-  AsunaGeneric,
   AsunaGetterGeneric,
   AsunaLabelledGeneric,
   AsunaSealedClassGeneric,
@@ -11,23 +11,27 @@ import asuna.macros.single.{
   AsunaSealedToAbsGeneric,
   AsunaSetterGeneric
 }
-import asuna.{Application2, Application3, TupleTag}
-import io.circe.{CirceUtils, Decoder, Encoder, Json, JsonObject}
-import org.scalax.kirito.circe.encoder.{JsonObjectAppender, JsonObjectContext}
+import asuna.{Application2, Application3, Application4, TupleTag}
+import io.circe.{Decoder, Encoder, JsonObject}
+import org.scalax.kirito.circe.decoder.ValidatedDecoder
+import org.scalax.kirito.circe.encoder.{JsonObjectContent, JsonObjectContext}
+import cats.syntax.all._
 
 object KCirce {
-  final def encodeCaseClass[H, R <: TupleTag, Obj, Na](
-    implicit ll: AsunaGeneric.Aux[H, R],
-    app: Application2[JsonObjectAppender, R, Obj, Na],
-    cv1: AsunaLabelledGeneric[H, Na],
-    cv2: AsunaGetterGeneric[H, Obj]
-  ): Encoder.AsObject[H] = {
+
+  def encodeCaseClassWithTable[Table, Model, Rep, R <: TupleTag, Obj, Name](table: Table)(
+    implicit ll: AsunaMultiplyGeneric.Aux[Table, Model, R],
+    app: Application3[JsonObjectContent, R, Obj, Name, Rep],
+    repGeneric: AsunaMultiplyRepGeneric[Table, Model, Rep],
+    cv1: AsunaLabelledGeneric[Model, Name],
+    cv2: AsunaGetterGeneric[Model, Obj]
+  ): Encoder.AsObject[Model] = {
     val names              = cv1.names()
     val applicationEncoder = app.application(JsonObjectContext)
-    Encoder.AsObject.instance { o: H =>
-      val linkedMap = new java.util.LinkedHashMap[String, Json]
-      applicationEncoder.appendField(cv2.getter(o), names, linkedMap)
-      CirceUtils.jsonObjectFromMap(linkedMap)
+    val application2       = applicationEncoder.appendField(names, repGeneric.rep(table))
+    Encoder.AsObject.instance { o: Model =>
+      val jsonList = application2.appendField(cv2.getter(o), List.empty)
+      JsonObject.fromIterable(jsonList)
     }
   }
 
@@ -47,14 +51,34 @@ object KCirce {
     }
   }
 
-  def decodeCaseClass[T, R <: TupleTag, Model, Nam, DefVal](
-    implicit ll: AsunaGeneric.Aux[T, R],
-    app: Application3[decoder.DecodeContent, R, Model, Nam, DefVal],
-    cv1: AsunaLabelledGeneric[T, Nam],
-    cv3: AsunaSetterGeneric[T, Model],
-    cv4: AsunaDefaultValueGeneric[T, DefVal]
-  ): Decoder[T] = {
-    app.application(decoder.DecodeContext).getValue(cv1.names, cv4.defaultValues).map(mm => cv3.setter(mm))
+  def decodeCaseClassWithTable[Table, Model, R <: TupleTag, Prop, Nam, DefVal, Rep](table: Table)(
+    implicit ll: AsunaMultiplyGeneric.Aux[Table, Model, R],
+    app: Application4[decoder.DecodeContent, R, Prop, Nam, DefVal, Rep],
+    repGeneric: AsunaMultiplyRepGeneric[Table, Model, Rep],
+    cv1: AsunaLabelledGeneric[Model, Nam],
+    cv3: AsunaSetterGeneric[Model, Prop],
+    cv4: AsunaDefaultValueGeneric[Model, DefVal]
+  ): Decoder[Model] = {
+    app.application(decoder.DecodeContext).getValue(cv1.names, cv4.defaultValues, repGeneric.rep(table)).map(mm => cv3.setter(mm))
+  }
+
+  /*def decodeCaseClassWithTable11[Model] = new {
+    def ii[R <: TupleTag, Table](table: Table)(implicit ll: AsunaMultiplyGeneric.Aux[Table, Model, R]) = new {
+      def mi[Prop, Nam, DefVal, Rep](implicit i: Application4[decoder.DecodeContent, R, Prop, Nam, DefVal, Rep]) = new {
+        def imoim(implicit cv3: AsunaSetterGeneric[Model, Prop]) = cv3
+      }
+    }
+  }*/
+
+  def validatedDecodeCaseClassWithTable[Table, Model, R <: TupleTag, Prop, Nam, DefVal, Rep](table: Table)(
+    implicit ll: AsunaMultiplyGeneric.Aux[Table, Model, R],
+    app: Application4[decoder.ValidatedDecodeContent, R, Prop, Nam, DefVal, Rep],
+    repGeneric: AsunaMultiplyRepGeneric[Table, Model, Rep],
+    cv1: AsunaLabelledGeneric[Model, Nam],
+    cv3: AsunaSetterGeneric[Model, Prop],
+    cv4: AsunaDefaultValueGeneric[Model, DefVal]
+  ): ValidatedDecoder[Model] = {
+    app.application(decoder.ValidatedDecodeContext).getValue(cv1.names, cv4.defaultValues, repGeneric.rep(table)).map(mm => cv3.setter(mm))
   }
 
   def decodeSealed[H, R <: TupleTag, Nam, Tran](

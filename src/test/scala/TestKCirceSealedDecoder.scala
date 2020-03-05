@@ -14,9 +14,9 @@ class TestKCirceSealedDecoder extends AnyFunSpec with Matchers {
   case class Test03(i1: String, i2: Long) extends ParentTrait
 
   val decodeParentTrait: Decoder[ParentTrait] = {
-    implicit val decodeTest01: Decoder[Test01]      = KCirce.decodeCaseClass
+    implicit val decodeTest01: Decoder[Test01]      = KCirce.decodeCaseClassWithTable(EmptyTable.value)
     implicit val decodeTest02: Decoder[Test02.type] = Decoder.instance(_ => Right(Test02))
-    implicit val decodeTest03: Decoder[Test03]      = KCirce.decodeCaseClass
+    implicit val decodeTest03: Decoder[Test03]      = KCirce.decodeCaseClassWithTable(EmptyTable.value)
     KCirce.decodeSealed
   }
 

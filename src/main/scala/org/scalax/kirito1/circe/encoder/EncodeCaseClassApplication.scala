@@ -1,12 +1,11 @@
-package org.scalax.kirito.circe.encoder
+package org.scalax.kirito1.circe.encoder
 
 import java.util
 
-import asuna.{Application2, Context2}
-import asuna.macros.single.PropertyTag
+import asuna.{Application2, Context2, PropertyTag0}
 import io.circe.Json
 
-class EncodeCaseClassApplication[T](final val toProperty: (String, T) => (String, Json)) extends Application2[JsonObjectAppender, PropertyTag[T], T, String] {
+class EncodeCaseClassApplication[T](final val toProperty: (String, T) => (String, Json)) extends Application2[JsonObjectAppender, PropertyTag0[T], T, String] {
 
   private final val appender = new JsonObjectAppender[T, String] {
     override final def appendField(data: T, name: String, m: util.LinkedHashMap[String, Json]): Unit = {
