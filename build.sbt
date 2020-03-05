@@ -24,7 +24,7 @@ libraryDependencies ++= circeDependencies
 val setting4 = org.scalafmt.sbt.ScalafmtPlugin.autoImport.scalafmtOnCompile := false
 
 val scalaTestVersion = "3.1.0"
-libraryDependencies ++= Seq("org.scalatest" %% "scalatest" % scalaTestVersion)
+libraryDependencies ++= Seq("org.scalatest" %% "scalatest" % scalaTestVersion % Test)
 
 resolvers += Resolver.bintrayRepo("djx314", "maven")
 libraryDependencies += "net.scalax" %% "poi-collection" % "0.4.0-M8"
