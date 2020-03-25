@@ -5,7 +5,6 @@ import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 import io.circe.syntax._
 
-
 class TestKCirceSealedDecoder extends AnyFunSpec with Matchers {
 
   sealed trait ParentTrait
