@@ -18,9 +18,7 @@ object DecodeContent {
     new Application4[DecodeContent, PropertyTag1[PlaceHolder, T], T, String, DefaultValue[T], PlaceHolder] {
       override def application(context: Context4[DecodeContent]): DecodeContent[T, String, DefaultValue[T], PlaceHolder] =
         new DecodeContent[T, String, DefaultValue[T], PlaceHolder] {
-          override def getValue(name: String, defaultValue: DefaultValue[T], rep: PlaceHolder): Decoder[T] = Decoder.instance { j =>
-            j.get(name)(dd.value)
-          }
+          override def getValue(name: String, defaultValue: DefaultValue[T], rep: PlaceHolder): Decoder[T] = Decoder.instance { j => j.get(name)(dd.value) }
         }
     }
 
@@ -28,9 +26,7 @@ object DecodeContent {
     new Application4[DecodeContent, PropertyTag1[Decoder[T], T], T, String, DefaultValue[T], Decoder[T]] {
       override def application(context: Context4[DecodeContent]): DecodeContent[T, String, DefaultValue[T], Decoder[T]] =
         new DecodeContent[T, String, DefaultValue[T], Decoder[T]] {
-          override def getValue(name: String, defaultValue: DefaultValue[T], rep: Decoder[T]): Decoder[T] = Decoder.instance { j =>
-            j.get(name)(rep)
-          }
+          override def getValue(name: String, defaultValue: DefaultValue[T], rep: Decoder[T]): Decoder[T] = Decoder.instance { j => j.get(name)(rep) }
         }
     }
 

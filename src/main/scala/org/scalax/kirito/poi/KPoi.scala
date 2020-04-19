@@ -119,9 +119,7 @@ object KPoi {
       } yield {
         val content = CPoi.wrapCell(Option(row.getCell(i)))
         import immutableReaders._
-        content.tryValue[String].toOption.flatMap { (r) =>
-          self.keys.find(item => r == item).map(titleItem => (titleItem, i))
-        }
+        content.tryValue[String].toOption.flatMap { (r) => self.keys.find(item => r == item).map(titleItem => (titleItem, i)) }
       }
       val titleMap = Map.from(optMap.flatMap(_.to(List)))
       new ReadToData[Model] {
@@ -192,17 +190,14 @@ object KPoi {
     val sheet       = workbook.getSheetAt(0)
     val titleRowOpt = Option(sheet.getRow(0))
     val titleList = titleRowOpt
-      .map(
-        titleRow =>
-          for {
-            i <- 0 to titleRow.getLastCellNum
-          } yield {
-            val content = CPoi.wrapCell(Option(titleRow.getCell(i)))
-            import immutableReaders._
-            content.tryValue[String].toOption.flatMap { (r) =>
-              func.keys.find(item => r == item).map(titleItem => (titleItem, i))
-            }
-          }
+      .map(titleRow =>
+        for {
+          i <- 0 to titleRow.getLastCellNum
+        } yield {
+          val content = CPoi.wrapCell(Option(titleRow.getCell(i)))
+          import immutableReaders._
+          content.tryValue[String].toOption.flatMap { (r) => func.keys.find(item => r == item).map(titleItem => (titleItem, i)) }
+        }
       )
       .getOrElse(List.empty)
     val titleMap = Map.from(titleList.flatMap(_.to(List)))

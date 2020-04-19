@@ -7,9 +7,7 @@ import org.scalax.kirito.circe.KCirce
 
 sealed trait ValidateResult[+T]
 case class errorMessage(fields: List[ErrorField]) extends ValidateResult[Nothing] {
-  def total: Set[String] = fields.foldLeft(Set.empty[String]) { (start, item) =>
-    start ++ item.messages
-  }
+  def total: Set[String]                    = fields.foldLeft(Set.empty[String]) { (start, item) => start ++ item.messages }
   def addPrefix(name: String): errorMessage = this.copy(fields = this.fields.map(_.addPrefix(name)))
 }
 case class responseBody[T](body: T) extends ValidateResult[T]
@@ -32,7 +30,7 @@ object errorMessage {
   }
   object EmptyTable
   implicit val circeEncoder: Encoder[errorMessage] = Encoder[ErrorMessageImpl].contramap(err => ErrorMessageImpl(err.fields, err.total))
-  implicit val circeDecoder: Decoder[errorMessage] = KCirce.decodeCaseClassWithTable(EmptyTable)
+  implicit val circeDecoder: Decoder[errorMessage] = KCirce.decodeCaseClass
 
   implicit def validateCirceEncoder[T](implicit bodyEncoder: Encoder[T]): Encoder[Validated[errorMessage, T]] =
     Encoder[ValidateResult[T]].contramap { (s) =>
@@ -64,5 +62,5 @@ object errorMessage {
 object responseBody {
   object EmptyTable
   implicit def circeEncoder[T](implicit bodyEncoder: Encoder[T]): Encoder.AsObject[responseBody[T]] = KCirce.encodeCaseClassWithTable(EmptyTable)
-  implicit def circeDecoder[T](implicit bodyDecoder: Decoder[T]): Decoder[responseBody[T]]          = KCirce.decodeCaseClassWithTable(EmptyTable)
+  implicit def circeDecoder[T](implicit bodyDecoder: Decoder[T]): Decoder[responseBody[T]]          = KCirce.decodeCaseClass
 }

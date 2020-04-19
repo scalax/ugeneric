@@ -225,9 +225,7 @@ object ValidateDecorderMeta {
                       }
                     }
                     .fold(
-                      { (value) =>
-                        rep.dataToResult(value).leftMap(errorMessage.build(fieldName, _))
-                      },
+                      { (value) => rep.dataToResult(value).leftMap(errorMessage.build(fieldName, _)) },
                       identity
                     )
                 }

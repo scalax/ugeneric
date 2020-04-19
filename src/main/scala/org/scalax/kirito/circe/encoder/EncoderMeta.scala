@@ -83,11 +83,10 @@ object EncoderMeta {
               } else {
                 val fieldName = rep.fieldNameMeta.getOrElse(name)
                 rep.literaMeta
-                  .map(
-                    meta =>
-                      new JsonObjectAppender[H] {
-                        override def appendField(data: H, m: List[(String, Json)]): List[(String, Json)] = (fieldName, meta.encoder(meta.litera)) :: m
-                      }
+                  .map(meta =>
+                    new JsonObjectAppender[H] {
+                      override def appendField(data: H, m: List[(String, Json)]): List[(String, Json)] = (fieldName, meta.encoder(meta.litera)) :: m
+                    }
                   )
                   .getOrElse(throw new Exception("没有被忽略的不需要隐式 Encoder 的列必须含有字面量"))
               }
@@ -108,13 +107,12 @@ object EncoderMeta {
               } else {
                 val fieldName = rep.fieldNameMeta.getOrElse(name)
                 rep.encoderMeta
-                  .map(
-                    i =>
-                      new JsonObjectAppender[H] {
-                        override def appendField(data: H, m: List[(String, Json)]): List[(String, Json)] = {
-                          (fieldName, i(rep.mapperMeta(data))) :: m
-                        }
+                  .map(i =>
+                    new JsonObjectAppender[H] {
+                      override def appendField(data: H, m: List[(String, Json)]): List[(String, Json)] = {
+                        (fieldName, i(rep.mapperMeta(data))) :: m
                       }
+                    }
                   )
                   .getOrElse(throw new Exception("没有被忽略的不需要 Encoder 的列必须提供内部 Encoder"))
               }

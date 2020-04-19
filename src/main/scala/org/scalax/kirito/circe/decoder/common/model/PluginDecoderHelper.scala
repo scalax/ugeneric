@@ -5,7 +5,7 @@ import asuna.macros.ByNameImplicit
 import asuna.macros.single.DefaultValue
 import io.circe.Decoder
 
-object DecoderHelper {
+object PluginDecoderHelper {
   def key(key: String): ProName                                                          = new ProName(key, false)
   def decoder[T](implicit decoder: Decoder[T]): ProDecoder[T]                            = new ProDecoder(decoder, false)
   def keyWithDecoder[T](key: String)(implicit decoder: Decoder[T]): ProDecoderWithKey[T] = new ProDecoderWithKey(key = key, decoder = decoder, isUseDefault = false)
@@ -18,10 +18,10 @@ object DecoderHelper {
   object ProName {
     implicit def asunaCirceDecoder[T](
       implicit dd: ByNameImplicit[Decoder[T]]
-    ): Application4[DecodeContent, PropertyTag1[ProName, T], T, String, DefaultValue[T], ProName] =
-      new Application4[DecodeContent, PropertyTag1[ProName, T], T, String, DefaultValue[T], ProName] {
-        override def application(context: Context4[DecodeContent]): DecodeContent[T, String, DefaultValue[T], ProName] =
-          new DecodeContent[T, String, DefaultValue[T], ProName] {
+    ): Application4[PluginDecodeContent, PropertyTag1[ProName, T], T, String, DefaultValue[T], ProName] =
+      new Application4[PluginDecodeContent, PropertyTag1[ProName, T], T, String, DefaultValue[T], ProName] {
+        override def application(context: Context4[PluginDecodeContent]): PluginDecodeContent[T, String, DefaultValue[T], ProName] =
+          new PluginDecodeContent[T, String, DefaultValue[T], ProName] {
             override def getValue(name: String, defaultValue: DefaultValue[T], rep: ProName): Decoder[T] = {
               Decoder.instance { j =>
                 if (rep.isUseDefault) {
@@ -53,10 +53,10 @@ object DecoderHelper {
   }
 
   object ProDecoder {
-    implicit def asunaCirceDecoder[T]: Application4[DecodeContent, PropertyTag1[ProDecoder[T], T], T, String, DefaultValue[T], ProDecoder[T]] =
-      new Application4[DecodeContent, PropertyTag1[ProDecoder[T], T], T, String, DefaultValue[T], ProDecoder[T]] {
-        override def application(context: Context4[DecodeContent]): DecodeContent[T, String, DefaultValue[T], ProDecoder[T]] =
-          new DecodeContent[T, String, DefaultValue[T], ProDecoder[T]] {
+    implicit def asunaCirceDecoder[T]: Application4[PluginDecodeContent, PropertyTag1[ProDecoder[T], T], T, String, DefaultValue[T], ProDecoder[T]] =
+      new Application4[PluginDecodeContent, PropertyTag1[ProDecoder[T], T], T, String, DefaultValue[T], ProDecoder[T]] {
+        override def application(context: Context4[PluginDecodeContent]): PluginDecodeContent[T, String, DefaultValue[T], ProDecoder[T]] =
+          new PluginDecodeContent[T, String, DefaultValue[T], ProDecoder[T]] {
             override def getValue(name: String, defaultValue: DefaultValue[T], rep: ProDecoder[T]): Decoder[T] = {
               Decoder.instance { j =>
                 if (rep.isUseDefault) {
@@ -90,10 +90,10 @@ object DecoderHelper {
   }
 
   object ProDecoderWithKey {
-    implicit def asunaCirceDecoder[T]: Application4[DecodeContent, PropertyTag1[ProDecoderWithKey[T], T], T, String, DefaultValue[T], ProDecoderWithKey[T]] =
-      new Application4[DecodeContent, PropertyTag1[ProDecoderWithKey[T], T], T, String, DefaultValue[T], ProDecoderWithKey[T]] {
-        override def application(context: Context4[DecodeContent]): DecodeContent[T, String, DefaultValue[T], ProDecoderWithKey[T]] =
-          new DecodeContent[T, String, DefaultValue[T], ProDecoderWithKey[T]] {
+    implicit def asunaCirceDecoder[T]: Application4[PluginDecodeContent, PropertyTag1[ProDecoderWithKey[T], T], T, String, DefaultValue[T], ProDecoderWithKey[T]] =
+      new Application4[PluginDecodeContent, PropertyTag1[ProDecoderWithKey[T], T], T, String, DefaultValue[T], ProDecoderWithKey[T]] {
+        override def application(context: Context4[PluginDecodeContent]): PluginDecodeContent[T, String, DefaultValue[T], ProDecoderWithKey[T]] =
+          new PluginDecodeContent[T, String, DefaultValue[T], ProDecoderWithKey[T]] {
             override def getValue(name: String, defaultValue: DefaultValue[T], rep: ProDecoderWithKey[T]): Decoder[T] = {
               Decoder.instance { j =>
                 if (rep.isUseDefault) {
