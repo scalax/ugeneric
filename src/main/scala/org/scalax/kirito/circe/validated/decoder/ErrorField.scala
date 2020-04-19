@@ -9,6 +9,6 @@ case class ErrorField(path: List[Path], messages: Set[String]) {
 
 object ErrorField {
   object EmptyTable
-  implicit val circeEncoder: Encoder.AsObject[ErrorField] = KCirce.encodeCaseClassWithTable(EmptyTable)
+  implicit val circeEncoder: Encoder.AsObject[ErrorField] = KCirce.encodeCaseClass
   implicit val circeDecoder: Decoder[ErrorField]          = KCirce.decodeCaseClass
 }

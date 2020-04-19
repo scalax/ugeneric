@@ -26,7 +26,7 @@ object errorMessage {
 
   case class ErrorMessageImpl(fields: List[ErrorField], total: Set[String])
   object ErrorMessageImpl {
-    implicit val circeEncoder1: Encoder[ErrorMessageImpl] = KCirce.encodeCaseClassWithTable(EmptyTable)
+    implicit val circeEncoder1: Encoder[ErrorMessageImpl] = KCirce.encodeCaseClass
   }
   object EmptyTable
   implicit val circeEncoder: Encoder[errorMessage] = Encoder[ErrorMessageImpl].contramap(err => ErrorMessageImpl(err.fields, err.total))
@@ -60,7 +60,6 @@ object errorMessage {
 }
 
 object responseBody {
-  object EmptyTable
-  implicit def circeEncoder[T](implicit bodyEncoder: Encoder[T]): Encoder.AsObject[responseBody[T]] = KCirce.encodeCaseClassWithTable(EmptyTable)
+  implicit def circeEncoder[T](implicit bodyEncoder: Encoder[T]): Encoder.AsObject[responseBody[T]] = KCirce.encodeCaseClass
   implicit def circeDecoder[T](implicit bodyDecoder: Decoder[T]): Decoder[responseBody[T]]          = KCirce.decodeCaseClass
 }

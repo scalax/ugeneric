@@ -1,33 +1,36 @@
-package org.scalax.kirito.circe.decoder
+package org.scalax.kirito.circe.decoder.common.model
 
 import asuna.macros.single.DefaultValue
 import asuna.macros.ByNameImplicit
-import asuna.macros.utils.PlaceHolder
-import asuna.{Application4, Context4, PropertyTag1}
+import asuna.{Application3, PropertyTag0}
 import io.circe._
+import org.scalax.kirito.circe.NameTranslator
 
-trait PluginDecodeContent[T, II, D, Rep] extends Any {
-  def getValue(name: II, defaultValue: D, rep: Rep): Decoder[T]
+trait PluginDecodeContent[Model, Name, DefaultValue] extends Any {
+  def getValue(name: Name, defaultValue: DefaultValue, p: Option[NameTranslator], useDefaultValue: Boolean): Decoder[Model]
 }
 
 object PluginDecodeContent {
 
-  implicit def asunaPlaceHolderDecoder[T](
-    implicit dd: ByNameImplicit[Decoder[T]]
-  ): Application4[PluginDecodeContent, PropertyTag1[PlaceHolder, T], T, String, DefaultValue[T], PlaceHolder] =
-    new Application4[PluginDecodeContent, PropertyTag1[PlaceHolder, T], T, String, DefaultValue[T], PlaceHolder] {
-      override def application(context: Context4[PluginDecodeContent]): PluginDecodeContent[T, String, DefaultValue[T], PlaceHolder] =
-        new PluginDecodeContent[T, String, DefaultValue[T], PlaceHolder] {
-          override def getValue(name: String, defaultValue: DefaultValue[T], rep: PlaceHolder): Decoder[T] = Decoder.instance { j => j.get(name)(dd.value) }
-        }
-    }
+  implicit def asunaPlaceHolderDecoder[T](implicit dd: ByNameImplicit[Decoder[T]]): Application3[PluginDecodeContent, PropertyTag0[T], T, String, DefaultValue[T]] = {
+    _ => (name, defaultValue, p, useDefault) =>
+      val nameI = p.map(_.tran(name)).getOrElse(name)
 
-  implicit def asunaCirceDecoder[T]: Application4[PluginDecodeContent, PropertyTag1[Decoder[T], T], T, String, DefaultValue[T], Decoder[T]] =
-    new Application4[PluginDecodeContent, PropertyTag1[Decoder[T], T], T, String, DefaultValue[T], Decoder[T]] {
-      override def application(context: Context4[PluginDecodeContent]): PluginDecodeContent[T, String, DefaultValue[T], Decoder[T]] =
-        new PluginDecodeContent[T, String, DefaultValue[T], Decoder[T]] {
-          override def getValue(name: String, defaultValue: DefaultValue[T], rep: Decoder[T]): Decoder[T] = Decoder.instance { j => j.get(name)(rep) }
+      { j =>
+        val fieldValue = j.downField(nameI)
+        val value      = fieldValue.as(dd.value)
+
+        if (value.isRight) {
+          value
+        } else {
+          //if this field is not exists or this field is null
+          if (fieldValue.focus.map(_.isNull).getOrElse(true) && useDefault) {
+            defaultValue.value.map(Right.apply).getOrElse(value)
+          } else {
+            value
+          }
         }
-    }
+      }
+  }
 
 }

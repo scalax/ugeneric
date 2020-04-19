@@ -9,8 +9,7 @@ import org.scalax.kirito.circe.KCirce
 case class RowMessage(rowNum: Int, fieldName: String, message: String)
 
 object RowMessage {
-  object EmptyTable
-  implicit val circeEncoder: Encoder.AsObject[RowMessage] = KCirce.encodeCaseClassWithTable(EmptyTable)
+  implicit val circeEncoder: Encoder.AsObject[RowMessage] = KCirce.encodeCaseClass
   implicit val circeDecoder: Decoder[RowMessage]          = KCirce.decodeCaseClass
 }
 

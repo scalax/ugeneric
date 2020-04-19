@@ -1,4 +1,4 @@
-package org.scalax.kirito.circe.decoder
+package org.scalax.kirito.circe.decoder.common.model
 
 import asuna.{AsunaTuple0, Context2, Plus2}
 import io.circe.Decoder
@@ -14,12 +14,9 @@ object DecodeContext extends Context2[DecodeContent] {
     val xx2 = p.takeHead2(name)
     val yy2 = p.takeTail2(name)
     for {
-      x1 <- x.getValue(xx2)
-      y1 <- y.getValue(yy2)
-    } yield {
-      p.plus1(x1, y1)
-    }
-
+      x1 <- x.getDecoder(xx2)
+      y1 <- y.getDecoder(yy2)
+    } yield p.plus1(x1, y1)
   }
 
   override val start: DecodeContent[AsunaTuple0, AsunaTuple0] = _ => zeroDecoder

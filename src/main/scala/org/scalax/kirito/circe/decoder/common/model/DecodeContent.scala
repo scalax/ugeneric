@@ -1,11 +1,11 @@
-package org.scalax.kirito.circe.decoder
+package org.scalax.kirito.circe.decoder.common.model
 
 import asuna.macros.ByNameImplicit
 import asuna.{Application2, PropertyTag0}
 import io.circe._
 
 trait DecodeContent[Model, Name] extends Any {
-  def getValue(name: Name): Decoder[Model]
+  def getDecoder(name: Name): Decoder[Model]
 }
 
 object DecodeContent {
