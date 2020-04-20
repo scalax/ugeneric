@@ -5,7 +5,7 @@ import io.circe.Json
 
 object JsonObjectContext extends Context2[JsonObjectContent] {
 
-  private val initObjectAppender: List[(String, Json)] => List[(String, Json)] = identity
+  private val initObjectAppender: JsonObjectFieldAppender = m => m
 
   private val jsonObjectAppenderAsunaTuple0: JsonObjectAppender[AsunaTuple0] = _ => initObjectAppender
 
@@ -15,11 +15,9 @@ object JsonObjectContext extends Context2[JsonObjectContent] {
       val appender2 = y.appendField(p.takeTail2(name))
 
       { data =>
-        val data1   = p.takeHead1(data)
-        val data2   = p.takeTail1(data)
-        val append2 = appender2.appendField(data2)
-        val append1 = appender1.appendField(data1)
-        m => append2(append1(m))
+        val data1 = p.takeHead1(data)
+        val data2 = p.takeTail1(data)
+        m => appender2.getAppender(data2).append(appender1.getAppender(data1).append(m))
       }
   }
 

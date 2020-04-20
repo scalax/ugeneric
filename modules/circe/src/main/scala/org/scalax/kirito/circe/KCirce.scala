@@ -47,7 +47,7 @@ object KCirce {
     val application2       = applicationEncoder.appendField(names)
 
     { o =>
-      val jsonList = application2.appendField(cv2.getter(o))(List.empty)
+      val jsonList = application2.getAppender(cv2.getter(o)).append(List.empty)
       JsonObject.fromIterable(jsonList)
     }
   }
@@ -63,7 +63,7 @@ object KCirce {
     val application2       = applicationEncoder.appendField(names, p)
 
     { o =>
-      val jsonList = application2.appendField(cv2.getter(o))(List.empty)
+      val jsonList = application2.getAppender(cv2.getter(o)).append(List.empty)
       JsonObject.fromIterable(jsonList)
     }
   }

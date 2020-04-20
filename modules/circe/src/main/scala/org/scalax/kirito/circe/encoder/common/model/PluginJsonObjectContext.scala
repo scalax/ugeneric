@@ -1,11 +1,10 @@
 package org.scalax.kirito.circe.encoder.common.model
 
 import asuna.{AsunaTuple0, Context2, Plus2}
-import io.circe.Json
 
 object PluginJsonObjectContext extends Context2[PluginJsonObjectContent] {
 
-  private val initObjectAppender: List[(String, Json)] => List[(String, Json)] = identity
+  private val initObjectAppender: JsonObjectFieldAppender = m => m
 
   private val jsonObjectAppenderAsunaTuple0: JsonObjectAppender[AsunaTuple0] = _ => initObjectAppender
 
@@ -16,11 +15,9 @@ object PluginJsonObjectContext extends Context2[PluginJsonObjectContent] {
     val appender2 = y.appendField(p.takeTail2(name), i)
 
     { data =>
-      val data1   = p.takeHead1(data)
-      val data2   = p.takeTail1(data)
-      val append1 = appender1.appendField(data1)
-      val append2 = appender2.appendField(data2)
-      m => append2(append1(m))
+      val data1 = p.takeHead1(data)
+      val data2 = p.takeTail1(data)
+      m => appender2.getAppender(data2).append(appender1.getAppender(data1).append(m))
     }
   }
 
