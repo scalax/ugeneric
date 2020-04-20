@@ -15,9 +15,11 @@ object JsonObjectContext extends Context2[JsonObjectContent] {
       val appender2 = y.appendField(p.takeTail2(name))
 
       { data =>
-        val data1 = p.takeHead1(data)
-        val data2 = p.takeTail1(data)
-        m => appender2.appendField(data2)(appender1.appendField(data1)(m))
+        val data1   = p.takeHead1(data)
+        val data2   = p.takeTail1(data)
+        val append2 = appender2.appendField(data2)
+        val append1 = appender1.appendField(data1)
+        m => append2(append1(m))
       }
   }
 

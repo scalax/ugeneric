@@ -4,8 +4,8 @@ import io.circe.Decoder
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 import io.circe.syntax._
-import org.scalax.kirito.circe.decoder.DecodeSealedApplication
 import org.scalax.kirito.circe.deImpl2.ParentTest03
+import org.scalax.kirito.circe.decoder.common.sealed_trait.DecodeSealedApplication
 
 package deImpl1 {
   sealed trait ParentTrait1

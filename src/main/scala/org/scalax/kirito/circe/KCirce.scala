@@ -52,6 +52,22 @@ object KCirce {
     }
   }
 
+  def encodeCaseClassWithPlugin[Model, R <: TupleTag, Prop, Name](p: Option[NameTranslator])(
+    implicit ll: single.AsunaGeneric.Aux[Model, R],
+    app: Application2[encoder.common.model.PluginJsonObjectContent, R, Prop, Name],
+    cv1: AsunaLabelledGeneric[Model, Name],
+    cv2: AsunaGetterGeneric[Model, Prop]
+  ): Encoder.AsObject[Model] = {
+    val names              = cv1.names()
+    val applicationEncoder = app.application(encoder.common.model.PluginJsonObjectContext)
+    val application2       = applicationEncoder.appendField(names, p)
+
+    { o =>
+      val jsonList = application2.appendField(cv2.getter(o))(List.empty)
+      JsonObject.fromIterable(jsonList)
+    }
+  }
+
   final def encodeCaseObject[T]: Encoder.AsObject[T] = _ => JsonObject.empty
 
   final def encodeSealed[H, R <: TupleTag, Cls, Lab](
@@ -104,12 +120,12 @@ object KCirce {
 
   def decodeSealed[H, R <: TupleTag, Nam, Tran](
     implicit ll: AsunaSealedGeneric.Aux[H, R],
-    app: Application2[decoder.DecodeSealedTraitSelector[H]#JsonDecoder, R, Nam, Tran],
+    app: Application2[decoder.common.sealed_trait.DecodeSealedTraitSelector[H]#JsonDecoder, R, Nam, Tran],
     cv1: AsunaSealedLabelledGeneric[H, Nam],
     cv2: AsunaSealedToAbsGeneric[H, Tran]
   ): Decoder[H] = {
     val names = cv1.names()
-    app.application(decoder.DecodeSealedContext[H]).getValue(names, cv2.names)
+    app.application(decoder.common.sealed_trait.DecodeSealedContext[H]).getValue(names, cv2.names)
   }
 
 }
