@@ -21,7 +21,7 @@ val circeDependencies = ("io.circe" %% "circe-derivation" % "0.12.0-M7") +: Seq(
 
 libraryDependencies ++= circeDependencies
 
-val setting4 = org.scalafmt.sbt.ScalafmtPlugin.autoImport.scalafmtOnCompile := false
+org.scalafmt.sbt.ScalafmtPlugin.autoImport.scalafmtOnCompile := true
 
 val scalaTestVersion = "3.1.0"
 libraryDependencies ++= Seq("org.scalatest" %% "scalatest" % scalaTestVersion % Test)

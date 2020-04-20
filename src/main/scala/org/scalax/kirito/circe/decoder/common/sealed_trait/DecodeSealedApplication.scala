@@ -1,4 +1,4 @@
-package org.scalax.kirito.circe.decoder
+package org.scalax.kirito.circe.decoder.common.sealed_trait
 
 import asuna.{Application2, Context2}
 import asuna.macros.single.SealedTag
@@ -8,10 +8,7 @@ class DecodeSealedApplication[Model, Sealed](final val toProperty: (String, HCur
     extends Application2[DecodeSealedTraitSelector[Sealed]#JsonDecoder, SealedTag[Model], String, Model => Sealed] {
   override def application(context: Context2[DecodeSealedTraitSelector[Sealed]#JsonDecoder]): DecodeSealedTraitSelector[Sealed]#JsonDecoder[String, Model => Sealed] = {
     val con = DecodeSealedTraitSelector[Sealed]
-    new con.JsonDecoder[String, Model => Sealed] {
-      override def getValue(name: String, tran: Model => Sealed): Decoder[Sealed] = {
-        Decoder.instance(s => toProperty(name, s))
-      }
-    }
+
+    { (name, tran) => s => toProperty(name, s) }: con.JsonDecoder[String, Model => Sealed]
   }
 }

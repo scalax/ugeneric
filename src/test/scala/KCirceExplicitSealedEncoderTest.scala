@@ -25,9 +25,9 @@ package enImpl2 {
 class KCirceExplicitSealedEncoderTest extends AnyFunSpec with Matchers {
 
   val encodeParentTrait: Encoder[enImpl2.ParentTrait2] = {
-    implicit val encodeTest01: Encoder[enImpl2.Test01]       = KCirce.encodeCaseClassWithTable(EmptyTable.value)
+    implicit val encodeTest01: Encoder[enImpl2.Test01]       = KCirce.encodeCaseClass
     implicit val encodeTest02: Encoder[enImpl2.Test02.type]  = KCirce.encodeCaseObject
-    implicit val encodeTest04: Encoder[enImpl2.ParentTest04] = KCirce.encodeCaseClassWithTable(EmptyTable.value)
+    implicit val encodeTest04: Encoder[enImpl2.ParentTest04] = KCirce.encodeCaseClass
     implicit val encodeTest03: EncodeSealedApplication[enImpl2.ParentTest03, enImpl2.ParentTrait2] =
       new EncodeSealedApplication[enImpl2.ParentTest03, enImpl2.ParentTrait2]((name, value) => ("Test03", ParentTest04(value.i1, value.i2.toString).asJson(encodeTest04)))
     KCirce.encodeSealed

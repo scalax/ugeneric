@@ -33,14 +33,13 @@ object FormContent {
       def getModel(map: Map[String, Seq[String]])(implicit ec: ExecutionContext): Future[Validated[ErrorMessage, B]] =
         fa.getModel(map)
           .map(s => s.map(r => f(r).getModel(map)))
-          .flatMap(
-            r =>
-              r match {
-                case Validated.Invalid(r) =>
-                  Future.successful(Validated.Invalid(r))
-                case Validated.Valid(r) =>
-                  r
-              }
+          .flatMap(r =>
+            r match {
+              case Validated.Invalid(r) =>
+                Future.successful(Validated.Invalid(r))
+              case Validated.Valid(r) =>
+                r
+            }
           )
     }
   }

@@ -15,7 +15,7 @@ import asuna.{Application2, Application3, TupleTag}
 import io.circe.{CirceUtils, Decoder, Encoder, Json, JsonObject}
 import org.scalax.kirito1.circe.encoder.{JsonObjectAppender, JsonObjectContext}
 
-object KCirce {
+object KCirce1 {
   final def encodeCaseClass[H, R <: TupleTag, Obj, Na](
     implicit ll: AsunaGeneric.Aux[H, R],
     app: Application2[JsonObjectAppender, R, Obj, Na],
@@ -42,9 +42,7 @@ object KCirce {
     val name1              = cv1.names()
     val name2              = cv2.names()
     val applicationEncoder = app.application(encoder.EncodeSealedContext[H])
-    Encoder.AsObject.instance { o: H =>
-      JsonObject.fromIterable(applicationEncoder.subClassToJsonOpt(o, name2, name1))
-    }
+    Encoder.AsObject.instance { o: H => JsonObject.fromIterable(applicationEncoder.subClassToJsonOpt(o, name2, name1)) }
   }
 
   def decodeCaseClass[T, R <: TupleTag, Model, Nam, DefVal](

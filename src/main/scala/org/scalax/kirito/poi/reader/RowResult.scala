@@ -22,9 +22,8 @@ object rowMessageContent {
   def build(rowNum: Int, fieldName: String, message: String): rowMessageContent        = rowMessageContent(List(RowMessage(rowNum, fieldName, message)))
   def build(rowNum: Int, fieldName: String, messages: List[String]): rowMessageContent = rowMessageContent(messages.map(r => RowMessage(rowNum, fieldName, r)).to(List))
 
-  object EmptyTable
-  implicit val circeEncoder: Encoder.AsObject[rowMessageContent] = KCirce.encodeCaseClassWithTable(EmptyTable)
-  implicit val circeDecoder: Decoder[rowMessageContent]          = KCirce.decodeCaseClassWithTable(EmptyTable)
+  implicit val circeEncoder: Encoder.AsObject[rowMessageContent] = KCirce.encodeCaseClass
+  implicit val circeDecoder: Decoder[rowMessageContent]          = KCirce.decodeCaseClass
 
   implicit val semigroupTypeClass: Semigroup[rowMessageContent] = new Semigroup[rowMessageContent] {
     override def combine(x: rowMessageContent, y: rowMessageContent): rowMessageContent = rowMessageContent(x.rowMsg ::: y.rowMsg)
@@ -49,7 +48,6 @@ object rowMessageContent {
 }
 
 object rowBody {
-  object EmptyTable
-  implicit def circeEncoder[T](implicit bodyEncoder: Encoder[T]): Encoder.AsObject[rowBody[T]] = KCirce.encodeCaseClassWithTable(EmptyTable)
-  implicit def circeDecoder[T](implicit bodyDecoder: Decoder[T]): Decoder[rowBody[T]]          = KCirce.decodeCaseClassWithTable(EmptyTable)
+  implicit def circeEncoder[T](implicit bodyEncoder: Encoder[T]): Encoder.AsObject[rowBody[T]] = KCirce.encodeCaseClass
+  implicit def circeDecoder[T](implicit bodyDecoder: Decoder[T]): Decoder[rowBody[T]]          = KCirce.decodeCaseClass
 }

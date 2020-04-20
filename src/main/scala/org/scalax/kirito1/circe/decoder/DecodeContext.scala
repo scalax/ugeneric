@@ -26,9 +26,7 @@ object DecodeContext extends Context3[DecodeContent] {
 
   override def start: DecodeContent[AsunaTuple0, AsunaTuple0, AsunaTuple0] = new DecodeContent[AsunaTuple0, AsunaTuple0, AsunaTuple0] {
     override def getValue(name: AsunaTuple0, defaultValue: AsunaTuple0): Decoder[AsunaTuple0] = {
-      Decoder.instance { _ =>
-        zeroValue
-      }
+      Decoder.instance { _ => zeroValue }
     }
   }
 }
