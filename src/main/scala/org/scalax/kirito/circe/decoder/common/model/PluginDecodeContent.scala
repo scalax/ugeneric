@@ -7,7 +7,7 @@ import io.circe._
 import org.scalax.kirito.circe.NameTranslator
 
 trait PluginDecodeContent[Model, Name, DefaultValue] extends Any {
-  def getValue(name: Name, defaultValue: DefaultValue, p: Option[NameTranslator], useDefaultValue: Boolean): Decoder[Model]
+  def getDecoder(name: Name, defaultValue: DefaultValue, p: Option[NameTranslator], useDefaultValue: Boolean): Decoder[Model]
 }
 
 object PluginDecodeContent {

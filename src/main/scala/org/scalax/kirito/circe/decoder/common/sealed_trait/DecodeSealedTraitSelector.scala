@@ -20,9 +20,9 @@ object DecodeSealedTraitSelector {
 
   implicit def asunaCirceSealedDecoder[T, R](
     implicit t: ByNameImplicit[Decoder[R]]
-  ): Application2[DecodeSealedTraitSelector[T]#JsonDecoder, SealedTag[R], String, R => T] = { _ =>
+  ): Application2[DecodeSealedTraitSelector[T]#JsonDecoder, SealedTag[R], String, R => T] = {
     val con = DecodeSealedTraitSelector[T]
-    ((name, tran) => _.get(name)(t.value).map(tran)): con.JsonDecoder[String, R => T]
+    _ => ((name, tran) => _.get(name)(t.value).map(tran)): con.JsonDecoder[String, R => T]
   }
 
 }

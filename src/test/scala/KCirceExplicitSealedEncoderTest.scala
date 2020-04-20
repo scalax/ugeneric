@@ -5,7 +5,7 @@ import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 import io.circe.syntax._
 import org.scalax.kirito.circe.enImpl2.ParentTest04
-import org.scalax.kirito.circe.encoder.EncodeSealedApplication
+import org.scalax.kirito.circe.encoder.common.sealed_trait.EncodeSealedApplication
 
 package enImpl1 {
   sealed trait ParentTrait1

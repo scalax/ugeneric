@@ -16,8 +16,8 @@ object PluginDecodeContext extends Context3[PluginDecodeContent] {
     val yy1 = p.takeTail2(name)
     val yy2 = p.takeTail3(defaultValue)
     for {
-      x1 <- x.getValue(xx1, xx2, i, useDefault)
-      y1 <- y.getValue(yy1, yy2, i, useDefault)
+      x1 <- x.getDecoder(xx1, xx2, i, useDefault)
+      y1 <- y.getDecoder(yy1, yy2, i, useDefault)
     } yield p.plus1(x1, y1)
   }
 
