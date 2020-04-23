@@ -5,26 +5,10 @@ scalaVersion := currentScalaVersion
 crossScalaVersions := Seq(scala_2_12_Version, currentScalaVersion)
 
 transitiveClassifiers := Seq("sources")
-
-resolvers += Resolver.bintrayRepo("scalax", "asuna")
-
-libraryDependencies ++= Seq("org.scalax" %% "asuna-macros"      % "0.0.3-20200423SNAP1")
-libraryDependencies ++= Seq("org.scalax" %% "asuna-scala-tuple" % "0.0.3-20200423SNAP1")
-libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.3"
-
-val circeVersion = "0.12.2"
-val circeDependencies = ("io.circe" %% "circe-derivation" % "0.12.0-M7") +: Seq(
-  "io.circe" %% "circe-core",
-  "io.circe" %% "circe-generic",
-  "io.circe" %% "circe-parser"
-).map(_ % circeVersion)
-
-libraryDependencies ++= circeDependencies
-
 org.scalafmt.sbt.ScalafmtPlugin.autoImport.scalafmtOnCompile := true
 
-val scalaTestVersion = "3.1.0"
-libraryDependencies ++= Seq("org.scalatest" %% "scalatest" % scalaTestVersion % Test)
+val circe     = (project in file("./modules/circe"))
+val benchmark = (project in file("./ugeneric-benchmark")).dependsOn(circe).aggregate(circe)
 
-resolvers += Resolver.bintrayRepo("djx314", "maven")
-libraryDependencies += "net.scalax" %% "poi-collection" % "0.4.0-M8"
+addCommandAlias("jmh1", "benchmark/jmh:run -i 3 -wi 3 -f 1 -t 1 .*Test01.*")
+addCommandAlias("jmh2", "benchmark/jmh:run -i 3 -wi 3 -f 1 -t 1 .*Test02.*")
