@@ -75,7 +75,7 @@ object KPoi {
     cv1: AsunaLabelledGeneric[Model, Name],
     cv2: AsunaGetterGeneric[Model, Obj]
   ): CPoiRowWriter[Model] = {
-    val names              = cv1.names()
+    val names              = cv1.names
     val applicationEncoder = app.application(RowWriterContext)
     val titles             = applicationEncoder.appendColumnTitle(names, repGeneric.rep(table), List.empty)
     new CPoiRowWriter[Model] {
@@ -170,7 +170,7 @@ object KPoi {
     val i   = app.application(reader.ReaderContext)
     val rep = repGeneric.rep(table)
     new CPoiRowReader[Model] {
-      override def keys: List[String] = i.getNames(cv1.names(), rep, List.empty)
+      override def keys: List[String] = i.getNames(cv1.names, rep, List.empty)
       override def read(data: Map[String, CellContentAbs], rowIndex: Int): Validated[rowMessageContent, Model] =
         i.getValue(cv1.names, rep).map(mm => cv3.setter(mm)).read(data, rowIndex)
     }

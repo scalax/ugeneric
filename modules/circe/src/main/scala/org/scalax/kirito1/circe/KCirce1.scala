@@ -22,7 +22,7 @@ object KCirce1 {
     cv1: AsunaLabelledGeneric[H, Na],
     cv2: AsunaGetterGeneric[H, Obj]
   ): Encoder.AsObject[H] = {
-    val names              = cv1.names()
+    val names              = cv1.names
     val applicationEncoder = app.application(JsonObjectContext)
     Encoder.AsObject.instance { o: H =>
       val linkedMap = new java.util.LinkedHashMap[String, Json]
@@ -39,8 +39,8 @@ object KCirce1 {
     cv1: AsunaSealedLabelledGeneric[H, Lab],
     cv2: AsunaSealedClassGeneric[H, Cls]
   ): Encoder.AsObject[H] = {
-    val name1              = cv1.names()
-    val name2              = cv2.names()
+    val name1              = cv1.names
+    val name2              = cv2.names
     val applicationEncoder = app.application(encoder.EncodeSealedContext[H])
     Encoder.AsObject.instance { o: H => JsonObject.fromIterable(applicationEncoder.subClassToJsonOpt(o, name2, name1)) }
   }
@@ -61,7 +61,7 @@ object KCirce1 {
     cv1: AsunaSealedLabelledGeneric[H, Nam],
     cv2: AsunaSealedToAbsGeneric[H, Tran]
   ): Decoder[H] = {
-    val names = cv1.names()
+    val names = cv1.names
     app.application(decoder.DecodeSealedContext[H]).getValue(names, cv2.names)
   }
 
