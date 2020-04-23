@@ -8,8 +8,8 @@ transitiveClassifiers := Seq("sources")
 
 resolvers += Resolver.bintrayRepo("scalax", "asuna")
 
-libraryDependencies ++= Seq("org.scalax" %% "asuna-macros"      % "0.0.3-20200325SNAP1")
-libraryDependencies ++= Seq("org.scalax" %% "asuna-scala-tuple" % "0.0.3-20200325SNAP1")
+libraryDependencies ++= Seq("org.scalax" %% "asuna-macros"      % "0.0.3-20200423SNAP1")
+libraryDependencies ++= Seq("org.scalax" %% "asuna-scala-tuple" % "0.0.3-20200423SNAP1")
 libraryDependencies += "com.chuusai" %% "shapeless" % "2.3.3"
 
 val circeVersion = "0.12.2"
