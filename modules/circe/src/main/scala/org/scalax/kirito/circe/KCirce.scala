@@ -1,7 +1,6 @@
 package org.scalax.kirito.circe
 
 import asuna.macros.multiply.{AsunaMultiplyGeneric, AsunaMultiplyRepGeneric}
-import asuna.macros.single
 import asuna.macros.single.{
   AsunaDefaultValueGeneric,
   AsunaGeneric,
@@ -37,7 +36,7 @@ object KCirce {
   }*/
 
   def encodeCaseClass[Model, R <: TupleTag, Prop, Name](
-    implicit ll: single.AsunaGeneric.Aux[Model, R],
+    implicit ll: AsunaGeneric.Aux[Model, R],
     app: Application2[encoder.common.model.JsonObjectContent, R, Prop, Name],
     cv1: AsunaLabelledGeneric[Model, Name],
     cv2: AsunaGetterGeneric[Model, Prop]
@@ -53,7 +52,7 @@ object KCirce {
   }
 
   def encodeCaseClassWithPlugin[Model, R <: TupleTag, Prop, Name](p: Option[NameTranslator])(
-    implicit ll: single.AsunaGeneric.Aux[Model, R],
+    implicit ll: AsunaGeneric.Aux[Model, R],
     app: Application2[encoder.common.model.PluginJsonObjectContent, R, Prop, Name],
     cv1: AsunaLabelledGeneric[Model, Name],
     cv2: AsunaGetterGeneric[Model, Prop]
