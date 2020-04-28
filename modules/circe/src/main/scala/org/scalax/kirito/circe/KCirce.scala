@@ -124,15 +124,11 @@ object KCirce {
     implicit ll: AsunaMultiplyGeneric.Aux[Table, Model, R],
     app: Application4[decoder.ValidatedDecodeContent, R, Prop, Nam, DefVal, Rep],
     repGeneric: AsunaMultiplyRepGeneric[Table, Model, Rep],
-    cv1: AsunaLabelledGeneric[Model, Nam]
-    //cv3: AsunaSetterGeneric[Model, Prop],
-    //cv4: AsunaDefaultValueGeneric[Model, DefVal]
-  ): ValidatedDecoder[Model] = {
-    app
-      .application(decoder.ValidatedDecodeContext)
-      .getValue(cv1.names, throw new Exception("debug.") /*cv4.defaultValues*/, repGeneric.rep(table))
-      .map(mm => throw new Exception("debug.") /*cv3.setter(mm)*/ )
-  }
+    cv1: AsunaLabelledGeneric[Model, Nam],
+    cv3: AsunaSetterGeneric[Model, Prop],
+    cv4: AsunaDefaultValueGeneric[Model, DefVal]
+  ): ValidatedDecoder[Model] =
+    app.application(decoder.ValidatedDecodeContext).getValue(cv1.names, cv4.defaultValues, repGeneric.rep(table)).map(mm => cv3.setter(mm))
 
   def decodeSealed[H, R <: TupleTag, Nam, Tran](
     implicit ll: AsunaSealedGeneric.Aux[H, R],

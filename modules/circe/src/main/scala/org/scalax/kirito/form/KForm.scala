@@ -11,10 +11,8 @@ object KForm {
     implicit ll: AsunaMultiplyGeneric.Aux[Table, Model, R],
     app: Application3[FormGetter, R, Nam, Rep, Prop],
     repGeneric: AsunaMultiplyRepGeneric[Table, Model, Rep],
-    cv1: AsunaLabelledGeneric[Model, Nam] //,
-    //cv3: AsunaSetterGeneric[Model, Prop]
-  ): FormContent[Model] = {
-    app.application(FormContext).getterByName(cv1.names, repGeneric.rep(table)).map(throw new Exception("22") /*cv3.setter*/ )
-  }
+    cv1: AsunaLabelledGeneric[Model, Nam],
+    cv3: AsunaSetterGeneric[Model, Prop]
+  ): FormContent[Model] = app.application(FormContext).getterByName(cv1.names, repGeneric.rep(table)).map(cv3.setter)
 
 }
