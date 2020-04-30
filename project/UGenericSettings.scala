@@ -3,7 +3,7 @@ import sbt.Keys._
 
 object UGenericSettings {
 
-  val versionSetting = Seq(version := "0.0.1-20200430SNAP1", organization := "org.scalax")
+  val versionSetting = Seq(version := "0.0.1-20200430SNAP3", organization := "org.scalax")
 
   val currentScalaVersion = "2.13.2"
   val scala_2_12_Version  = "2.12.11"

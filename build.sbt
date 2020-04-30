@@ -6,3 +6,5 @@ UGenericSettings.scalaVersionSetting
 
 addCommandAlias("jmh1", "circeBenchmark/jmh:run -i 3 -wi 3 -f 1 -t 1 .*Test01.*")
 addCommandAlias("jmh2", "circeBenchmark/jmh:run -i 3 -wi 3 -f 1 -t 1 .*Test02.*")
+
+val ugeneric = (project in file(".")).dependsOn(circe, slick).aggregate(circe, slick)
