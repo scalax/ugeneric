@@ -1,7 +1,7 @@
 Dependencies.fsg
 libraryDependencies += Dependencies.shapeless
 
-Dependencies.circeDependencies
+libraryDependencies ++= Dependencies.circe(scalaVersion.value)
 
 UGenericSettings.scalaSetting
 

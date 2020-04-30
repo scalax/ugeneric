@@ -21,8 +21,8 @@ object Dependencies {
 
   val shapeless = "com.chuusai" %% "shapeless" % "2.3.3"
 
-  val circeDependencies: Def.Setting[Seq[ModuleID]] = libraryDependencies ++= {
-    if (scalaVersion.value startsWith "2.11.") {
+  def circe(scalaVersionM: String) =
+    if (scalaVersionM startsWith "2.11.") {
       ("io.circe" %% "circe-derivation" % "0.11.0-M3") :: List(
         "io.circe" %% "circe-core",
         "io.circe" %% "circe-generic",
@@ -35,7 +35,6 @@ object Dependencies {
         "io.circe" %% "circe-parser"
       ).map(_ % "0.13.0")
     }
-  }
 
   val scalaTestVersion = "3.1.0"
   val scalaTest        = List("org.scalatest" %% "scalatest" % scalaTestVersion)
