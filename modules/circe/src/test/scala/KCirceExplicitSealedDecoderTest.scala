@@ -1,11 +1,11 @@
-package org.scalax.kirito.circe
+package org.scalax.ugeneric.circe
 
 import io.circe.Decoder
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 import io.circe.syntax._
-import org.scalax.kirito.circe.deImpl2.ParentTest03
-import org.scalax.kirito.circe.decoder.common.sealed_trait.DecodeSealedApplication
+import org.scalax.ugeneric.circe.deImpl2.ParentTest03
+import org.scalax.ugeneric.circe.decoder.common.sealed_trait.DecodeSealedApplication
 
 package deImpl1 {
   sealed trait ParentTrait1
@@ -22,16 +22,16 @@ package deImpl2 {
   case class ParentTest04(i1: String, i2: String)
 }
 
-class KCirceExplicitSealedDecoderTest extends AnyFunSpec with Matchers {
+class UCirceExplicitSealedDecoderTest extends AnyFunSpec with Matchers {
 
   val decodeParentTrait: Decoder[deImpl2.ParentTrait2] = {
-    implicit val decodeTest01: Decoder[deImpl2.Test01]       = KCirce.decodeCaseClass
+    implicit val decodeTest01: Decoder[deImpl2.Test01]       = UCirce.decodeCaseClass
     implicit val decodeTest02: Decoder[deImpl2.Test02.type]  = Decoder.instance(_ => Right(deImpl2.Test02))
-    implicit val decodeTest04: Decoder[deImpl2.ParentTest04] = KCirce.decodeCaseClass
+    implicit val decodeTest04: Decoder[deImpl2.ParentTest04] = UCirce.decodeCaseClass
     implicit val decodeTest03: DecodeSealedApplication[deImpl2.ParentTest03, deImpl2.ParentTrait2] = new DecodeSealedApplication((name, cursor) =>
       cursor.get("Test03")(decodeTest04).map(s => ParentTest03(s.i1, s.i2.toLong))
     )
-    KCirce.decodeSealed
+    UCirce.decodeSealed
   }
 
   describe("A json") {

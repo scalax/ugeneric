@@ -3,7 +3,7 @@ package org.scalax.asuna.circe
 import java.util.concurrent.TimeUnit
 
 import org.openjdk.jmh.annotations._
-import org.scalax.kirito.circe.KCirce
+import org.scalax.ugeneric.circe.UCirce
 
 object Aa {
   import ADTs.ADT0
@@ -70,15 +70,15 @@ class Test02 {
   }
 
   object asunaEncoder {
-    implicit val _w2: Encoder[A]        = KCirce.encodeSealed
-    implicit val _w3: Encoder[B]        = KCirce.encodeCaseClass
-    implicit val _w4: Encoder[C]        = KCirce.encodeCaseClass
-    implicit val _w5: Encoder[LL]       = KCirce.encodeSealed
-    implicit val _w6: Encoder[Node]     = KCirce.encodeCaseClass
-    implicit val _w7: Encoder[End.type] = KCirce.encodeCaseObject
-    implicit val _w8: Encoder[ADTc]     = KCirce.encodeCaseClass
-    implicit val _w9: Encoder[ADT0]     = KCirce.encodeCaseClass
-    implicit val _wData: Encoder[Data]  = KCirce.encodeCaseClass
+    implicit val _w2: Encoder[A]        = UCirce.encodeSealed
+    implicit val _w3: Encoder[B]        = UCirce.encodeCaseClass
+    implicit val _w4: Encoder[C]        = UCirce.encodeCaseClass
+    implicit val _w5: Encoder[LL]       = UCirce.encodeSealed
+    implicit val _w6: Encoder[Node]     = UCirce.encodeCaseClass
+    implicit val _w7: Encoder[End.type] = UCirce.encodeCaseObject
+    implicit val _w8: Encoder[ADTc]     = UCirce.encodeCaseClass
+    implicit val _w9: Encoder[ADT0]     = UCirce.encodeCaseClass
+    implicit val _wData: Encoder[Data]  = UCirce.encodeCaseClass
   }
 
   @Benchmark

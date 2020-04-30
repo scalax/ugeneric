@@ -1,2 +1,2 @@
 UGenericSettings.versionSetting
-name := "kirito"
+name := "ugeneric"

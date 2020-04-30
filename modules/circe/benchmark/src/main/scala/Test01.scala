@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit
 import org.openjdk.jmh.annotations._
 import upickle.default.{ReadWriter => RW}
 import io.circe.Encoder
-import org.scalax.kirito.circe.KCirce
+import org.scalax.ugeneric.circe.UCirce
 
 @BenchmarkMode(Array(Mode.Throughput)) // 测试方法平均执行时间
 @OutputTimeUnit(TimeUnit.SECONDS)      // 输出结果的时间粒度为微秒
@@ -26,8 +26,8 @@ class Test01 {
   }
 
   object asunaEncoder {
-    implicit val a1: Encoder.AsObject[Bar] = KCirce.encodeCaseClass
-    implicit val a2: Encoder.AsObject[Foo] = KCirce.encodeCaseClass
+    implicit val a1: Encoder.AsObject[Bar] = UCirce.encodeCaseClass
+    implicit val a2: Encoder.AsObject[Foo] = UCirce.encodeCaseClass
   }
 
   val model: Bar = Model.bar

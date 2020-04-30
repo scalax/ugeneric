@@ -1,4 +1,4 @@
-package org.scalax.kirito.circe
+package org.scalax.ugeneric.circe
 
 class EmptyTable
 
