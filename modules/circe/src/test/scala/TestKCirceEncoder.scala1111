@@ -1,14 +1,14 @@
-package org.scalax.kirito.circe
+package org.scalax.ugeneric.circe
 
 import io.circe.{Encoder, Json}
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 import io.circe.syntax._
-import org.scalax.kirito.circe.encoder.EncodeCaseClassApplication
+import org.scalax.ugeneric.circe.encoder.EncodeCaseClassApplication
 import shapeless._
 import shapeless.tag._
 
-class TestKCirceEncoder extends AnyFunSpec with Matchers {
+class TestUCirceEncoder extends AnyFunSpec with Matchers {
 
   trait IntTag
 
@@ -27,7 +27,7 @@ class TestKCirceEncoder extends AnyFunSpec with Matchers {
   implicit val proImplicit: EncodeCaseClassApplication[Int @@ IntTag] =
     new EncodeCaseClassApplication[Int @@ IntTag]((name, t) => ("被改过的 key：" + name, Json.fromString("value 是：" + String.valueOf(t))))
 
-  implicit val encoderTest04: Encoder[Test04] = KCirce.encodeCaseClass
+  implicit val encoderTest04: Encoder[Test04] = UCirce.encodeCaseClass
 
   describe("A case class") {
     it("should encode to a json") {

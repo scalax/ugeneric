@@ -1,2 +1,2 @@
 UGenericSettings.versionSetting
-name := "ugeneric"
+name := "ugeneric-circe"

@@ -1,16 +1,16 @@
-package org.scalax.kirito.circe
+package org.scalax.ugeneric.circe
 
 import io.circe.Decoder
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 import io.circe.syntax._
-import org.scalax.kirito.circe.decoder.DecodeCaseClassApplication
+import org.scalax.ugeneric.circe.decoder.DecodeCaseClassApplication
 import shapeless._
 import shapeless.tag._
 
 import scala.util.Try
 
-class TestKCirceDecoder extends AnyFunSpec with Matchers {
+class TestUCirceDecoder extends AnyFunSpec with Matchers {
   trait IntTag
   val IntTag = tag[IntTag]
 
@@ -25,7 +25,7 @@ class TestKCirceDecoder extends AnyFunSpec with Matchers {
     (name, h) => h.get("修改过的 key：i4")(Decoder.decodeLong).map(s => s.asInstanceOf[Long @@ LongTag])
   )
 
-  implicit val decoderTest04: Decoder[Test04] = KCirce.decodeCaseClass
+  implicit val decoderTest04: Decoder[Test04] = UCirce.decodeCaseClass
 
   describe("A json") {
     it("should decode to a case class") {

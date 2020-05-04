@@ -1,11 +1,11 @@
-package org.scalax.kirito.circe
+package org.scalax.ugeneric.circe
 
 import io.circe.Encoder
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 import io.circe.syntax._
 
-class TestKCirceSealedEncoder extends AnyFunSpec with Matchers {
+class TestUCirceSealedEncoder extends AnyFunSpec with Matchers {
 
   sealed trait ParentTrait
   case class Test01(i1: String, i2: Int)  extends ParentTrait
@@ -13,10 +13,10 @@ class TestKCirceSealedEncoder extends AnyFunSpec with Matchers {
   case class Test03(i1: String, i2: Long) extends ParentTrait
 
   val encodeParentTrait: Encoder[ParentTrait] = {
-    implicit val decodeTest01: Encoder[Test01]      = KCirce.encodeCaseClass
-    implicit val decodeTest02: Encoder[Test02.type] = KCirce.encodeCaseObject
-    implicit val decodeTest03: Encoder[Test03]      = KCirce.encodeCaseClass
-    KCirce.encodeSealed
+    implicit val decodeTest01: Encoder[Test01]      = UCirce.encodeCaseClass
+    implicit val decodeTest02: Encoder[Test02.type] = UCirce.encodeCaseObject
+    implicit val decodeTest03: Encoder[Test03]      = UCirce.encodeCaseClass
+    UCirce.encodeSealed
   }
 
   describe("A case class") {

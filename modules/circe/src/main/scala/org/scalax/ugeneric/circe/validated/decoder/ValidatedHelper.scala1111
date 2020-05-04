@@ -1,0 +1,244 @@
+package org.scalax.ugeneric.circe.decoder
+
+import asuna.macros.single.DefaultValue
+import asuna.macros.ByNameImplicit
+import asuna.{Application4, Context4, PropertyTag1}
+import cats.data.Validated
+import io.circe._
+
+trait ValidatedHelper {
+
+  trait FieldNameTran {
+    self =>
+    def decodeFieldName(old: String): String
+    def messageFieldName(old: String): String
+
+    def tranDecode(tran: String => String): FieldNameTran = new FieldNameTran {
+      override def decodeFieldName(old: String): String  = tran(self.decodeFieldName(old))
+      override def messageFieldName(old: String): String = self.messageFieldName(old)
+    }
+    def tranMessage(tran: String => String): FieldNameTran = new FieldNameTran {
+      override def decodeFieldName(old: String): String  = self.decodeFieldName(old)
+      override def messageFieldName(old: String): String = tran(self.messageFieldName(old))
+    }
+
+    def setDecode(name: String): FieldNameTran = new FieldNameTran {
+      override def decodeFieldName(old: String): String  = name
+      override def messageFieldName(old: String): String = self.messageFieldName(old)
+    }
+    def setMessage(name: String): FieldNameTran = new FieldNameTran {
+      override def decodeFieldName(old: String): String  = self.decodeFieldName(old)
+      override def messageFieldName(old: String): String = name
+    }
+  }
+
+  object FieldNameTran {
+    def init: FieldNameTran = new FieldNameTran {
+      override def decodeFieldName(old: String): String  = old
+      override def messageFieldName(old: String): String = old
+    }
+
+    implicit def asunaFieldNameDecoder[T](
+      implicit dd: ByNameImplicit[Decoder[T]],
+      errMsg: ByNameImplicit[ErrorTypeMsg[T]]
+    ): Application4[ValidatedDecodeContent, PropertyTag1[FieldNameTran, T], T, String, DefaultValue[T], FieldNameTran] =
+      new Application4[ValidatedDecodeContent, PropertyTag1[FieldNameTran, T], T, String, DefaultValue[T], FieldNameTran] {
+        override def application(context: Context4[ValidatedDecodeContent]): ValidatedDecodeContent[T, String, DefaultValue[T], FieldNameTran] =
+          new ValidatedDecodeContent[T, String, DefaultValue[T], FieldNameTran] {
+            override def getValue(name: String, defaultValue: DefaultValue[T], rep: FieldNameTran): ValidatedDecoder[T] = new ValidatedDecoder[T] {
+              override def getValue(json: ACursor): Validated[errorMessage, T] = {
+                json.downField(rep.decodeFieldName(name)).focus match {
+                  case Some(Json.Null) =>
+                    Validated.invalid(errorMessage.build(rep.decodeFieldName(name), s"${rep.messageFieldName(name)}不能为空"))
+                  case None =>
+                    Validated.invalid(errorMessage.build(rep.decodeFieldName(name), s"${rep.messageFieldName(name)}不能为空"))
+                  case Some(j) =>
+                    j.as(dd.value) match {
+                      case Left(_) =>
+                        Validated.invalid(errorMessage.build(rep.decodeFieldName(name), errMsg.value.msg(rep.messageFieldName(name))))
+                      case Right(value) => Validated.valid(value)
+                    }
+                }
+              }
+            }
+          }
+      }
+
+    implicit def asunaOptFieldNameDecoder[T](
+      implicit dd: ByNameImplicit[Decoder[Option[T]]],
+      errMsg: ByNameImplicit[ErrorTypeMsg[T]]
+    ): Application4[ValidatedDecodeContent, PropertyTag1[FieldNameTran, Option[T]], Option[T], String, DefaultValue[Option[T]], FieldNameTran] =
+      new Application4[ValidatedDecodeContent, PropertyTag1[FieldNameTran, Option[T]], Option[T], String, DefaultValue[Option[T]], FieldNameTran] {
+        override def application(context: Context4[ValidatedDecodeContent]): ValidatedDecodeContent[Option[T], String, DefaultValue[Option[T]], FieldNameTran] =
+          new ValidatedDecodeContent[Option[T], String, DefaultValue[Option[T]], FieldNameTran] {
+            override def getValue(name: String, defaultValue: DefaultValue[Option[T]], rep: FieldNameTran): ValidatedDecoder[Option[T]] =
+              new ValidatedDecoder[Option[T]] {
+                override def getValue(json: ACursor): Validated[errorMessage, Option[T]] = {
+                  val fieldJson = json.downField(rep.decodeFieldName(name)).focus match {
+                    case Some(j) => j
+                    case _       => Json.Null
+                  }
+                  fieldJson.as(dd.value) match {
+                    case Left(_) =>
+                      Validated.invalid(errorMessage.build(rep.decodeFieldName(name), errMsg.value.msg(rep.messageFieldName(name))))
+                    case Right(value) => Validated.valid(value)
+                  }
+                }
+              }
+          }
+      }
+  }
+
+  def fieldName: FieldNameTran                                                                            = FieldNameTran.init
+  def field[T](implicit decoder1: Decoder[T], errorTypeMsg1: ErrorTypeMsg[T]): FieldNameWithDecoder[T, T] = FieldNameWithDecoder.init(decoder1, errorTypeMsg1)
+  def optField[T](implicit decoder1: Decoder[Option[T]], errorTypeMsg1: ErrorTypeMsg[T]): FieldNameWithDecoder[Option[T], T] =
+    FieldNameWithDecoder.initOpt(decoder1, errorTypeMsg1)
+  def fieldWithDecoder[T](decoder1: Decoder[T])(implicit errorTypeMsg1: ErrorTypeMsg[T]): FieldNameWithDecoder[T, T] = FieldNameWithDecoder.init(decoder1, errorTypeMsg1)
+  def optFieldWithDecoder[T](decoder1: Decoder[Option[T]])(implicit errorTypeMsg1: ErrorTypeMsg[T]): FieldNameWithDecoder[Option[T], T] =
+    FieldNameWithDecoder.initOpt(decoder1, errorTypeMsg1)
+
+  trait FieldNameWithDecoder[T, MessageType] {
+    self =>
+    def decodeFieldName(old: String): String
+    def messageFieldName(old: String): String
+
+    def tranDecode(tran: String => String): FieldNameWithDecoder[T, MessageType] = new FieldNameWithDecoder[T, MessageType] {
+      override def decodeFieldName(old: String): String  = tran(self.decodeFieldName(old))
+      override def messageFieldName(old: String): String = self.messageFieldName(old)
+
+      override type InnerType = self.InnerType
+      override val decoder: Decoder[self.InnerType]          = self.decoder
+      override val messageContent: ErrorTypeMsg[MessageType] = self.messageContent
+
+      override def validate(in: self.InnerType): Validated[Set[String], T] = self.validate(in)
+    }
+    def tranMessage(tran: String => String): FieldNameWithDecoder[T, MessageType] = new FieldNameWithDecoder[T, MessageType] {
+      override def decodeFieldName(old: String): String  = self.decodeFieldName(old)
+      override def messageFieldName(old: String): String = tran(self.messageFieldName(old))
+
+      override type InnerType = self.InnerType
+      override val decoder: Decoder[self.InnerType]          = self.decoder
+      override val messageContent: ErrorTypeMsg[MessageType] = self.messageContent
+
+      override def validate(in: self.InnerType): Validated[Set[String], T] = self.validate(in)
+    }
+
+    def setDecode(name: String): FieldNameWithDecoder[T, MessageType] = new FieldNameWithDecoder[T, MessageType] {
+      override def decodeFieldName(old: String): String  = name
+      override def messageFieldName(old: String): String = self.messageFieldName(old)
+      override type InnerType = self.InnerType
+      override val decoder: Decoder[self.InnerType]          = self.decoder
+      override val messageContent: ErrorTypeMsg[MessageType] = self.messageContent
+
+      override def validate(in: self.InnerType): Validated[Set[String], T] = self.validate(in)
+    }
+    def setMessage(name: String): FieldNameWithDecoder[T, MessageType] = new FieldNameWithDecoder[T, MessageType] {
+      override def decodeFieldName(old: String): String  = self.decodeFieldName(old)
+      override def messageFieldName(old: String): String = name
+      override type InnerType = self.InnerType
+      override val decoder: Decoder[self.InnerType]          = self.decoder
+      override val messageContent: ErrorTypeMsg[MessageType] = self.messageContent
+
+      override def validate(in: self.InnerType): Validated[Set[String], T] = self.validate(in)
+    }
+
+    type InnerType
+    val decoder: Decoder[InnerType]
+
+    val messageContent: ErrorTypeMsg[MessageType]
+    def validate(in: InnerType): Validated[Set[String], T]
+
+    def andThen[R](an: T => Validated[Set[String], R]): FieldNameWithDecoder[R, MessageType] = new FieldNameWithDecoder[R, MessageType] {
+      override def decodeFieldName(old: String): String  = self.decodeFieldName(old)
+      override def messageFieldName(old: String): String = self.messageFieldName(old)
+
+      override type InnerType = self.InnerType
+      override val decoder: Decoder[self.InnerType]          = self.decoder
+      override val messageContent: ErrorTypeMsg[MessageType] = self.messageContent
+
+      override def validate(in: self.InnerType): Validated[Set[String], R] = self.validate(in).andThen(an)
+    }
+  }
+
+  object FieldNameWithDecoder {
+    def init[T](implicit decoder1: Decoder[T], errorTypeMsg1: ErrorTypeMsg[T]): FieldNameWithDecoder[T, T] = new FieldNameWithDecoder[T, T] {
+      override def decodeFieldName(old: String): String  = old
+      override def messageFieldName(old: String): String = old
+
+      override type InnerType = T
+      override val decoder: Decoder[T]             = decoder1
+      override val messageContent: ErrorTypeMsg[T] = errorTypeMsg1
+
+      override def validate(in: T): Validated[Set[String], T] = Validated.valid(in)
+    }
+
+    def initOpt[T](implicit decoder1: Decoder[Option[T]], errorTypeMsg1: ErrorTypeMsg[T]): FieldNameWithDecoder[Option[T], T] = new FieldNameWithDecoder[Option[T], T] {
+      override def decodeFieldName(old: String): String  = old
+      override def messageFieldName(old: String): String = old
+
+      override type InnerType = Option[T]
+      override val decoder: Decoder[Option[T]]     = decoder1
+      override val messageContent: ErrorTypeMsg[T] = errorTypeMsg1
+
+      override def validate(in: Option[T]): Validated[Set[String], Option[T]] = Validated.valid(in)
+    }
+
+    implicit def asunaFieldNameDecoder[T, MessageType]
+      : Application4[ValidatedDecodeContent, PropertyTag1[FieldNameWithDecoder[T, MessageType], T], T, String, DefaultValue[T], FieldNameWithDecoder[T, MessageType]] =
+      new Application4[ValidatedDecodeContent, PropertyTag1[FieldNameWithDecoder[T, MessageType], T], T, String, DefaultValue[T], FieldNameWithDecoder[T, MessageType]] {
+        override def application(context: Context4[ValidatedDecodeContent]): ValidatedDecodeContent[T, String, DefaultValue[T], FieldNameWithDecoder[T, MessageType]] =
+          new ValidatedDecodeContent[T, String, DefaultValue[T], FieldNameWithDecoder[T, MessageType]] {
+            override def getValue(name: String, defaultValue: DefaultValue[T], rep: FieldNameWithDecoder[T, MessageType]): ValidatedDecoder[T] = new ValidatedDecoder[T] {
+              override def getValue(json: ACursor): Validated[errorMessage, T] = {
+                json.downField(rep.decodeFieldName(name)).focus match {
+                  case Some(Json.Null) =>
+                    Validated.invalid(errorMessage.build(rep.decodeFieldName(name), s"${rep.messageFieldName(name)}不能为空"))
+                  case None =>
+                    Validated.invalid(errorMessage.build(rep.decodeFieldName(name), s"${rep.messageFieldName(name)}不能为空"))
+                  case Some(j) =>
+                    j.as(rep.decoder) match {
+                      case Left(_) =>
+                        Validated.invalid(errorMessage.build(rep.decodeFieldName(name), rep.messageContent.msg(rep.messageFieldName(name))))
+                      case Right(value) => rep.validate(value).leftMap(i => errorMessage.build(rep.decodeFieldName(name), i))
+                    }
+                }
+              }
+            }
+          }
+      }
+
+    implicit def asunaOptFieldNameDecoder[T, MessageType]
+      : Application4[ValidatedDecodeContent, PropertyTag1[FieldNameWithDecoder[Option[T], MessageType], Option[T]], Option[T], String, DefaultValue[
+        Option[T]
+      ], FieldNameWithDecoder[Option[T], MessageType]] =
+      new Application4[ValidatedDecodeContent, PropertyTag1[FieldNameWithDecoder[Option[T], MessageType], Option[T]], Option[T], String, DefaultValue[Option[T]], FieldNameWithDecoder[
+        Option[T],
+        MessageType
+      ]] {
+        override def application(
+          context: Context4[ValidatedDecodeContent]
+        ): ValidatedDecodeContent[Option[T], String, DefaultValue[Option[T]], FieldNameWithDecoder[Option[T], MessageType]] =
+          new ValidatedDecodeContent[Option[T], String, DefaultValue[Option[T]], FieldNameWithDecoder[Option[T], MessageType]] {
+            override def getValue(name: String, defaultValue: DefaultValue[Option[T]], rep: FieldNameWithDecoder[Option[T], MessageType]): ValidatedDecoder[Option[T]] =
+              new ValidatedDecoder[Option[T]] {
+                override def getValue(json: ACursor): Validated[errorMessage, Option[T]] = {
+                  val fieldJson = json.downField(rep.decodeFieldName(name)).focus match {
+                    case Some(j) => j
+                    case _       => Json.Null
+                  }
+                  fieldJson.as(rep.decoder) match {
+                    case Left(_) =>
+                      Validated.invalid(errorMessage.build(rep.decodeFieldName(name), rep.messageContent.msg(rep.messageFieldName(name))))
+                    case Right(value) =>
+                      rep.validate(value).leftMap(i => errorMessage.build(rep.decodeFieldName(name), i))
+                  }
+                }
+              }
+          }
+      }
+
+  }
+
+}
+
+object ValidatedHelper extends ValidatedHelper
