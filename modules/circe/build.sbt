@@ -1,9 +1,10 @@
+UGenericSettings.scalaSetting
+UGenericSettings.scala_212_213_cross
+
 Dependencies.fsg
 libraryDependencies += Dependencies.shapeless
 
 libraryDependencies ++= Dependencies.circe(scalaVersion.value)
-
-UGenericSettings.scalaSetting
 
 libraryDependencies ++= Dependencies.scalaTest.map(_ % Test)
 
