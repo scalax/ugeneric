@@ -1,16 +1,15 @@
 package org.scalax.ugeneric.circe.encoder.common.model
 
-import asuna.{Application2, PropertyTag0}
-import asuna.macros.ByNameImplicit
+import asuna.{ Application3, PropertyTag }
 import io.circe.Encoder
 
-abstract class JsonObjectContent[Model, Name] {
+abstract class JsonObjectContent[I,Model, Name] {
   def appendField(name: Name): JsonObjectAppender[Model]
 }
 
 object JsonObjectContent {
 
-  implicit final def asunaCirceImplicit[T](implicit t: => Encoder[T]): Application2[JsonObjectContent, PropertyTag0[T], T, String] =
+  implicit final def asunaCirceImplicit[T](implicit t: => Encoder[T]): Application3[JsonObjectContent, PropertyTag[T], T, String] =
     _ => name => data => m => (name, t(data)) :: m
 
 }

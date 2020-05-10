@@ -1,8 +1,8 @@
 package org.scalax.ugeneric.slick
 
-import asuna.{Application4, TupleTag}
+import asuna.Application6
 import asuna.macros.multiply.{AsunaMultiplyGeneric, AsunaMultiplyRepGeneric}
-import asuna.macros.single.{AsunaGetterGeneric, AsunaSetterGeneric}
+import asuna.macros.single.{AsunaGeneric, AsunaGetterGeneric, AsunaSetterGeneric}
 import org.scalax.ugeneric.slick.mutiply.{RepContext, RepNode}
 import slick.ast.{MappedScalaType, Node, ProductNode, TypeMapping}
 import slick.lifted.{AbstractTable, FlatShapeLevel, ProvenShape, Shape, ShapedValue}
@@ -13,11 +13,12 @@ import scala.reflect.ClassTag
 
 object USlick {
 
-  def mapWithTable[Rep, Table <: AbstractTable[Data], Data, P <: TupleTag, RepType, DataType, EncodeRef, Packed1](
+  def mapWithTable[Rep, HListDataType, Table <: AbstractTable[Data], Data, P, RepType, DataType, EncodeRef, Packed1](
     table: Table
   )(
     implicit p: AsunaMultiplyGeneric.Aux[Table, Data, P],
-    app: Application4[RepNode, P, RepType, DataType, EncodeRef, Packed1],
+    modelGeneric: AsunaGeneric.Aux[Data, HListDataType],
+    app: Application6[RepNode, P, HListDataType, RepType, DataType, EncodeRef, Packed1],
     asunaMultiplyRepGeneric: AsunaMultiplyRepGeneric[Table, Data, RepType],
     asunaGetterGeneric: AsunaGetterGeneric[Data, DataType],
     asunaSetterGeneric: AsunaSetterGeneric[Data, DataType],

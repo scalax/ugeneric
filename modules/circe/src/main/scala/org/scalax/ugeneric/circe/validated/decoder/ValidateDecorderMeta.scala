@@ -1,13 +1,13 @@
 package org.scalax.ugeneric.circe.validated.decoder
 
-import asuna.{Application4, Context4, PropertyTag1}
+import asuna.{Application4, Application6, Context4, Context6, PropertyTag }
 import asuna.macros.ByNameImplicit
 import asuna.macros.single.DefaultValue
 import cats.data.Validated
 import cats.implicits._
 import io.circe.{ACursor, Decoder, Json}
 import net.scalax.cpoi.api._
-import org.scalax.ugeneric.circe.decoder.{errorMessage, ValidatedDecodeContent, ValidatedDecoder}
+import org.scalax.ugeneric.circe.decoder.{ValidatedDecodeContent, ValidatedDecoder, errorMessage}
 
 import scala.collection.compat._
 
@@ -24,11 +24,11 @@ object ValidateDecorderMeta {
   object RequireImplicit {
     implicit def asunaCirceUntypedReader[T](
       implicit dd: ByNameImplicit[Decoder[T]]
-    ): Application4[ValidatedDecodeContent, PropertyTag1[FieldMetaWithNotType[RequireImplicit], T], T, String, DefaultValue[T], FieldMetaWithNotType[RequireImplicit]] =
-      new Application4[ValidatedDecodeContent, PropertyTag1[FieldMetaWithNotType[RequireImplicit], T], T, String, DefaultValue[T], FieldMetaWithNotType[RequireImplicit]] {
-        override def application(context: Context4[ValidatedDecodeContent]): ValidatedDecodeContent[T, String, DefaultValue[T], FieldMetaWithNotType[RequireImplicit]] = {
+    ): Application6[ValidatedDecodeContent, PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[T], T, String, DefaultValue[T], FieldMetaWithNotType[RequireImplicit]] =
+      new Application6[ValidatedDecodeContent, PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[T], T, String, DefaultValue[T], FieldMetaWithNotType[RequireImplicit]] {
+        override def application(context: Context6[ValidatedDecodeContent]): ValidatedDecodeContent[PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[T],T, String, DefaultValue[T], FieldMetaWithNotType[RequireImplicit]] = {
           def getName(rep: FieldMetaWithNotType[RequireImplicit], name: String): String = rep.fieldNameMeta.getOrElse(name)
-          new ValidatedDecodeContent[T, String, DefaultValue[T], FieldMetaWithNotType[RequireImplicit]] {
+          new ValidatedDecodeContent[PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[T],T, String, DefaultValue[T], FieldMetaWithNotType[RequireImplicit]] {
             override def getValue(name: String, defaultValue: DefaultValue[T], rep: FieldMetaWithNotType[RequireImplicit]): ValidatedDecoder[T] = {
               val fieldName = getName(rep, name)
               val simpleResult = new ValidatedDecoder[T] {

@@ -1,18 +1,17 @@
 package org.scalax.ugeneric.circe.decoder.common.model
 
 import asuna.macros.single.DefaultValue
-import asuna.macros.ByNameImplicit
-import asuna.{Application3, PropertyTag0}
+import asuna.{Application4, PropertyTag}
 import io.circe._
 import org.scalax.ugeneric.circe.NameTranslator
 
-trait PluginDecodeContent[Model, Name, DefaultValue] extends Any {
+trait PluginDecodeContent[N, Model, Name, DefaultValue] extends Any {
   def getDecoder(name: Name, defaultValue: DefaultValue, p: Option[NameTranslator], useDefaultValue: Boolean): Decoder[Model]
 }
 
 object PluginDecodeContent {
 
-  implicit def asunaPlaceHolderDecoder[T](implicit dd: => Decoder[T]): Application3[PluginDecodeContent, PropertyTag0[T], T, String, DefaultValue[T]] = {
+  implicit def asunaPlaceHolderDecoder[T](implicit dd: => Decoder[T]): Application4[PluginDecodeContent, PropertyTag[T], T, String, DefaultValue[T]] = {
     _ => (name, defaultValue, p, useDefault) =>
       val nameI = p.map(_.tran(name)).getOrElse(name)
 
