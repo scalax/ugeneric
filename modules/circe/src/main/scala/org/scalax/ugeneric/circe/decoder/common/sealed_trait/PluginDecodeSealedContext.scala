@@ -22,8 +22,11 @@ class PluginDecodeSealedContext[P] extends Context3[PluginDecodeSealedTraitSelec
     }: con.JsonDecoder[Z1, Z2, Z3]
   }
 
-  override val start
-    : PluginDecodeSealedTraitSelector[P]#JsonDecoder[AsunaTuple0, AsunaTuple0, AsunaTuple0] = { (_, _, _) => decoderZero }: con.JsonDecoder[AsunaTuple0, AsunaTuple0]
+  override val start: PluginDecodeSealedTraitSelector[P]#JsonDecoder[AsunaTuple0, AsunaTuple0, AsunaTuple0] = { (_, _, _) => decoderZero }: con.JsonDecoder[
+    AsunaTuple0,
+    AsunaTuple0,
+    AsunaTuple0
+  ]
 }
 
 object PluginDecodeSealedContext {

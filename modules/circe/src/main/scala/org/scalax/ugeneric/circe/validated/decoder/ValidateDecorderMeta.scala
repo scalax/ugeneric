@@ -1,13 +1,13 @@
 package org.scalax.ugeneric.circe.validated.decoder
 
-import asuna.{Application4, Application6, Context4, Context6, PropertyTag }
+import asuna.{Application4, Application6, Context4, Context6, PropertyTag}
 import asuna.macros.ByNameImplicit
 import asuna.macros.single.DefaultValue
 import cats.data.Validated
 import cats.implicits._
 import io.circe.{ACursor, Decoder, Json}
 import net.scalax.cpoi.api._
-import org.scalax.ugeneric.circe.decoder.{ValidatedDecodeContent, ValidatedDecoder, errorMessage}
+import org.scalax.ugeneric.circe.decoder.{errorMessage, ValidatedDecodeContent, ValidatedDecoder}
 
 import scala.collection.compat._
 
@@ -24,11 +24,21 @@ object ValidateDecorderMeta {
   object RequireImplicit {
     implicit def asunaCirceUntypedReader[T](
       implicit dd: ByNameImplicit[Decoder[T]]
-    ): Application6[ValidatedDecodeContent, PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[T], T, String, DefaultValue[T], FieldMetaWithNotType[RequireImplicit]] =
-      new Application6[ValidatedDecodeContent, PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[T], T, String, DefaultValue[T], FieldMetaWithNotType[RequireImplicit]] {
-        override def application(context: Context6[ValidatedDecodeContent]): ValidatedDecodeContent[PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[T],T, String, DefaultValue[T], FieldMetaWithNotType[RequireImplicit]] = {
+    ): Application6[ValidatedDecodeContent, PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[T], T, String, DefaultValue[T], FieldMetaWithNotType[
+      RequireImplicit
+    ]] =
+      new Application6[ValidatedDecodeContent, PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[T], T, String, DefaultValue[T], FieldMetaWithNotType[
+        RequireImplicit
+      ]] {
+        override def application(
+          context: Context6[ValidatedDecodeContent]
+        ): ValidatedDecodeContent[PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[T], T, String, DefaultValue[T], FieldMetaWithNotType[
+          RequireImplicit
+        ]] = {
           def getName(rep: FieldMetaWithNotType[RequireImplicit], name: String): String = rep.fieldNameMeta.getOrElse(name)
-          new ValidatedDecodeContent[PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[T],T, String, DefaultValue[T], FieldMetaWithNotType[RequireImplicit]] {
+          new ValidatedDecodeContent[PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[T], T, String, DefaultValue[T], FieldMetaWithNotType[
+            RequireImplicit
+          ]] {
             override def getValue(name: String, defaultValue: DefaultValue[T], rep: FieldMetaWithNotType[RequireImplicit]): ValidatedDecoder[T] = {
               val fieldName = getName(rep, name)
               val simpleResult = new ValidatedDecoder[T] {
@@ -109,13 +119,19 @@ object ValidateDecorderMeta {
 
     implicit def asunaCirceTypedReader[R, T](
       implicit dd: ByNameImplicit[Decoder[R]]
-    ): Application4[ValidatedDecodeContent, PropertyTag1[FieldMeta[RequireImplicit, R, T], T], T, String, DefaultValue[T], FieldMeta[RequireImplicit, R, T]] =
-      new Application4[ValidatedDecodeContent, PropertyTag1[FieldMeta[RequireImplicit, R, T], T], T, String, DefaultValue[T], FieldMeta[RequireImplicit, R, T]] {
-        override def application(context: Context4[ValidatedDecodeContent]): ValidatedDecodeContent[T, String, DefaultValue[T], FieldMeta[RequireImplicit, R, T]] = {
+    ): Application6[ValidatedDecodeContent, PropertyTag[FieldMeta[RequireImplicit, R, T]], PropertyTag[T], T, String, DefaultValue[T], FieldMeta[RequireImplicit, R, T]] =
+      new Application6[ValidatedDecodeContent, PropertyTag[FieldMeta[RequireImplicit, R, T]], PropertyTag[T], T, String, DefaultValue[T], FieldMeta[
+        RequireImplicit,
+        R,
+        T
+      ]] {
+        override def application(
+          context: Context6[ValidatedDecodeContent]
+        ): ValidatedDecodeContent[PropertyTag[FieldMeta[RequireImplicit, R, T]], PropertyTag[T], T, String, DefaultValue[T], FieldMeta[RequireImplicit, R, T]] = {
           def value(rep: FieldMeta[RequireImplicit, R, T]): Option[T]               = rep.decoderMeta.map(_ => throw new Exception("Require 列必须不能提供字面量或 Decoder"))
           def takeName(rep: FieldMeta[RequireImplicit, R, T], name: String): String = rep.fieldNameMeta.getOrElse(name)
 
-          new ValidatedDecodeContent[T, String, DefaultValue[T], FieldMeta[RequireImplicit, R, T]] {
+          new ValidatedDecodeContent[PropertyTag[FieldMeta[RequireImplicit, R, T]], PropertyTag[T], T, String, DefaultValue[T], FieldMeta[RequireImplicit, R, T]] {
             override def getValue(name: String, defaultValue: DefaultValue[T], rep: FieldMeta[RequireImplicit, R, T]): ValidatedDecoder[T] = {
               val fieldName = takeName(rep, name)
               value(rep).map(Validated.valid)
@@ -171,12 +187,22 @@ object ValidateDecorderMeta {
   class NotRequireImplicit extends ImplicitRequireOrNot
   object NotRequireImplicit {
     implicit def asunaCirceTypedReader[R, T]
-      : Application4[ValidatedDecodeContent, PropertyTag1[FieldMeta[NotRequireImplicit, R, T], T], T, String, DefaultValue[T], FieldMeta[NotRequireImplicit, R, T]] =
-      new Application4[ValidatedDecodeContent, PropertyTag1[FieldMeta[NotRequireImplicit, R, T], T], T, String, DefaultValue[T], FieldMeta[NotRequireImplicit, R, T]] {
-        override def application(context: Context4[ValidatedDecodeContent]): ValidatedDecodeContent[T, String, DefaultValue[T], FieldMeta[NotRequireImplicit, R, T]] = {
+      : Application6[ValidatedDecodeContent, PropertyTag[FieldMeta[NotRequireImplicit, R, T]], PropertyTag[T], T, String, DefaultValue[T], FieldMeta[
+        NotRequireImplicit,
+        R,
+        T
+      ]] =
+      new Application6[ValidatedDecodeContent, PropertyTag[FieldMeta[NotRequireImplicit, R, T]], PropertyTag[T], T, String, DefaultValue[T], FieldMeta[
+        NotRequireImplicit,
+        R,
+        T
+      ]] {
+        override def application(
+          context: Context6[ValidatedDecodeContent]
+        ): ValidatedDecodeContent[PropertyTag[FieldMeta[NotRequireImplicit, R, T]], PropertyTag[T], T, String, DefaultValue[T], FieldMeta[NotRequireImplicit, R, T]] = {
           def takeName(rep: FieldMeta[NotRequireImplicit, R, T], name: String): String = rep.fieldNameMeta.getOrElse(name)
 
-          new ValidatedDecodeContent[T, String, DefaultValue[T], FieldMeta[NotRequireImplicit, R, T]] {
+          new ValidatedDecodeContent[PropertyTag[FieldMeta[NotRequireImplicit, R, T]], PropertyTag[T], T, String, DefaultValue[T], FieldMeta[NotRequireImplicit, R, T]] {
             override def getValue(name: String, defaultValue: DefaultValue[T], rep: FieldMeta[NotRequireImplicit, R, T]): ValidatedDecoder[T] = {
               val literaOrReader = rep.decoderMeta.getOrElse(throw new Exception("字面量和 Decoder 不能同时不设置"))
               val fieldName      = takeName(rep, name)

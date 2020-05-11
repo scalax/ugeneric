@@ -1,9 +1,9 @@
 package org.scalax.ugeneric.circe.encoder.common.model
 
-import asuna.{ Application3, PropertyTag }
+import asuna.{Application3, PropertyTag}
 import io.circe.Encoder
 
-abstract class JsonObjectContent[I,Model, Name] {
+abstract class JsonObjectContent[I, Model, Name] {
   def appendField(name: Name): JsonObjectAppender[Model]
 }
 

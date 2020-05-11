@@ -17,7 +17,10 @@ class EncodeSealedContext[H] extends Context3[EncodeSealedTraitSelector[H]#JsonE
   }: con.JsonEncoder[Z1, Z2]
 
   override val start: EncodeSealedTraitSelector[H]#JsonEncoder[AsunaTuple0, AsunaTuple0] = { (_, _, _) => Option.empty }: con.JsonEncoder[AsunaTuple0, AsunaTuple0]*/
-  override def append[X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3](x: EncodeSealedTraitSelector[H]#JsonEncoder[X1, X2, X3], y: EncodeSealedTraitSelector[H]#JsonEncoder[Y1, Y2, Y3])(plus: Plus3[X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3]): EncodeSealedTraitSelector[H]#JsonEncoder[Z1, Z2, Z3] = {
+  override def append[X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3](
+    x: EncodeSealedTraitSelector[H]#JsonEncoder[X1, X2, X3],
+    y: EncodeSealedTraitSelector[H]#JsonEncoder[Y1, Y2, Y3]
+  )(plus: Plus3[X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3]): EncodeSealedTraitSelector[H]#JsonEncoder[Z1, Z2, Z3] = {
     { (model, classTags, name) =>
       val ax = plus.takeHead3(name)
       val yx = plus.takeTail3(name)
@@ -25,11 +28,11 @@ class EncodeSealedContext[H] extends Context3[EncodeSealedTraitSelector[H]#JsonE
       val cy = plus.takeTail2(classTags)
       val a  = x.subClassToJsonOpt(model, cx, ax)
       a.orElse(y.subClassToJsonOpt(model, cy, yx))
-    }: con.JsonEncoder[Z1, Z2,Z3]
+    }: con.JsonEncoder[Z1, Z2, Z3]
   }
 
   override val start: EncodeSealedTraitSelector[H]#JsonEncoder[AsunaTuple0, AsunaTuple0, AsunaTuple0] = {
-    { (_, _, _) => Option.empty }: con.JsonEncoder[AsunaTuple0, AsunaTuple0]
+    { (_, _, _) => Option.empty }: con.JsonEncoder[AsunaTuple0, AsunaTuple0, AsunaTuple0]
   }
 }
 

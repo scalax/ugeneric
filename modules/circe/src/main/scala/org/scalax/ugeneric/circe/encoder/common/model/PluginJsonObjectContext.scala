@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.circe.encoder.common.model
 
-import asuna.{AsunaTuple0, Context3,  Plus3}
+import asuna.{AsunaTuple0, Context3, Plus3}
 
 object PluginJsonObjectContext extends Context3[PluginJsonObjectContent] {
 
@@ -8,10 +8,9 @@ object PluginJsonObjectContext extends Context3[PluginJsonObjectContent] {
 
   private val jsonObjectAppenderAsunaTuple0: JsonObjectAppender[AsunaTuple0] = _ => initObjectAppender
 
-
-
-  override def append[X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3](x: PluginJsonObjectContent[X1, X2, X3], y: PluginJsonObjectContent[Y1, Y2, Y3])(p: Plus3[X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3]): PluginJsonObjectContent[Z1, Z2, Z3] = {
-    (name, i) =>
+  override def append[X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3](x: PluginJsonObjectContent[X1, X2, X3], y: PluginJsonObjectContent[Y1, Y2, Y3])(
+    p: Plus3[X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3]
+  ): PluginJsonObjectContent[Z1, Z2, Z3] = { (name, i) =>
     val appender1 = x.appendField(p.takeHead3(name), i)
     val appender2 = y.appendField(p.takeTail3(name), i)
 
@@ -22,7 +21,5 @@ object PluginJsonObjectContext extends Context3[PluginJsonObjectContent] {
     }
   }
 
-  override val start: PluginJsonObjectContent[AsunaTuple0, AsunaTuple0, AsunaTuple0] = {
-    (_, _) => jsonObjectAppenderAsunaTuple0
-  }
+  override val start: PluginJsonObjectContent[AsunaTuple0, AsunaTuple0, AsunaTuple0] = { (_, _) => jsonObjectAppenderAsunaTuple0 }
 }

@@ -23,7 +23,7 @@ class DecodeSealedContext[P] extends Context3[DecodeSealedTraitSelector[P]#JsonD
   }
 
   override val start: DecodeSealedTraitSelector[P]#JsonDecoder[AsunaTuple0, AsunaTuple0, AsunaTuple0] = {
-    { (_, _) => decoderZero }: con.JsonDecoder[AsunaTuple0, AsunaTuple0,AsunaTuple0]
+    { (_, _) => decoderZero }: con.JsonDecoder[AsunaTuple0, AsunaTuple0, AsunaTuple0]
   }
 }
 

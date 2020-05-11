@@ -1,10 +1,10 @@
 package org.scalax.ugeneric.circe.encoder.common.model
 
-import asuna.{ Application3, PropertyTag}
+import asuna.{Application3, PropertyTag}
 import io.circe.Encoder
 import org.scalax.ugeneric.circe.NameTranslator
 
-abstract class PluginJsonObjectContent[I,Model, Name] {
+abstract class PluginJsonObjectContent[I, Model, Name] {
   def appendField(name: Name, p: Option[NameTranslator]): JsonObjectAppender[Model]
 }
 

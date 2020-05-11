@@ -1,16 +1,16 @@
 package org.scalax.ugeneric.circe.decoder
 
-import asuna.{AsunaTuple0,  Context6,  Plus6}
+import asuna.{AsunaTuple0, Context6, Plus6}
 import cats.data.Validated
 import io.circe.ACursor
 
 object ValidatedDecodeContext extends Context6[ValidatedDecodeContent] {
 
-
-
-
-  override def append[X1, X2, X3, X4, X5, X6, Y1, Y2, Y3, Y4, Y5, Y6, Z1, Z2, Z3, Z4, Z5, Z6](x: ValidatedDecodeContent[X1, X2, X3, X4, X5, X6], y: ValidatedDecodeContent[Y1, Y2, Y3, Y4, Y5, Y6])(p: Plus6[X1, X2, X3, X4, X5, X6, Y1, Y2, Y3, Y4, Y5, Y6, Z1, Z2, Z3, Z4, Z5, Z6]): ValidatedDecodeContent[Z1, Z2, Z3, Z4, Z5, Z6] = {
-    new ValidatedDecodeContent[Z1, Z2, Z3, Z4,Z5,Z6] {
+  override def append[X1, X2, X3, X4, X5, X6, Y1, Y2, Y3, Y4, Y5, Y6, Z1, Z2, Z3, Z4, Z5, Z6](
+    x: ValidatedDecodeContent[X1, X2, X3, X4, X5, X6],
+    y: ValidatedDecodeContent[Y1, Y2, Y3, Y4, Y5, Y6]
+  )(p: Plus6[X1, X2, X3, X4, X5, X6, Y1, Y2, Y3, Y4, Y5, Y6, Z1, Z2, Z3, Z4, Z5, Z6]): ValidatedDecodeContent[Z1, Z2, Z3, Z4, Z5, Z6] = {
+    new ValidatedDecodeContent[Z1, Z2, Z3, Z4, Z5, Z6] {
       override def getValue(name: Z4, defaultValue: Z5, rep: Z6): ValidatedDecoder[Z3] = {
         val xx1 = p.takeHead4(name)
         val xx2 = p.takeHead5(defaultValue)
@@ -30,7 +30,7 @@ object ValidatedDecodeContext extends Context6[ValidatedDecodeContent] {
   }
 
   override val start: ValidatedDecodeContent[AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0] = {
-    new ValidatedDecodeContent[AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0,AsunaTuple0,AsunaTuple0] {
+    new ValidatedDecodeContent[AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0] {
       override def getValue(name: AsunaTuple0, defaultValue: AsunaTuple0, rep: AsunaTuple0): ValidatedDecoder[AsunaTuple0] = {
         new ValidatedDecoder[AsunaTuple0] {
           override def getValue(json: ACursor): Validated[errorMessage, AsunaTuple0] = Validated.valid(AsunaTuple0.value)
