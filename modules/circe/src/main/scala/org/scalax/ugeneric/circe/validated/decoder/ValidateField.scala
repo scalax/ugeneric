@@ -13,8 +13,8 @@ object Path {
 
   implicit val circeDecoder: Decoder[Path] = Decoder.instance[Path] { (h) =>
     h.focus match {
-      case Some(r) if r.isNumber => r.as[Int].map(IndexPath)
-      case Some(r) if r.isString => r.as[String].map(PropertyNamePath)
+      case Some(r) if r.isNumber => r.as[Int].right.map(IndexPath)
+      case Some(r) if r.isString => r.as[String].right.map(PropertyNamePath)
       case _                     => Left(DecodingFailure("不正确的路径格式", h.history))
     }
   }

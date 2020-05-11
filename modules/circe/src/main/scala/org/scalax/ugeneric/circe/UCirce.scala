@@ -40,12 +40,12 @@ object UCirce {
     app: Application3[encoder.common.model.JsonObjectContent, R, Prop, Name],
     cv1: AsunaLabelledGeneric[Model, Name],
     cv2: AsunaGetterGeneric[Model, Prop]
-  ): Encoder.AsObject[Model] = {
+  ): VersionCompat.ObjectEncoderType[Model] = {
     val names              = cv1.names
     val applicationEncoder = app.application(encoder.common.model.JsonObjectContext)
     val application2       = applicationEncoder.appendField(names)
 
-    { o =>
+    VersionCompat.ObjectEncoderValue.instance { o =>
       val jsonList = application2.getAppender(cv2.getter(o)).append(List.empty)
       JsonObject.fromIterable(jsonList)
     }
@@ -56,29 +56,29 @@ object UCirce {
     app: Application3[encoder.common.model.PluginJsonObjectContent, R, Prop, Name],
     cv1: AsunaLabelledGeneric[Model, Name],
     cv2: AsunaGetterGeneric[Model, Prop]
-  ): Encoder.AsObject[Model] = {
+  ): VersionCompat.ObjectEncoderType[Model] = {
     val names              = cv1.names
     val applicationEncoder = app.application(encoder.common.model.PluginJsonObjectContext)
     val application2       = applicationEncoder.appendField(names, p)
 
-    { o =>
+    VersionCompat.ObjectEncoderValue.instance { o =>
       val jsonList = application2.getAppender(cv2.getter(o)).append(List.empty)
       JsonObject.fromIterable(jsonList)
     }
   }
 
-  final def encodeCaseObject[T]: Encoder.AsObject[T] = _ => JsonObject.empty
+  final def encodeCaseObject[T]: VersionCompat.ObjectEncoderType[T] = VersionCompat.ObjectEncoderValue.instance(_ => JsonObject.empty)
 
   final def encodeSealed[H, R, Cls, Lab](
     implicit ll: AsunaSealedGeneric.Aux[H, R],
     app: Application3[encoder.common.sealed_trait.EncodeSealedTraitSelector[H]#JsonEncoder, R, Cls, Lab],
     cv1: AsunaSealedLabelledGeneric[H, Lab],
     cv2: AsunaSealedClassGeneric[H, Cls]
-  ): Encoder.AsObject[H] = {
+  ): VersionCompat.ObjectEncoderType[H] = {
     val name1              = cv1.names
     val name2              = cv2.names
     val applicationEncoder = app.application(encoder.common.sealed_trait.EncodeSealedContext[H])
-    o => JsonObject.fromIterable(applicationEncoder.subClassToJsonOpt(o, name2, name1))
+    VersionCompat.ObjectEncoderValue.instance { o => JsonObject.fromIterable(applicationEncoder.subClassToJsonOpt(o, name2, name1)) }
   }
 
   final def encodeSealedWithPlugin[H, R, Cls, Lab](nameTranslator: Option[NameTranslator])(
@@ -86,11 +86,11 @@ object UCirce {
     app: Application3[encoder.common.sealed_trait.PluginEncodeSealedTraitSelector[H]#JsonEncoder, R, Cls, Lab],
     cv1: AsunaSealedLabelledGeneric[H, Lab],
     cv2: AsunaSealedClassGeneric[H, Cls]
-  ): Encoder.AsObject[H] = {
+  ): VersionCompat.ObjectEncoderType[H] = {
     val name1              = cv1.names
     val name2              = cv2.names
     val applicationEncoder = app.application(encoder.common.sealed_trait.PluginEncodeSealedContext[H])
-    o => JsonObject.fromIterable(applicationEncoder.subClassToJsonOpt(o, name2, name1, nameTranslator))
+    VersionCompat.ObjectEncoderValue.instance { o => JsonObject.fromIterable(applicationEncoder.subClassToJsonOpt(o, name2, name1, nameTranslator)) }
   }
 
   /*def decodeCaseClassWithTable[Table, Model, R <: TupleTag, Prop, Nam, DefVal, Rep](table: Table)(

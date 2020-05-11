@@ -9,7 +9,10 @@ class DecodeSealedApplication[Model, Sealed](final val toProperty: (String, HCur
   private val con = DecodeSealedTraitSelector[Sealed]
   override def application(
     context: Context3[DecodeSealedTraitSelector[Sealed]#JsonDecoder]
-  ): DecodeSealedTraitSelector[Sealed]#JsonDecoder[SealedTag[Model], String, Model => Sealed] = { (name, _) => s => toProperty(name, s) }: con.JsonDecoder[SealedTag[
-    Model
-  ], String, Model => Sealed]
+  ): DecodeSealedTraitSelector[Sealed]#JsonDecoder[SealedTag[Model], String, Model => Sealed] = new con.JsonDecoder[SealedTag[Model], String, Model => Sealed] {
+    override def getValue(name: String, tran: Model => Sealed): Decoder[Sealed] = {
+      Decoder.instance { s => toProperty(name, s) }
+
+    }
+  }
 }

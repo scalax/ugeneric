@@ -10,10 +10,14 @@ class EncodeSealedApplication[Model, Sealed](final val toProperty: (String, Mode
 
   override def application(
     context: Context3[EncodeSealedTraitSelector[Sealed]#JsonEncoder]
-  ): EncodeSealedTraitSelector[Sealed]#JsonEncoder[SealedTag[Model], Class[Model], String] = { (model, classTags, labelled) =>
-    if (classTags.isInstance(model))
-      Some(toProperty(labelled, classTags.cast(model)))
-    else
-      Option.empty
-  }: con.JsonEncoder[SealedTag[Model], Class[Model], String]
+  ): EncodeSealedTraitSelector[Sealed]#JsonEncoder[SealedTag[Model], Class[Model], String] =
+    new con.JsonEncoder[SealedTag[Model], Class[Model], String] {
+      override def subClassToJsonOpt(model: Sealed, classTags: Class[Model], labelled: String): Option[(String, Json)] = {
+        if (classTags.isInstance(model))
+          Some(toProperty(labelled, classTags.cast(model)))
+        else
+          Option.empty
+      }
+    }
+
 }

@@ -1,12 +1,12 @@
 package org.scalax.ugeneric.circe.validated.decoder
 
-import asuna.{Application4, Application6, Context4, Context6, PropertyTag}
+import asuna.{Application6, Context6, PropertyTag}
 import asuna.macros.ByNameImplicit
 import asuna.macros.single.DefaultValue
 import cats.data.Validated
 import cats.implicits._
 import io.circe.{ACursor, Decoder, Json}
-import net.scalax.cpoi.api._
+import org.scalax.ugeneric.circe.VersionCompat._
 import org.scalax.ugeneric.circe.decoder.{errorMessage, ValidatedDecodeContent, ValidatedDecoder}
 
 import scala.collection.compat._
