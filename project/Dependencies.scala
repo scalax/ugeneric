@@ -3,7 +3,7 @@ import sbt.Keys._
 
 object Dependencies {
 
-  val asunaVersion = "0.0.3-20200511SNAP1"
+  val asunaVersion = "0.0.3-20200512SNAP1"
   val fsg = Seq(
     resolvers += Resolver.bintrayRepo("scalax", "asuna"),
     libraryDependencies ++= List(

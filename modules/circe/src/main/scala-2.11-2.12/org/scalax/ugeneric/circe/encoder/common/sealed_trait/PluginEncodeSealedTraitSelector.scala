@@ -21,20 +21,17 @@ object PluginEncodeSealedTraitSelector {
     implicit t: ByNameImplicit[Encoder[R]]
   ): Application3[PluginEncodeSealedTraitSelector[T]#JsonEncoder, SealedTag[R], Class[R], String] = {
     val con = PluginEncodeSealedTraitSelector[T]
-    new Application3[PluginEncodeSealedTraitSelector[T]#JsonEncoder, SealedTag[R], Class[R], String] {
+    new Application3[PluginEncodeSealedTraitSelector[T]#JsonEncoder, SealedTag[R], Class[R], String] with con.JsonEncoder[SealedTag[R], Class[R], String] {
+      override def subClassToJsonOpt(model: T, classTags: Class[R], name: String, i: Option[NameTranslator]): Option[(String, Json)] = {
+        val nameI = i.map(_.tran(name)).getOrElse(name)
+        if (classTags.isInstance(model))
+          Some((nameI, t.value(classTags.cast(model))))
+        else
+          Option.empty
+      }
       override def application(
         context: Context3[PluginEncodeSealedTraitSelector[T]#JsonEncoder]
-      ): PluginEncodeSealedTraitSelector[T]#JsonEncoder[SealedTag[R], Class[R], String] = {
-        new con.JsonEncoder[SealedTag[R], Class[R], String] {
-          override def subClassToJsonOpt(model: T, classTags: Class[R], name: String, i: Option[NameTranslator]): Option[(String, Json)] = {
-            val nameI = i.map(_.tran(name)).getOrElse(name)
-            if (classTags.isInstance(model))
-              Some((nameI, t.value(classTags.cast(model))))
-            else
-              Option.empty
-          }
-        }
-      }
+      ): PluginEncodeSealedTraitSelector[T]#JsonEncoder[SealedTag[R], Class[R], String] = this
     }
   }
 

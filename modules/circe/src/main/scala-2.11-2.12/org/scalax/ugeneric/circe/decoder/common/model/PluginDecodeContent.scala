@@ -13,30 +13,27 @@ trait PluginDecodeContent[N, Model, Name, DefaultValue] extends Any {
 object PluginDecodeContent {
 
   implicit def asunaPlaceHolderDecoder[T](implicit dd: ByNameImplicit[Decoder[T]]): Application4[PluginDecodeContent, PropertyTag[T], T, String, DefaultValue[T]] = {
-    new Application4[PluginDecodeContent, PropertyTag[T], T, String, DefaultValue[T]] {
-      override def application(context: Context4[PluginDecodeContent]): PluginDecodeContent[PropertyTag[T], T, String, DefaultValue[T]] = {
-        new PluginDecodeContent[PropertyTag[T], T, String, DefaultValue[T]] {
-          override def getDecoder(name: String, defaultValue: DefaultValue[T], p: Option[NameTranslator], useDefault: Boolean): Decoder[T] = {
-            val nameI = p.map(_.tran(name)).getOrElse(name)
+    new Application4[PluginDecodeContent, PropertyTag[T], T, String, DefaultValue[T]] with PluginDecodeContent[PropertyTag[T], T, String, DefaultValue[T]] {
+      override def getDecoder(name: String, defaultValue: DefaultValue[T], p: Option[NameTranslator], useDefault: Boolean): Decoder[T] = {
+        val nameI = p.map(_.tran(name)).getOrElse(name)
 
-            Decoder.instance { j =>
-              val fieldValue = j.downField(nameI)
-              val value      = fieldValue.as(dd.value)
+        Decoder.instance { j =>
+          val fieldValue = j.downField(nameI)
+          val value      = fieldValue.as(dd.value)
 
-              if (value.isRight) {
-                value
-              } else {
-                //if this field is not exists or this field is null
-                if (fieldValue.focus.map(_.isNull).getOrElse(true) && useDefault) {
-                  defaultValue.value.map(Right.apply).getOrElse(value)
-                } else {
-                  value
-                }
-              }
+          if (value.isRight) {
+            value
+          } else {
+            //if this field is not exists or this field is null
+            if (fieldValue.focus.map(_.isNull).getOrElse(true) && useDefault) {
+              defaultValue.value.map(Right.apply).getOrElse(value)
+            } else {
+              value
             }
           }
         }
       }
+      override def application(context: Context4[PluginDecodeContent]): PluginDecodeContent[PropertyTag[T], T, String, DefaultValue[T]] = this
     }
   }
 

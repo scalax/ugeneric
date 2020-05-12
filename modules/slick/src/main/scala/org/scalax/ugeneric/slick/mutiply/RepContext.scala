@@ -25,7 +25,7 @@ object RepContext extends Context6[RepNode] {
     }
   }
 
-  override def start: RepNode[AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0] = {
+  override val start: RepNode[AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0] = {
     new RepNode[AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0] {
       override def node(rep: AsunaTuple0, l: List[Node]): List[Node]                       = l
       override def fieldPlus(data: AsunaTuple0, l: List[Any]): List[Any]                   = l

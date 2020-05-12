@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.circe.decoder.common.sealed_trait
 
-import asuna.Application3
+import asuna.{Application3, Context3}
 import asuna.macros.single.SealedTag
 import io.circe.Decoder
 import org.scalax.ugeneric.circe.NameTranslator
@@ -22,11 +22,15 @@ object PluginDecodeSealedTraitSelector {
     implicit t: => Decoder[R]
   ): Application3[PluginDecodeSealedTraitSelector[T]#JsonDecoder, SealedTag[R], String, R => T] = {
     val con = PluginDecodeSealedTraitSelector[T]
-    _ =>
-      { (name, tran, i) => j =>
+    new Application3[PluginDecodeSealedTraitSelector[T]#JsonDecoder, SealedTag[R], String, R => T] with con.JsonDecoder[SealedTag[R], String, R => T] {
+      override def application(
+        context: Context3[PluginDecodeSealedTraitSelector[T]#JsonDecoder]
+      ): PluginDecodeSealedTraitSelector[T]#JsonDecoder[SealedTag[R], String, R => T] = this
+      override def getValue(name: String, tran: R => T, i: Option[NameTranslator]): Decoder[T] = {
         val nameI = i.map(_.tran(name)).getOrElse(name)
-        j.get(nameI)(t).map(tran)
-      }: con.JsonDecoder[SealedTag[R], String, R => T]
+        _.get(nameI)(t).map(tran)
+      }
+    }
   }
 
 }
