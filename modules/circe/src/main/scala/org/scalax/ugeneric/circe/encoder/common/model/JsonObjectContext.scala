@@ -5,16 +5,6 @@ import io.circe.Json
 
 object JsonObjectContext extends Context3[JsonObjectContent] {
 
-  private val initObjectAppender: JsonObjectFieldAppender = new JsonObjectFieldAppender {
-    override def append(data: List[(String, Json)]): List[(String, Json)] = data
-  }
-
-  private val jsonObjectAppenderAsunaTuple0: JsonObjectAppender[ZsgTuple0] = new JsonObjectAppender[ZsgTuple0] {
-    override def getAppender(data: ZsgTuple0): JsonObjectFieldAppender = {
-      initObjectAppender
-    }
-  }
-
   override def append[X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3](x: JsonObjectContent[X1, X2, X3], y: JsonObjectContent[Y1, Y2, Y3])(
     p: Plus3[X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3]
   ): JsonObjectContent[Z1, Z2, Z3] = new JsonObjectContent[Z1, Z2, Z3] {
@@ -36,6 +26,12 @@ object JsonObjectContext extends Context3[JsonObjectContent] {
   }
 
   override val start: JsonObjectContent[ZsgTuple0, ZsgTuple0, ZsgTuple0] = new JsonObjectContent[ZsgTuple0, ZsgTuple0, ZsgTuple0] {
+    val initObjectAppender: JsonObjectFieldAppender = new JsonObjectFieldAppender {
+      override def append(data: List[(String, Json)]): List[(String, Json)] = data
+    }
+    val jsonObjectAppenderAsunaTuple0: JsonObjectAppender[ZsgTuple0] = new JsonObjectAppender[ZsgTuple0] {
+      override def getAppender(data: ZsgTuple0): JsonObjectFieldAppender = initObjectAppender
+    }
     override def appendField(name: ZsgTuple0): JsonObjectAppender[ZsgTuple0] = {
       jsonObjectAppenderAsunaTuple0
     }

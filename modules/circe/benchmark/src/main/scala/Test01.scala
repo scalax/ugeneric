@@ -20,14 +20,14 @@ class Test01 {
 
   object rawCirceEncoder {
     import io.circe.generic.semiauto._
-    implicit val a1: Encoder.AsObject[Bar] = deriveEncoder
-    implicit val a2: Encoder.AsObject[Foo] = deriveEncoder
+    implicit val a1: Encoder[Bar] = deriveEncoder
+    implicit val a2: Encoder[Foo] = deriveEncoder
 
   }
 
   object asunaEncoder {
-    implicit val a1: Encoder.AsObject[Bar] = UCirce.encodeCaseClass
-    implicit val a2: Encoder.AsObject[Foo] = UCirce.encodeCaseClass
+    implicit val a1: Encoder[Bar] = UCirce.encodeCaseClass
+    implicit val a2: Encoder[Foo] = UCirce.encodeCaseClass
   }
 
   val model: Bar = Model.bar
