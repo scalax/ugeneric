@@ -1,12 +1,12 @@
 package org.scalax.ugeneric.circe.encoder.common.sealed_trait
 
-import asuna.Application2
+import asuna.{Application3, Context3}
 import asuna.macros.ByNameImplicit
 import asuna.macros.single.SealedTag
 import io.circe.{Encoder, Json}
 
 class EncodeSealedTraitSelector[H] {
-  trait JsonEncoder[T, II] {
+  trait JsonEncoder[M, T, II] {
     def subClassToJsonOpt(model: H, classTags: T, labelled: II): Option[(String, Json)]
   }
 }
@@ -18,15 +18,16 @@ object EncodeSealedTraitSelector {
 
   implicit final def asunaCirceSealedEncoder[T, R](
     implicit t: ByNameImplicit[Encoder[R]]
-  ): Application2[EncodeSealedTraitSelector[T]#JsonEncoder, SealedTag[R], Class[R], String] = {
+  ): EncodeSealedTraitSelector[T]#JsonEncoder[SealedTag[R], Class[R], String] = {
     val con = EncodeSealedTraitSelector[T]
-    _ =>
-      { (model, classTags, labelled) =>
+    new con.JsonEncoder[SealedTag[R], Class[R], String] {
+      override def subClassToJsonOpt(model: T, classTags: Class[R], labelled: String): Option[(String, Json)] = {
         if (classTags.isInstance(model))
           Some((labelled, t.value(classTags.cast(model))))
         else
           Option.empty
-      }: con.JsonEncoder[Class[R], String]
+      }
+    }
   }
 
 }

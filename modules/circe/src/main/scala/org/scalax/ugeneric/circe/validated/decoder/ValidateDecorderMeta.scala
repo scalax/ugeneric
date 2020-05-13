@@ -1,12 +1,12 @@
 package org.scalax.ugeneric.circe.validated.decoder
 
-import asuna.{Application4, Context4, PropertyTag1}
+import asuna.{Application6, Context6, PropertyTag}
 import asuna.macros.ByNameImplicit
 import asuna.macros.single.DefaultValue
 import cats.data.Validated
 import cats.implicits._
 import io.circe.{ACursor, Decoder, Json}
-import net.scalax.cpoi.api._
+import org.scalax.ugeneric.circe.VersionCompat._
 import org.scalax.ugeneric.circe.decoder.{errorMessage, ValidatedDecodeContent, ValidatedDecoder}
 
 import scala.collection.compat._
@@ -24,59 +24,60 @@ object ValidateDecorderMeta {
   object RequireImplicit {
     implicit def asunaCirceUntypedReader[T](
       implicit dd: ByNameImplicit[Decoder[T]]
-    ): Application4[ValidatedDecodeContent, PropertyTag1[FieldMetaWithNotType[RequireImplicit], T], T, String, DefaultValue[T], FieldMetaWithNotType[RequireImplicit]] =
-      new Application4[ValidatedDecodeContent, PropertyTag1[FieldMetaWithNotType[RequireImplicit], T], T, String, DefaultValue[T], FieldMetaWithNotType[RequireImplicit]] {
-        override def application(context: Context4[ValidatedDecodeContent]): ValidatedDecodeContent[T, String, DefaultValue[T], FieldMetaWithNotType[RequireImplicit]] = {
-          def getName(rep: FieldMetaWithNotType[RequireImplicit], name: String): String = rep.fieldNameMeta.getOrElse(name)
-          new ValidatedDecodeContent[T, String, DefaultValue[T], FieldMetaWithNotType[RequireImplicit]] {
-            override def getValue(name: String, defaultValue: DefaultValue[T], rep: FieldMetaWithNotType[RequireImplicit]): ValidatedDecoder[T] = {
-              val fieldName = getName(rep, name)
-              val simpleResult = new ValidatedDecoder[T] {
-                override def getValue(json: ACursor): Validated[errorMessage, T] = {
-                  json.downField(fieldName).focus match {
-                    //case Some(Json.Null) => Validated.invalid(errorMessage.build(fieldName, s"${fieldName}不能为空"))
-                    //case None            => Validated.invalid(errorMessage.build(fieldName, s"${fieldName}不能为空"))
-                    case Some(j) =>
-                      j.as(dd.value) match {
-                        case Left(i) =>
-                          Validated.invalid(errorMessage.build(fieldName, rep.typeErrorMessageMeta))
-                        case Right(value) => Validated.valid(value)
-                      }
-                    case _ =>
-                      Json.Null.as(dd.value) match {
-                        case Left(i) =>
-                          Validated.invalid(errorMessage.build(fieldName, rep.typeErrorMessageMeta))
-                        case Right(value) => Validated.valid(value)
-                      }
+    ): ValidatedDecodeContent[PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[T], T, String, DefaultValue[T], FieldMetaWithNotType[
+      RequireImplicit
+    ]] = {
+      def getName(rep: FieldMetaWithNotType[RequireImplicit], name: String): String = rep.fieldNameMeta.getOrElse(name)
+      new ValidatedDecodeContent[PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[T], T, String, DefaultValue[T], FieldMetaWithNotType[
+        RequireImplicit
+      ]] {
+        override def getValue(name: String, defaultValue: DefaultValue[T], rep: FieldMetaWithNotType[RequireImplicit]): ValidatedDecoder[T] = {
+          val fieldName = getName(rep, name)
+          val simpleResult = new ValidatedDecoder[T] {
+            override def getValue(json: ACursor): Validated[errorMessage, T] = {
+              json.downField(fieldName).focus match {
+                //case Some(Json.Null) => Validated.invalid(errorMessage.build(fieldName, s"${fieldName}不能为空"))
+                //case None            => Validated.invalid(errorMessage.build(fieldName, s"${fieldName}不能为空"))
+                case Some(j) =>
+                  j.as(dd.value) match {
+                    case Left(i) =>
+                      Validated.invalid(errorMessage.build(fieldName, rep.typeErrorMessageMeta))
+                    case Right(value) => Validated.valid(value)
                   }
-                }
-              }
-              if (rep.useDefaultMeta) {
-                defaultValue.value
-                  .map { (value) =>
-                    new ValidatedDecoder[T] {
-                      override def getValue(json: ACursor): Validated[errorMessage, T] = {
-                        json.downField(fieldName).focus match {
-                          case Some(Json.Null) => Validated.valid(value)
-                          case None            => Validated.valid(value)
-                          case Some(j) =>
-                            j.as(dd.value) match {
-                              case Left(i) =>
-                                Validated.invalid(errorMessage.build(fieldName, rep.typeErrorMessageMeta))
-                              case Right(value) => Validated.valid(value)
-                            }
-                        }
-                      }
-                    }
+                case _ =>
+                  Json.Null.as(dd.value) match {
+                    case Left(i) =>
+                      Validated.invalid(errorMessage.build(fieldName, rep.typeErrorMessageMeta))
+                    case Right(value) => Validated.valid(value)
                   }
-                  .getOrElse(simpleResult)
-              } else {
-                simpleResult
               }
             }
           }
+          if (rep.useDefaultMeta) {
+            defaultValue.value
+              .map { (value) =>
+                new ValidatedDecoder[T] {
+                  override def getValue(json: ACursor): Validated[errorMessage, T] = {
+                    json.downField(fieldName).focus match {
+                      case Some(Json.Null) => Validated.valid(value)
+                      case None            => Validated.valid(value)
+                      case Some(j) =>
+                        j.as(dd.value) match {
+                          case Left(i) =>
+                            Validated.invalid(errorMessage.build(fieldName, rep.typeErrorMessageMeta))
+                          case Right(value) => Validated.valid(value)
+                        }
+                    }
+                  }
+                }
+              }
+              .getOrElse(simpleResult)
+          } else {
+            simpleResult
+          }
         }
       }
+    }
 
     /*implicit def asunaCirceUntypedOptionReader[T](
       implicit dd: ByNameImplicit[Decoder[Option[T]]]
@@ -109,131 +110,125 @@ object ValidateDecorderMeta {
 
     implicit def asunaCirceTypedReader[R, T](
       implicit dd: ByNameImplicit[Decoder[R]]
-    ): Application4[ValidatedDecodeContent, PropertyTag1[FieldMeta[RequireImplicit, R, T], T], T, String, DefaultValue[T], FieldMeta[RequireImplicit, R, T]] =
-      new Application4[ValidatedDecodeContent, PropertyTag1[FieldMeta[RequireImplicit, R, T], T], T, String, DefaultValue[T], FieldMeta[RequireImplicit, R, T]] {
-        override def application(context: Context4[ValidatedDecodeContent]): ValidatedDecodeContent[T, String, DefaultValue[T], FieldMeta[RequireImplicit, R, T]] = {
-          def value(rep: FieldMeta[RequireImplicit, R, T]): Option[T]               = rep.decoderMeta.map(_ => throw new Exception("Require 列必须不能提供字面量或 Decoder"))
-          def takeName(rep: FieldMeta[RequireImplicit, R, T], name: String): String = rep.fieldNameMeta.getOrElse(name)
+    ): ValidatedDecodeContent[PropertyTag[FieldMeta[RequireImplicit, R, T]], PropertyTag[T], T, String, DefaultValue[T], FieldMeta[RequireImplicit, R, T]] = {
+      def value(rep: FieldMeta[RequireImplicit, R, T]): Option[T]               = rep.decoderMeta.map(_ => throw new Exception("Require 列必须不能提供字面量或 Decoder"))
+      def takeName(rep: FieldMeta[RequireImplicit, R, T], name: String): String = rep.fieldNameMeta.getOrElse(name)
 
-          new ValidatedDecodeContent[T, String, DefaultValue[T], FieldMeta[RequireImplicit, R, T]] {
-            override def getValue(name: String, defaultValue: DefaultValue[T], rep: FieldMeta[RequireImplicit, R, T]): ValidatedDecoder[T] = {
-              val fieldName = takeName(rep, name)
-              value(rep).map(Validated.valid)
+      new ValidatedDecodeContent[PropertyTag[FieldMeta[RequireImplicit, R, T]], PropertyTag[T], T, String, DefaultValue[T], FieldMeta[RequireImplicit, R, T]] {
+        override def getValue(name: String, defaultValue: DefaultValue[T], rep: FieldMeta[RequireImplicit, R, T]): ValidatedDecoder[T] = {
+          val fieldName = takeName(rep, name)
+          value(rep).map(Validated.valid)
 
-              val simpleResult = new ValidatedDecoder[T] {
-                override def getValue(json: ACursor): Validated[errorMessage, T] = {
-                  json.downField(fieldName).focus match {
+          val simpleResult = new ValidatedDecoder[T] {
+            override def getValue(json: ACursor): Validated[errorMessage, T] = {
+              json.downField(fieldName).focus match {
+                case Some(j) =>
+                  j.as(dd.value) match {
+                    case Left(i) =>
+                      Validated.invalid(errorMessage.build(fieldName, rep.typeErrorMessageMeta))
+                    case Right(value) =>
+                      rep.dataToResult(value).leftMap(errorMessage.build(fieldName, _))
+                  }
+                case _ =>
+                  Json.Null.as(dd.value) match {
+                    case Left(i) =>
+                      Validated.invalid(errorMessage.build(fieldName, rep.typeErrorMessageMeta))
+                    case Right(value) =>
+                      rep.dataToResult(value).leftMap(errorMessage.build(fieldName, _))
+                  }
+              }
+            }
+          }
+          if (rep.useDefaultMeta) {
+            defaultValue.value
+              .map { (value) =>
+                new ValidatedDecoder[T] {
+                  override def getValue(json: ACursor): Validated[errorMessage, T] = {
+                    json.downField(fieldName).focus match {
+                      case Some(Json.Null) => rep.validateMeta(value).map(_ => value).leftMap(errorMessage.build(fieldName, _))
+                      case None            => rep.validateMeta(value).map(_ => value).leftMap(errorMessage.build(fieldName, _))
+                      case Some(j) =>
+                        j.as(dd.value) match {
+                          case Left(i) =>
+                            Validated.invalid(errorMessage.build(fieldName, rep.typeErrorMessageMeta))
+                          case Right(value) => rep.dataToResult(value).leftMap(errorMessage.build(fieldName, _))
+                        }
+                    }
+                  }
+                }
+              }
+              .getOrElse(simpleResult)
+          } else {
+            simpleResult
+          }
+        }
+      }
+    }
+  }
+
+  class NotRequireImplicit extends ImplicitRequireOrNot
+  object NotRequireImplicit {
+    implicit def asunaCirceTypedReader[R, T]
+      : ValidatedDecodeContent[PropertyTag[FieldMeta[NotRequireImplicit, R, T]], PropertyTag[T], T, String, DefaultValue[T], FieldMeta[NotRequireImplicit, R, T]] = {
+      def takeName(rep: FieldMeta[NotRequireImplicit, R, T], name: String): String = rep.fieldNameMeta.getOrElse(name)
+
+      new ValidatedDecodeContent[PropertyTag[FieldMeta[NotRequireImplicit, R, T]], PropertyTag[T], T, String, DefaultValue[T], FieldMeta[NotRequireImplicit, R, T]] {
+        override def getValue(name: String, defaultValue: DefaultValue[T], rep: FieldMeta[NotRequireImplicit, R, T]): ValidatedDecoder[T] = {
+          val literaOrReader = rep.decoderMeta.getOrElse(throw new Exception("字面量和 Decoder 不能同时不设置"))
+          val fieldName      = takeName(rep, name)
+
+          new ValidatedDecoder[T] {
+            override def getValue(json: ACursor): Validated[errorMessage, T] = {
+              literaOrReader
+                .map { (decoder) =>
+                  def simpleResult = json.downField(fieldName).focus match {
                     case Some(j) =>
-                      j.as(dd.value) match {
+                      j.as(decoder) match {
                         case Left(i) =>
                           Validated.invalid(errorMessage.build(fieldName, rep.typeErrorMessageMeta))
                         case Right(value) =>
                           rep.dataToResult(value).leftMap(errorMessage.build(fieldName, _))
                       }
                     case _ =>
-                      Json.Null.as(dd.value) match {
+                      Json.Null.as(decoder) match {
                         case Left(i) =>
                           Validated.invalid(errorMessage.build(fieldName, rep.typeErrorMessageMeta))
                         case Right(value) =>
                           rep.dataToResult(value).leftMap(errorMessage.build(fieldName, _))
                       }
                   }
-                }
-              }
-              if (rep.useDefaultMeta) {
-                defaultValue.value
-                  .map { (value) =>
-                    new ValidatedDecoder[T] {
-                      override def getValue(json: ACursor): Validated[errorMessage, T] = {
+                  if (rep.useDefaultMeta) {
+                    defaultValue.value
+                      .map { (value) =>
                         json.downField(fieldName).focus match {
-                          case Some(Json.Null) => rep.validateMeta(value).map(_ => value).leftMap(errorMessage.build(fieldName, _))
-                          case None            => rep.validateMeta(value).map(_ => value).leftMap(errorMessage.build(fieldName, _))
                           case Some(j) =>
-                            j.as(dd.value) match {
+                            j.as(decoder) match {
+                              case Left(i) =>
+                                Validated.invalid(errorMessage.build(fieldName, rep.typeErrorMessageMeta))
+                              case Right(value) => rep.dataToResult(value).leftMap(errorMessage.build(fieldName, _))
+                            }
+                          case _ =>
+                            Json.Null.as(decoder) match {
                               case Left(i) =>
                                 Validated.invalid(errorMessage.build(fieldName, rep.typeErrorMessageMeta))
                               case Right(value) => rep.dataToResult(value).leftMap(errorMessage.build(fieldName, _))
                             }
                         }
                       }
-                    }
+                      .getOrElse(simpleResult)
+                  } else {
+                    simpleResult
                   }
-                  .getOrElse(simpleResult)
-              } else {
-                simpleResult
-              }
-            }
-          }
-        }
-      }
-  }
-
-  class NotRequireImplicit extends ImplicitRequireOrNot
-  object NotRequireImplicit {
-    implicit def asunaCirceTypedReader[R, T]
-      : Application4[ValidatedDecodeContent, PropertyTag1[FieldMeta[NotRequireImplicit, R, T], T], T, String, DefaultValue[T], FieldMeta[NotRequireImplicit, R, T]] =
-      new Application4[ValidatedDecodeContent, PropertyTag1[FieldMeta[NotRequireImplicit, R, T], T], T, String, DefaultValue[T], FieldMeta[NotRequireImplicit, R, T]] {
-        override def application(context: Context4[ValidatedDecodeContent]): ValidatedDecodeContent[T, String, DefaultValue[T], FieldMeta[NotRequireImplicit, R, T]] = {
-          def takeName(rep: FieldMeta[NotRequireImplicit, R, T], name: String): String = rep.fieldNameMeta.getOrElse(name)
-
-          new ValidatedDecodeContent[T, String, DefaultValue[T], FieldMeta[NotRequireImplicit, R, T]] {
-            override def getValue(name: String, defaultValue: DefaultValue[T], rep: FieldMeta[NotRequireImplicit, R, T]): ValidatedDecoder[T] = {
-              val literaOrReader = rep.decoderMeta.getOrElse(throw new Exception("字面量和 Decoder 不能同时不设置"))
-              val fieldName      = takeName(rep, name)
-
-              new ValidatedDecoder[T] {
-                override def getValue(json: ACursor): Validated[errorMessage, T] = {
-                  literaOrReader
-                    .map { (decoder) =>
-                      def simpleResult = json.downField(fieldName).focus match {
-                        case Some(j) =>
-                          j.as(decoder) match {
-                            case Left(i) =>
-                              Validated.invalid(errorMessage.build(fieldName, rep.typeErrorMessageMeta))
-                            case Right(value) =>
-                              rep.dataToResult(value).leftMap(errorMessage.build(fieldName, _))
-                          }
-                        case _ =>
-                          Json.Null.as(decoder) match {
-                            case Left(i) =>
-                              Validated.invalid(errorMessage.build(fieldName, rep.typeErrorMessageMeta))
-                            case Right(value) =>
-                              rep.dataToResult(value).leftMap(errorMessage.build(fieldName, _))
-                          }
-                      }
-                      if (rep.useDefaultMeta) {
-                        defaultValue.value
-                          .map { (value) =>
-                            json.downField(fieldName).focus match {
-                              case Some(j) =>
-                                j.as(decoder) match {
-                                  case Left(i) =>
-                                    Validated.invalid(errorMessage.build(fieldName, rep.typeErrorMessageMeta))
-                                  case Right(value) => rep.dataToResult(value).leftMap(errorMessage.build(fieldName, _))
-                                }
-                              case _ =>
-                                Json.Null.as(decoder) match {
-                                  case Left(i) =>
-                                    Validated.invalid(errorMessage.build(fieldName, rep.typeErrorMessageMeta))
-                                  case Right(value) => rep.dataToResult(value).leftMap(errorMessage.build(fieldName, _))
-                                }
-                            }
-                          }
-                          .getOrElse(simpleResult)
-                      } else {
-                        simpleResult
-                      }
-                    }
-                    .fold(
-                      { (value) => rep.dataToResult(value).leftMap(errorMessage.build(fieldName, _)) },
-                      identity
-                    )
                 }
-              }
+                .fold(
+                  { (value) => rep.dataToResult(value).leftMap(errorMessage.build(fieldName, _)) },
+                  identity
+                )
             }
           }
         }
       }
+    }
   }
 
   trait FieldMetaWithNotType[Poly <: ImplicitRequireOrNot] {

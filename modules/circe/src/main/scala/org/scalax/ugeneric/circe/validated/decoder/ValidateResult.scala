@@ -3,7 +3,7 @@ package org.scalax.ugeneric.circe.decoder
 import cats.Semigroup
 import cats.data.Validated
 import io.circe._
-import org.scalax.ugeneric.circe.UCirce
+import org.scalax.ugeneric.circe.{UCirce, VersionCompat}
 
 sealed trait ValidateResult[+T]
 case class errorMessage(fields: List[ErrorField]) extends ValidateResult[Nothing] {
@@ -14,8 +14,8 @@ case class responseBody[T](body: T) extends ValidateResult[T]
 
 object ValidateResult {
   object EmptyTable
-  implicit def circeEncoder[T](implicit bodyEncoder: Encoder[T]): Encoder.AsObject[ValidateResult[T]] = UCirce.encodeSealed
-  implicit def circeDecoder[T](implicit bodyDecoder: Decoder[T]): Decoder[ValidateResult[T]]          = UCirce.decodeSealed
+  implicit def circeEncoder[T](implicit bodyEncoder: Encoder[T]): VersionCompat.ObjectEncoderType[ValidateResult[T]] = UCirce.encodeSealed
+  implicit def circeDecoder[T](implicit bodyDecoder: Decoder[T]): Decoder[ValidateResult[T]]                         = UCirce.decodeSealed
 }
 
 object errorMessage {
@@ -60,6 +60,6 @@ object errorMessage {
 }
 
 object responseBody {
-  implicit def circeEncoder[T](implicit bodyEncoder: Encoder[T]): Encoder.AsObject[responseBody[T]] = UCirce.encodeCaseClass
-  implicit def circeDecoder[T](implicit bodyDecoder: Decoder[T]): Decoder[responseBody[T]]          = UCirce.decodeCaseClass
+  implicit def circeEncoder[T](implicit bodyEncoder: Encoder[T]): VersionCompat.ObjectEncoderType[responseBody[T]] = UCirce.encodeCaseClass
+  implicit def circeDecoder[T](implicit bodyDecoder: Decoder[T]): Decoder[responseBody[T]]                         = UCirce.decodeCaseClass
 }

@@ -36,9 +36,9 @@ class TestUCirceSealedDecoder extends AnyFunSpec with Matchers {
         import io.circe.generic.auto._
         (test03: ParentTrait).asJson
       }
-      test01Json.as(decodeParentTrait).getOrElse(throw new Exception("decode failed")) shouldEqual test01
-      test02Json.as(decodeParentTrait).getOrElse(throw new Exception("decode failed")) shouldEqual Test02
-      test03Json.as(decodeParentTrait).getOrElse(throw new Exception("decode failed")) shouldEqual test03
+      test01Json.as(decodeParentTrait).right.getOrElse(throw new Exception("decode failed")) shouldEqual test01
+      test02Json.as(decodeParentTrait).right.getOrElse(throw new Exception("decode failed")) shouldEqual Test02
+      test03Json.as(decodeParentTrait).right.getOrElse(throw new Exception("decode failed")) shouldEqual test03
     }
   }
 }

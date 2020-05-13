@@ -28,9 +28,10 @@ class UCirceExplicitSealedDecoderTest extends AnyFunSpec with Matchers {
     implicit val decodeTest01: Decoder[deImpl2.Test01]       = UCirce.decodeCaseClass
     implicit val decodeTest02: Decoder[deImpl2.Test02.type]  = Decoder.instance(_ => Right(deImpl2.Test02))
     implicit val decodeTest04: Decoder[deImpl2.ParentTest04] = UCirce.decodeCaseClass
-    implicit val decodeTest03: DecodeSealedApplication[deImpl2.ParentTest03, deImpl2.ParentTrait2] = new DecodeSealedApplication((name, cursor) =>
-      cursor.get("Test03")(decodeTest04).map(s => ParentTest03(s.i1, s.i2.toLong))
-    )
+    implicit val decodeTest03 /*: DecodeSealedApplication[deImpl2.ParentTest03, deImpl2.ParentTrait2]*/ =
+      DecodeSealedApplication[deImpl2.ParentTest03, deImpl2.ParentTrait2]((name, cursor) =>
+        cursor.get("Test03")(decodeTest04).right.map(s => ParentTest03(s.i1, s.i2.toLong))
+      )
     UCirce.decodeSealed
   }
 
@@ -56,9 +57,9 @@ class UCirceExplicitSealedDecoderTest extends AnyFunSpec with Matchers {
       val compareTest02 = deImpl2.Test02
       val compareTest03 = deImpl2.ParentTest03(i1 = "pro1-test03", i2 = 4)
 
-      test01Json.as(decodeParentTrait).getOrElse(throw new Exception("decode failed")) shouldEqual compareTest01
-      test02Json.as(decodeParentTrait).getOrElse(throw new Exception("decode failed")) shouldEqual compareTest02
-      test03Json.as(decodeParentTrait).getOrElse(throw new Exception("decode failed")) shouldEqual compareTest03
+      test01Json.as(decodeParentTrait).right.getOrElse(throw new Exception("decode failed")) shouldEqual compareTest01
+      test02Json.as(decodeParentTrait).right.getOrElse(throw new Exception("decode failed")) shouldEqual compareTest02
+      test03Json.as(decodeParentTrait).right.getOrElse(throw new Exception("decode failed")) shouldEqual compareTest03
     }
   }
 }
