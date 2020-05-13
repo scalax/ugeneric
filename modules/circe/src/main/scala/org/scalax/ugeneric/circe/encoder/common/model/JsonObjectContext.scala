@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.circe.encoder.common.model
 
-import asuna.{AsunaTuple0, Context3, Plus3}
+import asuna.{Context3, Plus3, ZsgTuple0}
 import io.circe.Json
 
 object JsonObjectContext extends Context3[JsonObjectContent] {
@@ -9,8 +9,8 @@ object JsonObjectContext extends Context3[JsonObjectContent] {
     override def append(data: List[(String, Json)]): List[(String, Json)] = data
   }
 
-  private val jsonObjectAppenderAsunaTuple0: JsonObjectAppender[AsunaTuple0] = new JsonObjectAppender[AsunaTuple0] {
-    override def getAppender(data: AsunaTuple0): JsonObjectFieldAppender = {
+  private val jsonObjectAppenderAsunaTuple0: JsonObjectAppender[ZsgTuple0] = new JsonObjectAppender[ZsgTuple0] {
+    override def getAppender(data: ZsgTuple0): JsonObjectFieldAppender = {
       initObjectAppender
     }
   }
@@ -35,8 +35,8 @@ object JsonObjectContext extends Context3[JsonObjectContent] {
     }
   }
 
-  override val start: JsonObjectContent[AsunaTuple0, AsunaTuple0, AsunaTuple0] = new JsonObjectContent[AsunaTuple0, AsunaTuple0, AsunaTuple0] {
-    override def appendField(name: AsunaTuple0): JsonObjectAppender[AsunaTuple0] = {
+  override val start: JsonObjectContent[ZsgTuple0, ZsgTuple0, ZsgTuple0] = new JsonObjectContent[ZsgTuple0, ZsgTuple0, ZsgTuple0] {
+    override def appendField(name: ZsgTuple0): JsonObjectAppender[ZsgTuple0] = {
       jsonObjectAppenderAsunaTuple0
     }
   }

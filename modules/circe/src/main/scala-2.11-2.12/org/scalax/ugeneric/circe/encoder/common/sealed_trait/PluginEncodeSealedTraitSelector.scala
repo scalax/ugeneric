@@ -19,9 +19,9 @@ object PluginEncodeSealedTraitSelector {
 
   implicit final def asunaCirceSealedEncoder[T, R](
     implicit t: ByNameImplicit[Encoder[R]]
-  ): Application3[PluginEncodeSealedTraitSelector[T]#JsonEncoder, SealedTag[R], Class[R], String] = {
+  ): PluginEncodeSealedTraitSelector[T]#JsonEncoder[SealedTag[R], Class[R], String] = {
     val con = PluginEncodeSealedTraitSelector[T]
-    new Application3[PluginEncodeSealedTraitSelector[T]#JsonEncoder, SealedTag[R], Class[R], String] with con.JsonEncoder[SealedTag[R], Class[R], String] {
+    new con.JsonEncoder[SealedTag[R], Class[R], String] {
       override def subClassToJsonOpt(model: T, classTags: Class[R], name: String, i: Option[NameTranslator]): Option[(String, Json)] = {
         val nameI = i.map(_.tran(name)).getOrElse(name)
         if (classTags.isInstance(model))
@@ -29,9 +29,6 @@ object PluginEncodeSealedTraitSelector {
         else
           Option.empty
       }
-      override def application(
-        context: Context3[PluginEncodeSealedTraitSelector[T]#JsonEncoder]
-      ): PluginEncodeSealedTraitSelector[T]#JsonEncoder[SealedTag[R], Class[R], String] = this
     }
   }
 

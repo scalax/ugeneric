@@ -1,12 +1,12 @@
 package org.scalax.ugeneric.circe.decoder.common.model
 
-import asuna.{AsunaTuple0, Context3, Plus3}
+import asuna.{Context3, Plus3, ZsgTuple0}
 import io.circe.Decoder
 
 object DecodeContext extends Context3[DecodeContent] {
 
-  private val zeroValue                         = Right(AsunaTuple0.value)
-  private val zeroDecoder: Decoder[AsunaTuple0] = Decoder.instance { _ => zeroValue }
+  private val zeroValue                       = Right(ZsgTuple0.value)
+  private val zeroDecoder: Decoder[ZsgTuple0] = Decoder.instance { _ => zeroValue }
 
   override def append[X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3](x: DecodeContent[X1, X2, X3], y: DecodeContent[Y1, Y2, Y3])(
     p: Plus3[X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3]
@@ -21,7 +21,7 @@ object DecodeContext extends Context3[DecodeContent] {
     }
   }
 
-  override val start: DecodeContent[AsunaTuple0, AsunaTuple0, AsunaTuple0] = new DecodeContent[AsunaTuple0, AsunaTuple0, AsunaTuple0] {
-    override def getDecoder(name: AsunaTuple0): Decoder[AsunaTuple0] = zeroDecoder
+  override val start: DecodeContent[ZsgTuple0, ZsgTuple0, ZsgTuple0] = new DecodeContent[ZsgTuple0, ZsgTuple0, ZsgTuple0] {
+    override def getDecoder(name: ZsgTuple0): Decoder[ZsgTuple0] = zeroDecoder
   }
 }

@@ -1,6 +1,6 @@
 UGenericSettings.scalaSetting
 UGenericSettings.scala_211_212_213_cross
-UGenericSettings.scala212VersionSetting
+UGenericSettings.scala213VersionSetting
 
 Dependencies.fsg
 libraryDependencies += Dependencies.shapeless

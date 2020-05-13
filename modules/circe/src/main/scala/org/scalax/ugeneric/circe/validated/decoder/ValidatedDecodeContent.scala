@@ -3,7 +3,7 @@ package org.scalax.ugeneric.circe.decoder
 import asuna.macros.single.DefaultValue
 import asuna.macros.ByNameImplicit
 import asuna.macros.utils.PlaceHolder
-import asuna.{Application4, Application6, Context4, Context6, PropertyTag}
+import asuna.{Application6, Context6, PropertyTag}
 import cats.data.Validated
 import io.circe._
 
@@ -15,27 +15,22 @@ object ValidatedDecodeContent {
 
   implicit def asunaCirceDecoder[T](
     implicit dd: ByNameImplicit[Decoder[T]]
-  ): Application6[ValidatedDecodeContent, PropertyTag[PlaceHolder], PropertyTag[T], T, String, DefaultValue[T], PlaceHolder] =
-    new Application6[ValidatedDecodeContent, PropertyTag[PlaceHolder], PropertyTag[T], T, String, DefaultValue[T], PlaceHolder] {
-      override def application(
-        context: Context6[ValidatedDecodeContent]
-      ): ValidatedDecodeContent[PropertyTag[PlaceHolder], PropertyTag[T], T, String, DefaultValue[T], PlaceHolder] =
-        new ValidatedDecodeContent[PropertyTag[PlaceHolder], PropertyTag[T], T, String, DefaultValue[T], PlaceHolder] {
-          override def getValue(name: String, defaultValue: DefaultValue[T], rep: PlaceHolder): ValidatedDecoder[T] = new ValidatedDecoder[T] {
-            override def getValue(json: ACursor): Validated[errorMessage, T] = {
-              json.downField(name).focus match {
-                case Some(Json.Null) => Validated.invalid(errorMessage.build(name, s"${name}不能为空"))
-                case None            => Validated.invalid(errorMessage.build(name, s"${name}不能为空"))
-                case Some(j) =>
-                  j.as(dd.value) match {
-                    case Left(i) =>
-                      Validated.invalid(errorMessage.build(name, i.message))
-                    case Right(value) => Validated.valid(value)
-                  }
+  ): ValidatedDecodeContent[PropertyTag[PlaceHolder], PropertyTag[T], T, String, DefaultValue[T], PlaceHolder] =
+    new ValidatedDecodeContent[PropertyTag[PlaceHolder], PropertyTag[T], T, String, DefaultValue[T], PlaceHolder] {
+      override def getValue(name: String, defaultValue: DefaultValue[T], rep: PlaceHolder): ValidatedDecoder[T] = new ValidatedDecoder[T] {
+        override def getValue(json: ACursor): Validated[errorMessage, T] = {
+          json.downField(name).focus match {
+            case Some(Json.Null) => Validated.invalid(errorMessage.build(name, s"${name}不能为空"))
+            case None            => Validated.invalid(errorMessage.build(name, s"${name}不能为空"))
+            case Some(j) =>
+              j.as(dd.value) match {
+                case Left(i) =>
+                  Validated.invalid(errorMessage.build(name, i.message))
+                case Right(value) => Validated.valid(value)
               }
-            }
           }
         }
+      }
     }
 
   /*implicit def asunaOptCirceDecoder[T](
@@ -57,18 +52,13 @@ object ValidatedDecodeContent {
 
   implicit def asunaValidatedCirceDecoder[T](
     implicit dd: ByNameImplicit[ValidatedDecoder[T]]
-  ): Application6[ValidatedDecodeContent, PropertyTag[PlaceHolder], PropertyTag[T], T, String, DefaultValue[T], PlaceHolder] =
-    new Application6[ValidatedDecodeContent, PropertyTag[PlaceHolder], PropertyTag[T], T, String, DefaultValue[T], PlaceHolder] {
-      override def application(
-        context: Context6[ValidatedDecodeContent]
-      ): ValidatedDecodeContent[PropertyTag[PlaceHolder], PropertyTag[T], T, String, DefaultValue[T], PlaceHolder] =
-        new ValidatedDecodeContent[PropertyTag[PlaceHolder], PropertyTag[T], T, String, DefaultValue[T], PlaceHolder] {
-          override def getValue(name: String, defaultValue: DefaultValue[T], rep: PlaceHolder): ValidatedDecoder[T] = new ValidatedDecoder[T] {
-            override def getValue(json: ACursor): Validated[errorMessage, T] = {
-              dd.value.getValue(json.downField(name)).leftMap(_.addPrefix(name))
-            }
-          }
+  ): ValidatedDecodeContent[PropertyTag[PlaceHolder], PropertyTag[T], T, String, DefaultValue[T], PlaceHolder] =
+    new ValidatedDecodeContent[PropertyTag[PlaceHolder], PropertyTag[T], T, String, DefaultValue[T], PlaceHolder] {
+      override def getValue(name: String, defaultValue: DefaultValue[T], rep: PlaceHolder): ValidatedDecoder[T] = new ValidatedDecoder[T] {
+        override def getValue(json: ACursor): Validated[errorMessage, T] = {
+          dd.value.getValue(json.downField(name)).leftMap(_.addPrefix(name))
         }
+      }
     }
 
 }

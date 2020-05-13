@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.circe.decoder.common.sealed_trait
 
-import asuna.{AsunaTuple0, Context3, Plus3}
+import asuna.{Context3, Plus3, ZsgTuple0}
 import io.circe.Decoder
 
 class DecodeSealedContext[P] extends Context3[DecodeSealedTraitSelector[P]#JsonDecoder] {
@@ -23,8 +23,8 @@ class DecodeSealedContext[P] extends Context3[DecodeSealedTraitSelector[P]#JsonD
     }
   }
 
-  override val start: DecodeSealedTraitSelector[P]#JsonDecoder[AsunaTuple0, AsunaTuple0, AsunaTuple0] = new con.JsonDecoder[AsunaTuple0, AsunaTuple0, AsunaTuple0] {
-    override def getValue(name: AsunaTuple0, tran: AsunaTuple0): Decoder[P] = decoderZero
+  override val start: DecodeSealedTraitSelector[P]#JsonDecoder[ZsgTuple0, ZsgTuple0, ZsgTuple0] = new con.JsonDecoder[ZsgTuple0, ZsgTuple0, ZsgTuple0] {
+    override def getValue(name: ZsgTuple0, tran: ZsgTuple0): Decoder[P] = decoderZero
   }
 }
 

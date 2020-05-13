@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.circe.encoder.common.sealed_trait
 
-import asuna.{AsunaTuple0, Context3, Plus3}
+import asuna.{Context3, Plus3, ZsgTuple0}
 import io.circe.Json
 import org.scalax.ugeneric.circe.NameTranslator
 
@@ -19,8 +19,8 @@ class PluginEncodeSealedContext[H] extends Context3[PluginEncodeSealedTraitSelec
     }
   }
 
-  override val start: PluginEncodeSealedTraitSelector[H]#JsonEncoder[AsunaTuple0, AsunaTuple0, AsunaTuple0] = new con.JsonEncoder[AsunaTuple0, AsunaTuple0, AsunaTuple0] {
-    override def subClassToJsonOpt(model: H, classTags: AsunaTuple0, name: AsunaTuple0, i: Option[NameTranslator]): Option[(String, Json)] = Option.empty
+  override val start: PluginEncodeSealedTraitSelector[H]#JsonEncoder[ZsgTuple0, ZsgTuple0, ZsgTuple0] = new con.JsonEncoder[ZsgTuple0, ZsgTuple0, ZsgTuple0] {
+    override def subClassToJsonOpt(model: H, classTags: ZsgTuple0, name: ZsgTuple0, i: Option[NameTranslator]): Option[(String, Json)] = Option.empty
   }
 }
 

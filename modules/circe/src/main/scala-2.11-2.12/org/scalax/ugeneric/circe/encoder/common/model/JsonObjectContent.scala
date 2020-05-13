@@ -10,8 +10,8 @@ trait JsonObjectContent[I, Model, Name] {
 
 object JsonObjectContent {
 
-  implicit final def asunaCirceImplicit[T](implicit t: ByNameImplicit[Encoder[T]]): Application3[JsonObjectContent, PropertyTag[T], T, String] =
-    new Application3[JsonObjectContent, PropertyTag[T], T, String] with JsonObjectContent[PropertyTag[T], T, String] {
+  implicit final def asunaCirceImplicit[T](implicit t: ByNameImplicit[Encoder[T]]): JsonObjectContent[PropertyTag[T], T, String] =
+    new JsonObjectContent[PropertyTag[T], T, String] {
       override def appendField(name: String): JsonObjectAppender[T] = {
         new JsonObjectAppender[T] {
           override def getAppender(data: T): JsonObjectFieldAppender = new JsonObjectFieldAppender {
@@ -19,7 +19,6 @@ object JsonObjectContent {
           }
         }
       }
-      override def application(context: Context3[JsonObjectContent]): JsonObjectContent[PropertyTag[T], T, String] = this
     }
 
 }

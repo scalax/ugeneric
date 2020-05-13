@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.circe.encoder.common.model
 
-import asuna.{AsunaTuple0, Context3, Plus3}
+import asuna.{Context3, Plus3, ZsgTuple0}
 import io.circe.Json
 import org.scalax.ugeneric.circe.NameTranslator
 
@@ -10,8 +10,8 @@ object PluginJsonObjectContext extends Context3[PluginJsonObjectContent] {
     override def append(data: List[(String, Json)]): List[(String, Json)] = data
   }
 
-  private val jsonObjectAppenderAsunaTuple0: JsonObjectAppender[AsunaTuple0] = new JsonObjectAppender[AsunaTuple0] {
-    override def getAppender(data: AsunaTuple0): JsonObjectFieldAppender = {
+  private val jsonObjectAppenderAsunaTuple0: JsonObjectAppender[ZsgTuple0] = new JsonObjectAppender[ZsgTuple0] {
+    override def getAppender(data: ZsgTuple0): JsonObjectFieldAppender = {
       initObjectAppender
     }
   }
@@ -34,8 +34,8 @@ object PluginJsonObjectContext extends Context3[PluginJsonObjectContent] {
     }
   }
 
-  override val start: PluginJsonObjectContent[AsunaTuple0, AsunaTuple0, AsunaTuple0] = new PluginJsonObjectContent[AsunaTuple0, AsunaTuple0, AsunaTuple0] {
-    override def appendField(name: AsunaTuple0, p: Option[NameTranslator]): JsonObjectAppender[AsunaTuple0] = {
+  override val start: PluginJsonObjectContent[ZsgTuple0, ZsgTuple0, ZsgTuple0] = new PluginJsonObjectContent[ZsgTuple0, ZsgTuple0, ZsgTuple0] {
+    override def appendField(name: ZsgTuple0, p: Option[NameTranslator]): JsonObjectAppender[ZsgTuple0] = {
       jsonObjectAppenderAsunaTuple0
     }
   }

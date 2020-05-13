@@ -10,12 +10,9 @@ trait DecodeContent[N, Model, Name] extends Any {
 
 object DecodeContent {
 
-  implicit def asunaDecoder[Model](implicit dd: ByNameImplicit[Decoder[Model]]): Application3[DecodeContent, PropertyTag[Model], Model, String] =
-    new Application3[DecodeContent, PropertyTag[Model], Model, String] with DecodeContent[PropertyTag[Model], Model, String] {
-      override def getDecoder(name: String): Decoder[Model] = {
-        Decoder.instance(_.get(name)(dd.value))
-      }
-      override def application(context: Context3[DecodeContent]): DecodeContent[PropertyTag[Model], Model, String] = this
+  implicit def asunaDecoder[Model](implicit dd: ByNameImplicit[Decoder[Model]]): DecodeContent[PropertyTag[Model], Model, String] =
+    new DecodeContent[PropertyTag[Model], Model, String] {
+      override def getDecoder(name: String): Decoder[Model] = Decoder.instance(_.get(name)(dd.value))
     }
 
 }

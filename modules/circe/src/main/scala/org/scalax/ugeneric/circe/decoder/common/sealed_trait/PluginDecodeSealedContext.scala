@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.circe.decoder.common.sealed_trait
 
-import asuna.{AsunaTuple0, Context3, Plus3}
+import asuna.{Context3, Plus3, ZsgTuple0}
 import io.circe.Decoder
 import org.scalax.ugeneric.circe.NameTranslator
 
@@ -23,8 +23,8 @@ class PluginDecodeSealedContext[P] extends Context3[PluginDecodeSealedTraitSelec
     }
   }
 
-  override val start: PluginDecodeSealedTraitSelector[P]#JsonDecoder[AsunaTuple0, AsunaTuple0, AsunaTuple0] = new con.JsonDecoder[AsunaTuple0, AsunaTuple0, AsunaTuple0] {
-    override def getValue(name: AsunaTuple0, tran: AsunaTuple0, i: Option[NameTranslator]): Decoder[P] = decoderZero
+  override val start: PluginDecodeSealedTraitSelector[P]#JsonDecoder[ZsgTuple0, ZsgTuple0, ZsgTuple0] = new con.JsonDecoder[ZsgTuple0, ZsgTuple0, ZsgTuple0] {
+    override def getValue(name: ZsgTuple0, tran: ZsgTuple0, i: Option[NameTranslator]): Decoder[P] = decoderZero
   }
 }
 

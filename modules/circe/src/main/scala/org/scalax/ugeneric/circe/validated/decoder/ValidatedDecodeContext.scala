@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.circe.decoder
 
-import asuna.{AsunaTuple0, Context6, Plus6}
+import asuna.{Context6, Plus6, ZsgTuple0}
 import cats.data.Validated
 import io.circe.ACursor
 
@@ -29,11 +29,11 @@ object ValidatedDecodeContext extends Context6[ValidatedDecodeContent] {
     }
   }
 
-  override val start: ValidatedDecodeContent[AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0] = {
-    new ValidatedDecodeContent[AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0, AsunaTuple0] {
-      override def getValue(name: AsunaTuple0, defaultValue: AsunaTuple0, rep: AsunaTuple0): ValidatedDecoder[AsunaTuple0] = {
-        new ValidatedDecoder[AsunaTuple0] {
-          override def getValue(json: ACursor): Validated[errorMessage, AsunaTuple0] = Validated.valid(AsunaTuple0.value)
+  override val start: ValidatedDecodeContent[ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0] = {
+    new ValidatedDecodeContent[ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0] {
+      override def getValue(name: ZsgTuple0, defaultValue: ZsgTuple0, rep: ZsgTuple0): ValidatedDecoder[ZsgTuple0] = {
+        new ValidatedDecoder[ZsgTuple0] {
+          override def getValue(json: ACursor): Validated[errorMessage, ZsgTuple0] = Validated.valid(ZsgTuple0.value)
         }
       }
     }

@@ -12,8 +12,8 @@ trait PluginDecodeContent[N, Model, Name, DefaultValue] extends Any {
 
 object PluginDecodeContent {
 
-  implicit def asunaPlaceHolderDecoder[T](implicit dd: ByNameImplicit[Decoder[T]]): Application4[PluginDecodeContent, PropertyTag[T], T, String, DefaultValue[T]] = {
-    new Application4[PluginDecodeContent, PropertyTag[T], T, String, DefaultValue[T]] with PluginDecodeContent[PropertyTag[T], T, String, DefaultValue[T]] {
+  implicit def asunaPlaceHolderDecoder[T](implicit dd: ByNameImplicit[Decoder[T]]): PluginDecodeContent[PropertyTag[T], T, String, DefaultValue[T]] = {
+    new PluginDecodeContent[PropertyTag[T], T, String, DefaultValue[T]] {
       override def getDecoder(name: String, defaultValue: DefaultValue[T], p: Option[NameTranslator], useDefault: Boolean): Decoder[T] = {
         val nameI = p.map(_.tran(name)).getOrElse(name)
 
@@ -33,7 +33,6 @@ object PluginDecodeContent {
           }
         }
       }
-      override def application(context: Context4[PluginDecodeContent]): PluginDecodeContent[PropertyTag[T], T, String, DefaultValue[T]] = this
     }
   }
 
