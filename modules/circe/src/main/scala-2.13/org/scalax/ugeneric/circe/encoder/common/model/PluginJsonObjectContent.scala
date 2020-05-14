@@ -12,7 +12,7 @@ object PluginJsonObjectContent {
 
   implicit final def asunaCirceImplicit[T](implicit t: => Encoder[T]): PluginJsonObjectContent[PropertyTag[T], T, String] = { (name, p) =>
     val nameI = p.map(_.tran(name)).getOrElse(name)
-    data => m => (nameI, t(data)) :: m
+    (data, m) => (nameI, t(data)) :: m
   }
 
 }

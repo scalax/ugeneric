@@ -12,25 +12,18 @@ object JsonObjectContext extends Context3[JsonObjectContent] {
       val appender1 = x.appendField(p.takeHead3(name))
       val appender2 = y.appendField(p.takeTail3(name))
       new JsonObjectAppender[Z2] {
-        override def getAppender(data: Z2): JsonObjectFieldAppender = {
+        override def getAppender(data: Z2, l: List[(String, Json)]): List[(String, Json)] = {
           val data1 = p.takeHead2(data)
           val data2 = p.takeTail2(data)
-          new JsonObjectFieldAppender {
-            override def append(m: List[(String, Json)]): List[(String, Json)] = {
-              appender2.getAppender(data2).append(appender1.getAppender(data1).append(m))
-            }
-          }
+          appender2.getAppender(data2, appender1.getAppender(data1, l))
         }
       }
     }
   }
 
   override val start: JsonObjectContent[ZsgTuple0, ZsgTuple0, ZsgTuple0] = new JsonObjectContent[ZsgTuple0, ZsgTuple0, ZsgTuple0] {
-    val initObjectAppender: JsonObjectFieldAppender = new JsonObjectFieldAppender {
-      override def append(data: List[(String, Json)]): List[(String, Json)] = data
-    }
     val jsonObjectAppenderAsunaTuple0: JsonObjectAppender[ZsgTuple0] = new JsonObjectAppender[ZsgTuple0] {
-      override def getAppender(data: ZsgTuple0): JsonObjectFieldAppender = initObjectAppender
+      override def getAppender(data: ZsgTuple0, l: List[(String, Json)]): List[(String, Json)] = l
     }
     override def appendField(name: ZsgTuple0): JsonObjectAppender[ZsgTuple0] = {
       jsonObjectAppenderAsunaTuple0

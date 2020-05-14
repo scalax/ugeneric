@@ -9,6 +9,6 @@ abstract class JsonObjectContent[I, Model, Name] {
 
 object JsonObjectContent {
 
-  implicit final def asunaCirceImplicit[T](implicit t: => Encoder[T]): JsonObjectContent[PropertyTag[T], T, String] = name => data => m => (name, t(data)) :: m
+  @inline implicit final def asunaCirceImplicit[T](implicit t: => Encoder[T]): JsonObjectContent[PropertyTag[T], T, String] = name => (data, m) => (name, t(data)) :: m
 
 }

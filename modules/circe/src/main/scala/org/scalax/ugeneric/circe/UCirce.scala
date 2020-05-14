@@ -46,7 +46,7 @@ object UCirce {
     val application2       = applicationEncoder.appendField(names)
 
     VersionCompat.ObjectEncoderValue.instance { o =>
-      val jsonList = application2.getAppender(cv2.getter(o)).append(List.empty)
+      val jsonList = application2.getAppender(cv2.getter(o), List.empty)
       JsonObject.fromIterable(jsonList)
     }
   }
@@ -62,7 +62,7 @@ object UCirce {
     val application2       = applicationEncoder.appendField(names, p)
 
     VersionCompat.ObjectEncoderValue.instance { o =>
-      val jsonList = application2.getAppender(cv2.getter(o)).append(List.empty)
+      val jsonList = application2.getAppender(cv2.getter(o), List.empty)
       JsonObject.fromIterable(jsonList)
     }
   }
