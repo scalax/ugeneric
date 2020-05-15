@@ -1,6 +1,5 @@
 package org.scalax.ugeneric.circe.encoder.common.sealed_trait
 
-import asuna.{Application3, Context3}
 import asuna.macros.single.SealedTag
 import io.circe.{Encoder, Json}
 
