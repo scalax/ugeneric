@@ -1,7 +1,7 @@
 package org.scalax.ugeneric.circe.decoder.common.model
 
-import asuna.macros.single.DefaultValue
-import asuna.{Application4, Context4, PropertyTag}
+import zsg.macros.single.DefaultValue
+import zsg.PropertyTag
 import io.circe._
 import org.scalax.ugeneric.circe.NameTranslator
 

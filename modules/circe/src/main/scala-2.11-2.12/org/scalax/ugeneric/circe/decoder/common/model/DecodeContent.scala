@@ -1,7 +1,7 @@
 package org.scalax.ugeneric.circe.decoder.common.model
 
-import asuna.macros.ByNameImplicit
-import asuna.{Application3, Context3, PropertyTag}
+import zsg.macros.ByNameImplicit
+import zsg.PropertyTag
 import io.circe._
 
 trait DecodeContent[N, Model, Name] extends Any {

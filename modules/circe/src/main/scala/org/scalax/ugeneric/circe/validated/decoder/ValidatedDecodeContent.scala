@@ -1,9 +1,9 @@
 package org.scalax.ugeneric.circe.decoder
 
-import asuna.macros.single.DefaultValue
-import asuna.macros.ByNameImplicit
-import asuna.macros.utils.PlaceHolder
-import asuna.{Application6, Context6, PropertyTag}
+import zsg.macros.single.DefaultValue
+import zsg.macros.ByNameImplicit
+import zsg.macros.utils.PlaceHolder
+import zsg.PropertyTag
 import cats.data.Validated
 import io.circe._
 

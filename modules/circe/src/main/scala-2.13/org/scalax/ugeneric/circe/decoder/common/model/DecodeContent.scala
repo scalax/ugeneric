@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.circe.decoder.common.model
 
-import asuna.PropertyTag
+import zsg.PropertyTag
 import io.circe._
 
 trait DecodeContent[N, Model, Name] extends Any {

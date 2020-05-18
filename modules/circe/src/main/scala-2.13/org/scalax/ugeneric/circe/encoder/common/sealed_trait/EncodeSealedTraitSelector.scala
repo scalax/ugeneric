@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.circe.encoder.common.sealed_trait
 
-import asuna.macros.single.SealedTag
+import zsg.macros.single.SealedTag
 import io.circe.{Encoder, Json}
 
 class EncodeSealedTraitSelector[H] {

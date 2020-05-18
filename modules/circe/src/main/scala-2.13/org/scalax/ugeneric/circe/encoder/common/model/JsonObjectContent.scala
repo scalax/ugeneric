@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.circe.encoder.common.model
 
-import asuna.PropertyTag
+import zsg.PropertyTag
 import io.circe.Encoder
 
 abstract class JsonObjectContent[I, Model, Name] {

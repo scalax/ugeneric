@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.circe.decoder.common.model
 
-import asuna.{Context3, Plus3, ZsgTuple0}
+import zsg.{Context3, Plus3, ZsgTuple0}
 import io.circe.Decoder
 
 object DecodeContext extends Context3[DecodeContent] {

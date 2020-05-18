@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.circe.decoder.common.model
 
-import asuna.{Context4, Plus4, ZsgTuple0}
+import zsg.{Context4, Plus4, ZsgTuple0}
 import io.circe.Decoder
 import org.scalax.ugeneric.circe.NameTranslator
 

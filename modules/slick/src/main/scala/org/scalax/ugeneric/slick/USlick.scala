@@ -1,8 +1,8 @@
 package org.scalax.ugeneric.slick
 
-import asuna.Application6
-import asuna.macros.multiply.{AsunaMultiplyGeneric, AsunaMultiplyRepGeneric}
-import asuna.macros.single.{AsunaGeneric, AsunaGetterGeneric, AsunaSetterGeneric}
+import zsg.Application6
+import zsg.macros.multiply.{AsunaMultiplyGeneric, AsunaMultiplyRepGeneric}
+import zsg.macros.single.{AsunaGeneric, AsunaGetterGeneric, AsunaSetterGeneric}
 import org.scalax.ugeneric.slick.mutiply.{RepContext, RepNode}
 import slick.ast.{MappedScalaType, Node, ProductNode, TypeMapping}
 import slick.lifted.{AbstractTable, FlatShapeLevel, ProvenShape, Shape, ShapedValue}

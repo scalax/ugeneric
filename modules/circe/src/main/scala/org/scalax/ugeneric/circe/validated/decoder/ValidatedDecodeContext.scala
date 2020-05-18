@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.circe.decoder
 
-import asuna.{Context6, Plus6, ZsgTuple0}
+import zsg.{Context6, Plus6, ZsgTuple0}
 import cats.data.Validated
 import io.circe.ACursor
 

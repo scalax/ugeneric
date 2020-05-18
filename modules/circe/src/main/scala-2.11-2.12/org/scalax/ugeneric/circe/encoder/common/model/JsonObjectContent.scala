@@ -1,7 +1,7 @@
 package org.scalax.ugeneric.circe.encoder.common.model
 
-import asuna.{Application3, Context3, PropertyTag}
-import asuna.macros.ByNameImplicit
+import zsg.PropertyTag
+import zsg.macros.ByNameImplicit
 import io.circe.{Encoder, Json}
 
 trait JsonObjectContent[I, Model, Name] {
@@ -14,9 +14,7 @@ object JsonObjectContent {
     new JsonObjectContent[PropertyTag[T], T, String] {
       override def appendField(name: String): JsonObjectAppender[T] = {
         new JsonObjectAppender[T] {
-          override def getAppender(data: T): JsonObjectFieldAppender = new JsonObjectFieldAppender {
-            override def append(m: List[(String, Json)]): List[(String, Json)] = (name, t.value(data)) :: m
-          }
+          override def getAppender(data: T, l: List[(String, Json)]): List[(String, Json)] = (name, t.value(data)) :: l
         }
       }
     }

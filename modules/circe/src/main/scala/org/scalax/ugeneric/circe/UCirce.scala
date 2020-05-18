@@ -1,7 +1,7 @@
 package org.scalax.ugeneric.circe
 
-import asuna.macros.multiply.{AsunaMultiplyGeneric, AsunaMultiplyRepGeneric}
-import asuna.macros.single.{
+import zsg.macros.multiply.{AsunaMultiplyGeneric, AsunaMultiplyRepGeneric}
+import zsg.macros.single.{
   AsunaDefaultValueGeneric,
   AsunaGeneric,
   AsunaGetterGeneric,
@@ -12,7 +12,7 @@ import asuna.macros.single.{
   AsunaSealedToAbsGeneric,
   AsunaSetterGeneric
 }
-import asuna.{Application3, Application4, Application6}
+import zsg.{Application3, Application4, Application6}
 import io.circe.{Decoder, Encoder, JsonObject}
 import org.scalax.ugeneric.circe.decoder.ValidatedDecoder
 import cats.syntax.all._

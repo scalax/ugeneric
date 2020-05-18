@@ -1,7 +1,7 @@
 package org.scalax.ugeneric.circe.encoder.common.model
 
-import asuna.{Application3, Context3, PropertyTag}
-import asuna.macros.ByNameImplicit
+import zsg.PropertyTag
+import zsg.macros.ByNameImplicit
 import io.circe.{Encoder, Json}
 import org.scalax.ugeneric.circe.NameTranslator
 
@@ -16,9 +16,7 @@ object PluginJsonObjectContent {
       override def appendField(name: String, p: Option[NameTranslator]): JsonObjectAppender[T] = {
         val nameI = p.map(_.tran(name)).getOrElse(name)
         new JsonObjectAppender[T] {
-          override def getAppender(data: T): JsonObjectFieldAppender = new JsonObjectFieldAppender {
-            override def append(m: List[(String, Json)]): List[(String, Json)] = (nameI, t.value(data)) :: m
-          }
+          override def getAppender(data: T, l: List[(String, Json)]): List[(String, Json)] = (nameI, t.value(data)) :: l
         }
       }
     }

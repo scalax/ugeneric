@@ -1,8 +1,8 @@
 package org.scalax.ugeneric.circe.validated.decoder
 
-import asuna.{Application6, Context6, PropertyTag}
-import asuna.macros.ByNameImplicit
-import asuna.macros.single.DefaultValue
+import zsg.PropertyTag
+import zsg.macros.ByNameImplicit
+import zsg.macros.single.DefaultValue
 import cats.data.Validated
 import cats.implicits._
 import io.circe.{ACursor, Decoder, Json}

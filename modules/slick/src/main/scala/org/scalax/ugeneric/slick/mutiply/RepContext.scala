@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.slick.mutiply
 
-import asuna.{Context6, Plus6, ZsgTuple0}
+import zsg.{Context6, Plus6, ZsgTuple0}
 import slick.ast.Node
 
 object RepContext extends Context6[RepNode] {
