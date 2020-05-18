@@ -1,8 +1,8 @@
 package org.scalax.ugeneric.slick
 
 import zsg.Application6
-import zsg.macros.multiply.{AsunaMultiplyGeneric, AsunaMultiplyRepGeneric}
-import zsg.macros.single.{AsunaGeneric, AsunaGetterGeneric, AsunaSetterGeneric}
+import zsg.macros.multiply.{ZsgMultiplyGeneric, ZsgMultiplyRepGeneric}
+import zsg.macros.single.{ZsgGeneric, ZsgGetterGeneric, ZsgSetterGeneric}
 import org.scalax.ugeneric.slick.mutiply.{RepContext, RepNode}
 import slick.ast.{MappedScalaType, Node, ProductNode, TypeMapping}
 import slick.lifted.{AbstractTable, FlatShapeLevel, ProvenShape, Shape, ShapedValue}
@@ -16,12 +16,12 @@ object USlick {
   def mapWithTable[Rep, HListDataType, Table <: AbstractTable[Data], Data, P, RepType, DataType, EncodeRef, Packed1](
     table: Table
   )(
-    implicit p: AsunaMultiplyGeneric.Aux[Table, Data, P],
-    modelGeneric: AsunaGeneric.Aux[Data, HListDataType],
+    implicit p: ZsgMultiplyGeneric.Aux[Table, Data, P],
+    modelGeneric: ZsgGeneric.Aux[Data, HListDataType],
     app: Application6[RepNode, P, HListDataType, RepType, DataType, EncodeRef, Packed1],
-    asunaMultiplyRepGeneric: AsunaMultiplyRepGeneric[Table, Data, RepType],
-    asunaGetterGeneric: AsunaGetterGeneric[Data, DataType],
-    asunaSetterGeneric: AsunaSetterGeneric[Data, DataType],
+    asunaMultiplyRepGeneric: ZsgMultiplyRepGeneric[Table, Data, RepType],
+    asunaGetterGeneric: ZsgGetterGeneric[Data, DataType],
+    asunaSetterGeneric: ZsgSetterGeneric[Data, DataType],
     i: ClassTag[Data]
   ): ProvenShape[Data] = {
     val repType = app.application(RepContext)

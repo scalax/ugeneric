@@ -3,7 +3,7 @@ import sbt.Keys._
 
 object Dependencies {
 
-  val asunaVersion = "0.0.3-20200518-SNAP1"
+  val asunaVersion = "0.0.3-20200518-SNAP2"
   val fsg = Seq(
     resolvers += Resolver.bintrayRepo("scalax", "zsg"),
     libraryDependencies ++= List(
@@ -39,6 +39,11 @@ object Dependencies {
   val scalaTestVersion = "3.1.0"
   val scalaTest        = List("org.scalatest" %% "scalatest" % scalaTestVersion)
 
-  val upickle = Seq("com.lihaoyi" %% "upickle" % "0.8.0")
+  def upickle(scalaVersion: String) =
+    if (scalaVersion.startsWith("2.12")) {
+      Seq("com.lihaoyi" %% "upickle" % "0.8.0")
+    } else {
+      List.empty
+    }
 
 }

@@ -1,5 +1,5 @@
 UGenericSettings.scalaSetting
-UGenericSettings.scala213VersionSetting
-libraryDependencies ++= Dependencies.upickle
+UGenericSettings.scalaVersionSetting
+libraryDependencies ++= Dependencies.upickle(scalaVersion = scalaVersion.value)
 enablePlugins(JmhPlugin)
 name := "circe-benchmark"

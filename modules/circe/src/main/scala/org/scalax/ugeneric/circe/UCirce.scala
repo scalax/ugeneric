@@ -1,16 +1,16 @@
 package org.scalax.ugeneric.circe
 
-import zsg.macros.multiply.{AsunaMultiplyGeneric, AsunaMultiplyRepGeneric}
+import zsg.macros.multiply.{ZsgMultiplyGeneric, ZsgMultiplyRepGeneric}
 import zsg.macros.single.{
-  AsunaDefaultValueGeneric,
-  AsunaGeneric,
-  AsunaGetterGeneric,
-  AsunaLabelledGeneric,
-  AsunaSealedClassGeneric,
-  AsunaSealedGeneric,
-  AsunaSealedLabelledGeneric,
-  AsunaSealedToAbsGeneric,
-  AsunaSetterGeneric
+  ZsgDefaultValueGeneric,
+  ZsgGeneric,
+  ZsgGetterGeneric,
+  ZsgLabelledGeneric,
+  ZsgSealedClassGeneric,
+  ZsgSealedGeneric,
+  ZsgSealedLabelledGeneric,
+  ZsgSealedToAbsGeneric,
+  ZsgSetterGeneric
 }
 import zsg.{Application3, Application4, Application6}
 import io.circe.{Decoder, Encoder, JsonObject}
@@ -36,10 +36,10 @@ object UCirce {
   }*/
 
   def encodeCaseClass[Model, R, Prop, Name](
-    implicit ll: AsunaGeneric.Aux[Model, R],
+    implicit ll: ZsgGeneric.Aux[Model, R],
     app: Application3[encoder.common.model.JsonObjectContent, R, Prop, Name],
-    cv1: AsunaLabelledGeneric[Model, Name],
-    cv2: AsunaGetterGeneric[Model, Prop]
+    cv1: ZsgLabelledGeneric[Model, Name],
+    cv2: ZsgGetterGeneric[Model, Prop]
   ): VersionCompat.ObjectEncoderType[Model] = {
     val names              = cv1.names
     val applicationEncoder = app.application(encoder.common.model.JsonObjectContext)
@@ -52,10 +52,10 @@ object UCirce {
   }
 
   def encodeCaseClassWithPlugin[Model, R, Prop, Name](p: Option[NameTranslator])(
-    implicit ll: AsunaGeneric.Aux[Model, R],
+    implicit ll: ZsgGeneric.Aux[Model, R],
     app: Application3[encoder.common.model.PluginJsonObjectContent, R, Prop, Name],
-    cv1: AsunaLabelledGeneric[Model, Name],
-    cv2: AsunaGetterGeneric[Model, Prop]
+    cv1: ZsgLabelledGeneric[Model, Name],
+    cv2: ZsgGetterGeneric[Model, Prop]
   ): VersionCompat.ObjectEncoderType[Model] = {
     val names              = cv1.names
     val applicationEncoder = app.application(encoder.common.model.PluginJsonObjectContext)
@@ -70,10 +70,10 @@ object UCirce {
   final def encodeCaseObject[T]: VersionCompat.ObjectEncoderType[T] = VersionCompat.ObjectEncoderValue.instance(_ => JsonObject.empty)
 
   final def encodeSealed[H, R, Cls, Lab](
-    implicit ll: AsunaSealedGeneric.Aux[H, R],
+    implicit ll: ZsgSealedGeneric.Aux[H, R],
     app: Application3[encoder.common.sealed_trait.EncodeSealedTraitSelector[H]#JsonEncoder, R, Cls, Lab],
-    cv1: AsunaSealedLabelledGeneric[H, Lab],
-    cv2: AsunaSealedClassGeneric[H, Cls]
+    cv1: ZsgSealedLabelledGeneric[H, Lab],
+    cv2: ZsgSealedClassGeneric[H, Cls]
   ): VersionCompat.ObjectEncoderType[H] = {
     val name1              = cv1.names
     val name2              = cv2.names
@@ -82,10 +82,10 @@ object UCirce {
   }
 
   final def encodeSealedWithPlugin[H, R, Cls, Lab](nameTranslator: Option[NameTranslator])(
-    implicit ll: AsunaSealedGeneric.Aux[H, R],
+    implicit ll: ZsgSealedGeneric.Aux[H, R],
     app: Application3[encoder.common.sealed_trait.PluginEncodeSealedTraitSelector[H]#JsonEncoder, R, Cls, Lab],
-    cv1: AsunaSealedLabelledGeneric[H, Lab],
-    cv2: AsunaSealedClassGeneric[H, Cls]
+    cv1: ZsgSealedLabelledGeneric[H, Lab],
+    cv2: ZsgSealedClassGeneric[H, Cls]
   ): VersionCompat.ObjectEncoderType[H] = {
     val name1              = cv1.names
     val name2              = cv2.names
@@ -105,47 +105,47 @@ object UCirce {
   }*/
 
   def decodeCaseClass[Model, R, Prop, Name](
-    implicit ll: AsunaGeneric.Aux[Model, R],
+    implicit ll: ZsgGeneric.Aux[Model, R],
     app: Application3[decoder.common.model.DecodeContent, R, Prop, Name],
-    cv1: AsunaLabelledGeneric[Model, Name],
-    cv3: AsunaSetterGeneric[Model, Prop]
+    cv1: ZsgLabelledGeneric[Model, Name],
+    cv3: ZsgSetterGeneric[Model, Prop]
   ): Decoder[Model] = app.application(decoder.common.model.DecodeContext).getDecoder(cv1.names).map(mm => cv3.setter(mm))
 
   def decodeCaseClassWithPlugin[Model, R, Prop, Name, DefaultValue](nameTranslator: Option[NameTranslator], useDefaultValue: Boolean)(
-    implicit ll: AsunaGeneric.Aux[Model, R],
+    implicit ll: ZsgGeneric.Aux[Model, R],
     app: Application4[decoder.common.model.PluginDecodeContent, R, Prop, Name, DefaultValue],
-    cv1: AsunaLabelledGeneric[Model, Name],
-    cv3: AsunaSetterGeneric[Model, Prop],
-    cv4: AsunaDefaultValueGeneric[Model, DefaultValue]
+    cv1: ZsgLabelledGeneric[Model, Name],
+    cv3: ZsgSetterGeneric[Model, Prop],
+    cv4: ZsgDefaultValueGeneric[Model, DefaultValue]
   ): Decoder[Model] =
     app.application(decoder.common.model.PluginDecodeContext).getDecoder(cv1.names, cv4.defaultValues, nameTranslator, useDefaultValue).map(mm => cv3.setter(mm))
 
   def validatedDecodeCaseClassWithTable[Table, ModelTupeType, Model, R, Prop, Nam, DefVal, Rep](table: Table)(
-    implicit ll: AsunaMultiplyGeneric.Aux[Table, Model, R],
-    n: AsunaGeneric.Aux[Model, ModelTupeType],
+    implicit ll: ZsgMultiplyGeneric.Aux[Table, Model, R],
+    n: ZsgGeneric.Aux[Model, ModelTupeType],
     app: Application6[decoder.ValidatedDecodeContent, R, ModelTupeType, Prop, Nam, DefVal, Rep],
-    repGeneric: AsunaMultiplyRepGeneric[Table, Model, Rep],
-    cv1: AsunaLabelledGeneric[Model, Nam],
-    cv3: AsunaSetterGeneric[Model, Prop],
-    cv4: AsunaDefaultValueGeneric[Model, DefVal]
+    repGeneric: ZsgMultiplyRepGeneric[Table, Model, Rep],
+    cv1: ZsgLabelledGeneric[Model, Nam],
+    cv3: ZsgSetterGeneric[Model, Prop],
+    cv4: ZsgDefaultValueGeneric[Model, DefVal]
   ): ValidatedDecoder[Model] =
     app.application(decoder.ValidatedDecodeContext).getValue(cv1.names, cv4.defaultValues, repGeneric.rep(table)).map(mm => cv3.setter(mm))
 
   def decodeSealed[H, R, Nam, Tran](
-    implicit ll: AsunaSealedGeneric.Aux[H, R],
+    implicit ll: ZsgSealedGeneric.Aux[H, R],
     app: Application3[decoder.common.sealed_trait.DecodeSealedTraitSelector[H]#JsonDecoder, R, Nam, Tran],
-    cv1: AsunaSealedLabelledGeneric[H, Nam],
-    cv2: AsunaSealedToAbsGeneric[H, Tran]
+    cv1: ZsgSealedLabelledGeneric[H, Nam],
+    cv2: ZsgSealedToAbsGeneric[H, Tran]
   ): Decoder[H] = {
     val names = cv1.names
     app.application(decoder.common.sealed_trait.DecodeSealedContext[H]).getValue(names, cv2.names)
   }
 
   def decodeSealedWithPlugin[H, R, Nam, Tran](nameTranslator: Option[NameTranslator])(
-    implicit ll: AsunaSealedGeneric.Aux[H, R],
+    implicit ll: ZsgSealedGeneric.Aux[H, R],
     app: Application3[decoder.common.sealed_trait.PluginDecodeSealedTraitSelector[H]#JsonDecoder, R, Nam, Tran],
-    cv1: AsunaSealedLabelledGeneric[H, Nam],
-    cv2: AsunaSealedToAbsGeneric[H, Tran]
+    cv1: ZsgSealedLabelledGeneric[H, Nam],
+    cv2: ZsgSealedToAbsGeneric[H, Tran]
   ): Decoder[H] = {
     val names = cv1.names
     app.application(decoder.common.sealed_trait.PluginDecodeSealedContext[H]).getValue(names, cv2.names, nameTranslator)
