@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.slick.mutiply
 
-import asuna.{Application6, Context6, PropertyTag}
+import asuna.PropertyTag
 import slick.ast.{ElementSymbol, Node, Select}
 import slick.lifted.{Shape, ShapeLevel}
 
