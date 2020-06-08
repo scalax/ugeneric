@@ -7,8 +7,8 @@ import org.scalax.ugeneric.circe.NameTranslator
 
 class PluginDecodeSealedTraitSelector[P] {
 
-  trait JsonDecoder[I, II, T] {
-    def getValue(name: II, tran: T, i: Option[NameTranslator]): Decoder[P]
+  trait JsonDecoder[I, II] {
+    def getValue(name: II, i: Option[NameTranslator]): Decoder[P]
   }
 
 }
@@ -18,15 +18,15 @@ object PluginDecodeSealedTraitSelector {
   def apply[T]: PluginDecodeSealedTraitSelector[T]        = value.asInstanceOf[PluginDecodeSealedTraitSelector[T]]
   private val value: PluginDecodeSealedTraitSelector[Any] = new PluginDecodeSealedTraitSelector[Any]
 
-  implicit def asunaCirceSealedDecoder[T, R](
+  implicit def asunaCirceSealedDecoder[T, R <: T](
     implicit t: ByNameImplicit[Decoder[R]]
-  ): PluginDecodeSealedTraitSelector[T]#JsonDecoder[SealedTag[R], String, R => T] = {
+  ): PluginDecodeSealedTraitSelector[T]#JsonDecoder[SealedTag[R], String] = {
     val con = PluginDecodeSealedTraitSelector[T]
-    new con.JsonDecoder[SealedTag[R], String, R => T] {
-      override def getValue(name: String, tran: R => T, i: Option[NameTranslator]): Decoder[T] = {
+    new con.JsonDecoder[SealedTag[R], String] {
+      override def getValue(name: String, i: Option[NameTranslator]): Decoder[T] = {
         val nameI = i.map(_.tran(name)).getOrElse(name)
         Decoder.instance {
-          _.get(nameI)(t.value).right.map(tran)
+          _.get(nameI)(t.value): Decoder.Result[R]
         }
       }
     }

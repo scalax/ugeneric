@@ -10,10 +10,9 @@ import zsg.macros.single.{
   ZsgSealedClassGeneric,
   ZsgSealedGeneric,
   ZsgSealedLabelledGeneric,
-  ZsgSealedToAbsGeneric,
   ZsgSetterGeneric
 }
-import zsg.{Application3, Application4, Application6}
+import zsg.{Application2, Application3, Application4, Application6}
 import io.circe.{Decoder, Encoder, JsonObject}
 import org.scalax.ugeneric.circe.decoder.ValidatedDecoder
 import cats.syntax.all._
@@ -126,24 +125,22 @@ object UCirce {
   ): ValidatedDecoder[Model] =
     app.application(decoder.ValidatedDecodeContext).getValue(cv1.names, cv4.defaultValues, repGeneric.rep(table)).map(mm => cv3.setter(mm))
 
-  def decodeSealed[H, R, Nam, Tran](
+  def decodeSealed[H, R, Nam](
     implicit ll: ZsgSealedGeneric.Aux[H, R],
-    app: Application3[decoder.common.sealed_trait.DecodeSealedTraitSelector[H]#JsonDecoder, R, Nam, Tran],
-    cv1: ZsgSealedLabelledGeneric[H, Nam],
-    cv2: ZsgSealedToAbsGeneric[H, Tran]
+    app: Application2[decoder.common.sealed_trait.DecodeSealedTraitSelector[H]#JsonDecoder, R, Nam],
+    cv1: ZsgSealedLabelledGeneric[H, Nam]
   ): Decoder[H] = {
     val names = cv1.names
-    app.application(decoder.common.sealed_trait.DecodeSealedContext[H]).getValue(names, cv2.names)
+    app.application(decoder.common.sealed_trait.DecodeSealedContext[H]).getValue(names)
   }
 
-  def decodeSealedWithPlugin[H, R, Nam, Tran](nameTranslator: Option[NameTranslator])(
+  def decodeSealedWithPlugin[H, R, Nam](nameTranslator: Option[NameTranslator])(
     implicit ll: ZsgSealedGeneric.Aux[H, R],
-    app: Application3[decoder.common.sealed_trait.PluginDecodeSealedTraitSelector[H]#JsonDecoder, R, Nam, Tran],
-    cv1: ZsgSealedLabelledGeneric[H, Nam],
-    cv2: ZsgSealedToAbsGeneric[H, Tran]
+    app: Application2[decoder.common.sealed_trait.PluginDecodeSealedTraitSelector[H]#JsonDecoder, R, Nam],
+    cv1: ZsgSealedLabelledGeneric[H, Nam]
   ): Decoder[H] = {
     val names = cv1.names
-    app.application(decoder.common.sealed_trait.PluginDecodeSealedContext[H]).getValue(names, cv2.names, nameTranslator)
+    app.application(decoder.common.sealed_trait.PluginDecodeSealedContext[H]).getValue(names, nameTranslator)
   }
 
 }
