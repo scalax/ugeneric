@@ -6,6 +6,7 @@ import zsg.macros.single.{
   ZsgGeneric,
   ZsgGetterGeneric,
   ZsgLabelledGeneric,
+  ZsgLabelledTypeGeneric,
   ZsgSealedClassGeneric,
   ZsgSealedGeneric,
   ZsgSealedLabelledGeneric,
@@ -37,32 +38,26 @@ object UCirce {
 
   def encodeCaseClass[Model, R, Prop, Name](
     implicit ll: ZsgGeneric.Aux[Model, R],
-    app: Application3[encoder.common.model.JsonObjectContent, R, Prop, Name],
-    cv1: ZsgLabelledGeneric[Model, Name],
+    nImplicit: ZsgLabelledTypeGeneric.Aux[Model, Name],
+    app: Application3[encoder.common.model.JsonObjectContent, R, Name, Prop],
     cv2: ZsgGetterGeneric[Model, Prop]
   ): VersionCompat.ObjectEncoderType[Model] = {
-    val names              = cv1.names
     val applicationEncoder = app.application(encoder.common.model.JsonObjectContext)
-    val application2       = applicationEncoder.appendField(names)
-
     VersionCompat.ObjectEncoderValue.instance { o =>
-      val jsonList = application2.getAppender(cv2.getter(o), List.empty)
+      val jsonList = applicationEncoder.getAppender(cv2.getter(o), List.empty)
       JsonObject.fromIterable(jsonList)
     }
   }
 
   def encodeCaseClassWithPlugin[Model, R, Prop, Name](p: Option[NameTranslator])(
     implicit ll: ZsgGeneric.Aux[Model, R],
-    app: Application3[encoder.common.model.PluginJsonObjectContent, R, Prop, Name],
-    cv1: ZsgLabelledGeneric[Model, Name],
+    nImplicit: ZsgLabelledTypeGeneric.Aux[Model, Name],
+    app: Application3[encoder.common.model.PluginJsonObjectContent, R, Name, Prop],
     cv2: ZsgGetterGeneric[Model, Prop]
   ): VersionCompat.ObjectEncoderType[Model] = {
-    val names              = cv1.names
     val applicationEncoder = app.application(encoder.common.model.PluginJsonObjectContext)
-    val application2       = applicationEncoder.appendField(names, p)
-
     VersionCompat.ObjectEncoderValue.instance { o =>
-      val jsonList = application2.getAppender(cv2.getter(o), List.empty)
+      val jsonList = applicationEncoder.getAppender(cv2.getter(o), List.empty, p)
       JsonObject.fromIterable(jsonList)
     }
   }

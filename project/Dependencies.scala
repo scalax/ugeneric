@@ -8,6 +8,7 @@ object Dependencies {
     resolvers += Resolver.bintrayRepo("scalax", "zsg"),
     libraryDependencies ++= List(
       "org.scalax" %% "zsg-macros"      % asunaVersion,
+      "org.scalax" %% "zsg-debug"       % asunaVersion,
       "org.scalax" %% "zsg-scala-tuple" % asunaVersion
     )
   )
@@ -40,7 +41,7 @@ object Dependencies {
   val scalaTest        = List("org.scalatest" %% "scalatest" % scalaTestVersion)
 
   def upickle(scalaVersion: String) =
-    if (scalaVersion.startsWith("2.12")) {
+    if (scalaVersion.startsWith("2.12") || scalaVersion.startsWith("2.13")) {
       Seq("com.lihaoyi" %% "upickle" % "0.8.0")
     } else {
       List.empty
