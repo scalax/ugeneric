@@ -1,21 +1,24 @@
 package org.scalax.ugeneric.circe.decoder.common.model
 
-import zsg.macros.single.DefaultValue
+import zsg.macros.single.{ColumnName, DefaultValue, GenericColumnName, StringName}
 import zsg.macros.ByNameImplicit
 import zsg.PropertyTag
 import io.circe._
 import org.scalax.ugeneric.circe.NameTranslator
 
-trait PluginDecodeContent[N, Model, Name, DefaultValue] extends Any {
-  def getDecoder(name: Name, defaultValue: DefaultValue, p: Option[NameTranslator], useDefaultValue: Boolean): Decoder[Model]
+trait PluginDecodeContent[N, Name, Model, DefaultValue] extends Any {
+  def getDecoder(defaultValue: DefaultValue, p: Option[NameTranslator], useDefaultValue: Boolean): Decoder[Model]
 }
 
 object PluginDecodeContent {
 
-  implicit def asunaPlaceHolderDecoder[T](implicit dd: ByNameImplicit[Decoder[T]]): PluginDecodeContent[PropertyTag[T], T, String, DefaultValue[T]] = {
-    new PluginDecodeContent[PropertyTag[T], T, String, DefaultValue[T]] {
-      override def getDecoder(name: String, defaultValue: DefaultValue[T], p: Option[NameTranslator], useDefault: Boolean): Decoder[T] = {
-        val nameI = p.map(_.tran(name)).getOrElse(name)
+  implicit def zsgDecoderContent[T, N <: StringName](
+    implicit dd: ByNameImplicit[Decoder[T]],
+    genName: GenericColumnName[N]
+  ): PluginDecodeContent[PropertyTag[T], ColumnName[N], T, DefaultValue[T]] = {
+    new PluginDecodeContent[PropertyTag[T], ColumnName[N], T, DefaultValue[T]] {
+      override def getDecoder(defaultValue: DefaultValue[T], p: Option[NameTranslator], useDefault: Boolean): Decoder[T] = {
+        val nameI = p.map(_.tran(genName.value)).getOrElse(genName.value)
 
         Decoder.instance { j =>
           val fieldValue = j.downField(nameI)

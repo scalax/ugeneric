@@ -16,6 +16,7 @@ import zsg.{Application2, Application3, Application4, Application6}
 import io.circe.{Decoder, Encoder, JsonObject}
 import org.scalax.ugeneric.circe.decoder.ValidatedDecoder
 import cats.syntax.all._
+import zsg.macros.single
 
 object UCirce {
 
@@ -100,19 +101,19 @@ object UCirce {
 
   def decodeCaseClass[Model, R, Prop, Name](
     implicit ll: ZsgGeneric.Aux[Model, R],
-    app: Application3[decoder.common.model.DecodeContent, R, Prop, Name],
-    cv1: ZsgLabelledGeneric[Model, Name],
+    tImplicit: single.ZsgLabelledTypeGeneric.Aux[Model, Name],
+    app: Application3[decoder.common.model.DecodeContent, R, Name, Prop],
     cv3: ZsgSetterGeneric[Model, Prop]
-  ): Decoder[Model] = app.application(decoder.common.model.DecodeContext).getDecoder(cv1.names).map(mm => cv3.setter(mm))
+  ): Decoder[Model] = app.application(decoder.common.model.DecodeContext).getDecoder.map(mm => cv3.setter(mm))
 
   def decodeCaseClassWithPlugin[Model, R, Prop, Name, DefaultValue](nameTranslator: Option[NameTranslator], useDefaultValue: Boolean)(
     implicit ll: ZsgGeneric.Aux[Model, R],
-    app: Application4[decoder.common.model.PluginDecodeContent, R, Prop, Name, DefaultValue],
-    cv1: ZsgLabelledGeneric[Model, Name],
+    tImplicit: single.ZsgLabelledTypeGeneric.Aux[Model, Name],
+    app: Application4[decoder.common.model.PluginDecodeContent, R, Name, Prop, DefaultValue],
     cv3: ZsgSetterGeneric[Model, Prop],
     cv4: ZsgDefaultValueGeneric[Model, DefaultValue]
   ): Decoder[Model] =
-    app.application(decoder.common.model.PluginDecodeContext).getDecoder(cv1.names, cv4.defaultValues, nameTranslator, useDefaultValue).map(mm => cv3.setter(mm))
+    app.application(decoder.common.model.PluginDecodeContext).getDecoder(cv4.defaultValues, nameTranslator, useDefaultValue).map(mm => cv3.setter(mm))
 
   def validatedDecodeCaseClassWithTable[Table, ModelTupeType, Model, R, Prop, Nam, DefVal, Rep](table: Table)(
     implicit ll: ZsgMultiplyGeneric.Aux[Table, Model, R],

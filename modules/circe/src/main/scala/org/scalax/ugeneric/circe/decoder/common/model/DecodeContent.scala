@@ -3,16 +3,19 @@ package org.scalax.ugeneric.circe.decoder.common.model
 import zsg.macros.ByNameImplicit
 import zsg.PropertyTag
 import io.circe._
+import zsg.macros.single.{ColumnName, GenericColumnName, StringName}
 
-trait DecodeContent[N, Model, Name] extends Any {
-  def getDecoder(name: Name): Decoder[Model]
+trait DecodeContent[N, Name, Model] extends Any {
+  def getDecoder: Decoder[Model]
 }
 
 object DecodeContent {
 
-  implicit def asunaDecoder[Model](implicit dd: ByNameImplicit[Decoder[Model]]): DecodeContent[PropertyTag[Model], Model, String] =
-    new DecodeContent[PropertyTag[Model], Model, String] {
-      override def getDecoder(name: String): Decoder[Model] = Decoder.instance(_.get(name)(dd.value))
-    }
+  implicit def ugenericDecoder[Model, N <: StringName](
+    implicit dd: ByNameImplicit[Decoder[Model]],
+    genName: GenericColumnName[N]
+  ): DecodeContent[PropertyTag[Model], ColumnName[N], Model] = new DecodeContent[PropertyTag[Model], ColumnName[N], Model] {
+    override def getDecoder: Decoder[Model] = Decoder.instance(_.get(genName.value)(dd.value))
+  }
 
 }
