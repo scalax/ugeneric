@@ -1,4 +1,4 @@
-package org.scalax.ugeneric.circe.encoder.common.model
+package ugeneric.circe.encoder
 
 import zsg.PropertyTag
 import io.circe.{Encoder, Json}

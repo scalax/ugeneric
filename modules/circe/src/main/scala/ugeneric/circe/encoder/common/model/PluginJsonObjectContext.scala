@@ -1,8 +1,8 @@
-package org.scalax.ugeneric.circe.encoder.common.model
+package ugeneric.circe.encoder
 
 import zsg.{Context3, Plus3, ZsgTuple0}
 import io.circe.Json
-import org.scalax.ugeneric.circe.NameTranslator
+import ugeneric.circe.NameTranslator
 
 object PluginJsonObjectContext extends Context3[PluginJsonObjectContent] {
   override def append[X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3](x: PluginJsonObjectContent[X1, X2, X3], y: PluginJsonObjectContent[Y1, Y2, Y3])(

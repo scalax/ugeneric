@@ -16,11 +16,26 @@ import zsg.{Application2, Application3, Application4, Application6}
 import io.circe.{Decoder, JsonObject}
 import org.scalax.ugeneric.circe.decoder.{ValidatedDecodeContent, ValidatedDecodeContext, ValidatedDecoder}
 import cats.syntax.all._
-import org.scalax.ugeneric.circe.NameTranslator
-import org.scalax.ugeneric.circe.decoder.common.model.{DecodeContent, DecodeContext, PluginDecodeContent, PluginDecodeContext}
-import org.scalax.ugeneric.circe.decoder.common.sealed_trait.{DecodeSealedContext, DecodeSealedTraitSelector, PluginDecodeSealedContext, PluginDecodeSealedTraitSelector}
-import org.scalax.ugeneric.circe.encoder.common.model.{JsonObjectContent, JsonObjectContext, PluginJsonObjectContent, PluginJsonObjectContext}
-import org.scalax.ugeneric.circe.encoder.common.sealed_trait.{EncodeSealedContext, EncodeSealedTraitSelector, PluginEncodeSealedContext, PluginEncodeSealedTraitSelector}
+import ugeneric.circe.decoder.{
+  DecodeContent,
+  DecodeContext,
+  DecodeSealedContext,
+  DecodeSealedTraitSelector,
+  PluginDecodeContent,
+  PluginDecodeContext,
+  PluginDecodeSealedContext,
+  PluginDecodeSealedTraitSelector
+}
+import ugeneric.circe.encoder.{
+  EncodeSealedContext,
+  EncodeSealedTraitSelector,
+  JsonObjectContent,
+  JsonObjectContext,
+  PluginEncodeSealedContext,
+  PluginEncodeSealedTraitSelector,
+  PluginJsonObjectContent,
+  PluginJsonObjectContext
+}
 
 object UCirce {
 

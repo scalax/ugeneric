@@ -1,8 +1,8 @@
-package org.scalax.ugeneric.circe.decoder.common.model
+package ugeneric.circe.decoder
 
 import zsg.{Context4, Plus4, ZsgTuple0}
 import io.circe.Decoder
-import org.scalax.ugeneric.circe.NameTranslator
+import ugeneric.circe.NameTranslator
 
 object PluginDecodeContext extends Context4[PluginDecodeContent] {
 

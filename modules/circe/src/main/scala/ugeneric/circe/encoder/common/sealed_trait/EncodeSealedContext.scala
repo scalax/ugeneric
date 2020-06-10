@@ -1,4 +1,4 @@
-package org.scalax.ugeneric.circe.encoder.common.sealed_trait
+package ugeneric.circe.encoder
 
 import zsg.{Context3, Plus3, ZsgTuple0}
 import io.circe.Json

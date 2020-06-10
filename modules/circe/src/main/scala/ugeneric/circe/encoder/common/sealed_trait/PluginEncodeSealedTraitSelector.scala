@@ -1,9 +1,9 @@
-package org.scalax.ugeneric.circe.encoder.common.sealed_trait
+package ugeneric.circe.encoder
 
 import zsg.macros.ByNameImplicit
 import zsg.macros.single.SealedTag
 import io.circe.{Encoder, Json}
-import org.scalax.ugeneric.circe.NameTranslator
+import ugeneric.circe.NameTranslator
 
 class PluginEncodeSealedTraitSelector[H] {
   abstract class JsonEncoder[M, T, Name] {

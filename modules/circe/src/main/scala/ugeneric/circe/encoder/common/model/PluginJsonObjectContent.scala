@@ -1,8 +1,8 @@
-package org.scalax.ugeneric.circe.encoder.common.model
+package ugeneric.circe.encoder
 
 import zsg.PropertyTag
 import io.circe.{Encoder, Json}
-import org.scalax.ugeneric.circe.NameTranslator
+import ugeneric.circe.NameTranslator
 import zsg.macros.ByNameImplicit
 import zsg.macros.single.{ColumnName, GenericColumnName, StringName}
 

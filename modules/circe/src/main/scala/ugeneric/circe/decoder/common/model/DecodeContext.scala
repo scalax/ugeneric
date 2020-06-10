@@ -1,4 +1,4 @@
-package org.scalax.ugeneric.circe.decoder.common.model
+package ugeneric.circe.decoder
 
 import zsg.{Context3, Plus3, ZsgTuple0}
 import io.circe.Decoder

@@ -4,8 +4,8 @@ import io.circe.Encoder
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 import io.circe.syntax._
-import org.scalax.ugeneric.circe.encoder.common.sealed_trait.EncodeSealedApplication
 import ugeneric.circe.UCirce
+import ugeneric.circe.encoder.EncodeSealedApplication
 import ugeneric.circe.test.encoder.model.{NamedSealed, SimpleSealed}
 
 class TestUCirceExplicitSealedEncoderTest extends AnyFunSpec with Matchers {

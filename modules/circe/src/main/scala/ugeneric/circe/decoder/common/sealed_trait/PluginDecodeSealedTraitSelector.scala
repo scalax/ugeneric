@@ -1,9 +1,9 @@
-package org.scalax.ugeneric.circe.decoder.common.sealed_trait
+package ugeneric.circe.decoder
 
 import zsg.macros.ByNameImplicit
 import zsg.macros.single.SealedTag
 import io.circe.Decoder
-import org.scalax.ugeneric.circe.NameTranslator
+import ugeneric.circe.NameTranslator
 
 class PluginDecodeSealedTraitSelector[P] {
 

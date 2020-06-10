@@ -1,8 +1,8 @@
-package org.scalax.ugeneric.circe.decoder.common.sealed_trait
+package ugeneric.circe.decoder
 
 import zsg.{Context2, Plus2, ZsgTuple0}
 import io.circe.Decoder
-import org.scalax.ugeneric.circe.NameTranslator
+import ugeneric.circe.NameTranslator
 
 class PluginDecodeSealedContext[P] extends Context2[PluginDecodeSealedTraitSelector[P]#JsonDecoder] {
 

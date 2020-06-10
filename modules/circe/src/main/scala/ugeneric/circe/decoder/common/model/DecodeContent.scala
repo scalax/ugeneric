@@ -1,4 +1,4 @@
-package org.scalax.ugeneric.circe.decoder.common.model
+package ugeneric.circe.decoder
 
 import zsg.macros.ByNameImplicit
 import zsg.PropertyTag

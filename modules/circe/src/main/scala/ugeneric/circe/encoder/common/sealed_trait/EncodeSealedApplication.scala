@@ -1,4 +1,4 @@
-package org.scalax.ugeneric.circe.encoder.common.sealed_trait
+package ugeneric.circe.encoder
 
 import zsg.macros.single.SealedTag
 import io.circe.Json

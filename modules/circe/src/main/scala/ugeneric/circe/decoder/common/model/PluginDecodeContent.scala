@@ -1,10 +1,10 @@
-package org.scalax.ugeneric.circe.decoder.common.model
+package ugeneric.circe.decoder
 
 import zsg.macros.single.{ColumnName, DefaultValue, GenericColumnName, StringName}
 import zsg.macros.ByNameImplicit
 import zsg.PropertyTag
 import io.circe._
-import org.scalax.ugeneric.circe.NameTranslator
+import ugeneric.circe.NameTranslator
 
 trait PluginDecodeContent[N, Name, Model, DefaultValue] extends Any {
   def getDecoder(defaultValue: DefaultValue, p: Option[NameTranslator], useDefaultValue: Boolean): Decoder[Model]
