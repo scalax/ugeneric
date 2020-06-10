@@ -1,4 +1,4 @@
-package org.scalax.ugeneric.circe
+package ugeneric.circe
 
 object VersionCompat {
 
