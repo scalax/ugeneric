@@ -6,7 +6,7 @@ import org.openjdk.jmh.annotations._
 import upickle.default.{ReadWriter => RW}
 import io.circe.Encoder
 import ugeneric.circe.UCirce
-import ugeneric.circe.encoder.benchmark.model.{Bar, Foo}
+import ugeneric.circe.encoder.benchmark.model.{Bar, Foo, Model1}
 
 @BenchmarkMode(Array(Mode.Throughput)) // 测试方法平均执行时间
 @OutputTimeUnit(TimeUnit.SECONDS)      // 输出结果的时间粒度为微秒
@@ -31,7 +31,7 @@ class Test01 {
     implicit val a2: Encoder[Foo] = UCirce.encodeCaseClass
   }
 
-  val model: Bar = Model.bar
+  val model: Bar = Model1.bar
 
   @Benchmark
   def upickleTest = {
