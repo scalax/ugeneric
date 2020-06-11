@@ -1,23 +1,8 @@
-package org.scalax.asuna.circe.encoder.test
+package ugeneric.circe.encoder.benchmark.model
 
-case class Foo(
-  i1: Int,
-  i2: String,
-  i3: String,
-  i4: String,
-  i5: String,
-  i6: String,
-  i7: String,
-  i8: String,
-  i9: String,
-  i10: String,
-  i11: String,
-  i12: String
-)
 
-case class Bar(i1: Foo)
 
-object Model {
+object Model1 {
   val foo = Foo(
     i1 = 404,
     i2 = "init string",
@@ -33,5 +18,5 @@ object Model {
     i12 = "2333"
   )
 
-  val bar = Bar(i1 = Model.foo)
+  val bar = Bar(i1 = Model1.foo)
 }

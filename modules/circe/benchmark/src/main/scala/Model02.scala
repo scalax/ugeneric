@@ -1,4 +1,4 @@
-package org.scalax.asuna.circe
+package ugeneric.circe.encoder.benchmark.model
 
 object ADTs {
   case class ADT0(i1: String)

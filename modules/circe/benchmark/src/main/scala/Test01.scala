@@ -1,11 +1,12 @@
-package org.scalax.asuna.circe.encoder.test
+package ugeneric.circe.encoder.test
 
 import java.util.concurrent.TimeUnit
 
 import org.openjdk.jmh.annotations._
 import upickle.default.{ReadWriter => RW}
 import io.circe.Encoder
-import org.scalax.ugeneric.circe.UCirce
+import ugeneric.circe.UCirce
+import ugeneric.circe.encoder.benchmark.model.{Bar, Foo}
 
 @BenchmarkMode(Array(Mode.Throughput)) // 测试方法平均执行时间
 @OutputTimeUnit(TimeUnit.SECONDS)      // 输出结果的时间粒度为微秒

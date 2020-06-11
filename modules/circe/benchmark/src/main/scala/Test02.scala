@@ -1,16 +1,16 @@
-package org.scalax.asuna.circe
+package ugeneric.circe.encoder.benchmark
 
 import java.util.concurrent.TimeUnit
 
 import org.openjdk.jmh.annotations._
-import org.scalax.ugeneric.circe.UCirce
+import ugeneric.circe.UCirce
 
 object Aa {
-  import ADTs.ADT0
-  import Defaults._
-  import Generic.ADT
-  import Hierarchy._
-  import Recursive._
+  import ugeneric.circe.encoder.benchmark.model.ADTs.ADT0
+  import ugeneric.circe.encoder.benchmark.model.Defaults._
+  import ugeneric.circe.encoder.benchmark.model.Generic.ADT
+  import ugeneric.circe.encoder.benchmark.model.Hierarchy._
+  import ugeneric.circe.encoder.benchmark.model.Recursive._
   type Data = ADT[Seq[(Int, Int)], String, A, LL, ADTc, ADT0]
   val benchmarkSampleData: Data = ADT(
     Vector((1, 2), (3, 4), (4, 5), (6, 7), (8, 9), (10, 11), (12, 13)),
@@ -34,11 +34,11 @@ class Test02 {
   import upickle.default.{ReadWriter => RW, macroRW}
   import upickle.default._
 
-  import ADTs.ADT0
-  import Defaults._
-  import Generic.ADT
-  import Hierarchy._
-  import Recursive._
+  import ugeneric.circe.encoder.benchmark.model.ADTs.ADT0
+  import ugeneric.circe.encoder.benchmark.model.Defaults._
+  import ugeneric.circe.encoder.benchmark.model.Generic.ADT
+  import ugeneric.circe.encoder.benchmark.model.Hierarchy._
+  import ugeneric.circe.encoder.benchmark.model.Recursive._
   type Data = ADT[Seq[(Int, Int)], String, A, LL, ADTc, ADT0]
 
   import io.circe._
