@@ -1,4 +1,4 @@
-package ugeneric.circe.encoder.test
+package ugeneric.circe.encoder.benchmark
 
 import java.util.concurrent.TimeUnit
 
@@ -11,7 +11,7 @@ import ugeneric.circe.encoder.benchmark.model.{Bar, Foo}
 @BenchmarkMode(Array(Mode.Throughput)) // 测试方法平均执行时间
 @OutputTimeUnit(TimeUnit.SECONDS)      // 输出结果的时间粒度为微秒
 @State(Scope.Thread)                   // 每个测试线程一个实例
-class Test01 {
+class JsonEncoderBenchmark {
 
   object uPickle {
     import upickle.default.macroRW
