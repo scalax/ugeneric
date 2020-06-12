@@ -23,7 +23,6 @@ class JsonEncoderBenchmark {
     import io.circe.generic.semiauto._
     implicit val a1: Encoder[Bar] = deriveEncoder
     implicit val a2: Encoder[Foo] = deriveEncoder
-
   }
 
   object zsgEncoder {
