@@ -14,5 +14,3 @@ case class Foo(
   i11: String,
   i12: String
 )
-
-

@@ -1,7 +1,5 @@
 package ugeneric.circe.encoder.benchmark.model
 
-
-
 object Model1 {
   val foo = Foo(
     i1 = 404,
