@@ -1,4 +1,4 @@
-package ugeneric.circe.encoder.benchmark
+package ugeneric.circe.benchmark
 
 import java.util.concurrent.TimeUnit
 
@@ -6,7 +6,7 @@ import org.openjdk.jmh.annotations._
 import upickle.default.{ReadWriter => RW}
 import io.circe.Encoder
 import ugeneric.circe.UCirce
-import ugeneric.circe.encoder.benchmark.model.{Bar, Foo, Model1}
+import ugeneric.circe.benchmark.model.{Bar, Foo, Model1}
 
 @BenchmarkMode(Array(Mode.Throughput)) // 测试方法平均执行时间
 @OutputTimeUnit(TimeUnit.SECONDS)      // 输出结果的时间粒度为微秒
@@ -26,7 +26,7 @@ class JsonEncoderBenchmark {
 
   }
 
-  object asunaEncoder {
+  object zsgEncoder {
     implicit val a1: Encoder[Bar] = UCirce.encodeCaseClass
     implicit val a2: Encoder[Foo] = UCirce.encodeCaseClass
   }
@@ -34,18 +34,18 @@ class JsonEncoderBenchmark {
   val model: Bar = Model1.bar
 
   @Benchmark
-  def upickleTest = {
+  def uPickleTest: String = {
     import upickle.default._
     write(model)(uPickle.rw1)
   }
 
   @Benchmark
-  def asunaCirceTest = {
-    asunaEncoder.a1(model).noSpaces
+  def zsgCirceTest: String = {
+    zsgEncoder.a1(model).noSpaces
   }
 
   @Benchmark
-  def rawCirceTest = {
+  def rawCirceTest: String = {
     rawCirceEncoder.a1(model).noSpaces
   }
 

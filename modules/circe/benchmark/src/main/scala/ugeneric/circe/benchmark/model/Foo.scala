@@ -1,4 +1,4 @@
-package ugeneric.circe.encoder.benchmark.model
+package ugeneric.circe.benchmark.model
 
 case class Foo(
   i1: Int,
