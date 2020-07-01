@@ -28,7 +28,7 @@ object UGenericSettings {
 
   val scalaSetting = List(
     transitiveClassifiers := Seq("sources"),
-    org.scalafmt.sbt.ScalafmtPlugin.autoImport.scalafmtOnCompile := false,
+    org.scalafmt.sbt.ScalafmtPlugin.autoImport.scalafmtOnCompile := true,
     publishArtifact in packageDoc := false,
     byNameImplicitSourceSetting
   )
