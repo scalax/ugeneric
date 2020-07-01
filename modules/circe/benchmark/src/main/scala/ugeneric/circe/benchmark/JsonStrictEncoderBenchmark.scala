@@ -11,7 +11,7 @@ import ugeneric.circe.benchmark.model.{Bar, Foo, Model1}
 @BenchmarkMode(Array(Mode.Throughput)) // 测试方法平均执行时间
 @OutputTimeUnit(TimeUnit.SECONDS)      // 输出结果的时间粒度为微秒
 @State(Scope.Thread)                   // 每个测试线程一个实例
-class JsonEncoderBenchmark {
+class JsonStrictEncoderBenchmark {
 
   object uPickle {
     import upickle.default.macroRW
