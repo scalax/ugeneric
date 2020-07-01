@@ -7,8 +7,8 @@ object Dependencies {
   val fsg = Seq(
     resolvers += Resolver.bintrayRepo("scalax", "zsg"),
     libraryDependencies ++= List(
-      "org.scalax" %% "zsg-macros"      % zsgVersion ,
-       "org.scalax" %% "zsg-debug"       % zsgVersion // ,
+      "org.scalax" %% "zsg-macros" % zsgVersion,
+      "org.scalax" %% "zsg-debug"  % zsgVersion // ,
       // "org.scalax" %% "zsg-scala-tuple" % zsgVersion
     )
   )
