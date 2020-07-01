@@ -26,8 +26,8 @@ class JsonEncoderBenchmark {
   }
 
   object zsgEncoder {
-    implicit val a1: Encoder[Bar] = UCirce.encodeCaseClass
-    implicit val a2: Encoder[Foo] = UCirce.encodeCaseClass
+    implicit val a1: Encoder[Bar] = UCirce.encodeCaseClass(implicit c => _.encodeCaseClass)
+    implicit val a2: Encoder[Foo] = UCirce.encodeCaseClass(implicit c => _.encodeCaseClass)
   }
 
   val model: Bar = Model1.bar

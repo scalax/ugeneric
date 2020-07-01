@@ -3,13 +3,13 @@ import sbt.Keys._
 
 object Dependencies {
 
-  val zsgVersion = "0.0.4-SNAP2020062801"
+  val zsgVersion = "0.0.4-SNAP2020070101"
   val fsg = Seq(
     resolvers += Resolver.bintrayRepo("scalax", "zsg"),
     libraryDependencies ++= List(
-      "org.scalax" %% "zsg-macros"      % zsgVersion,
-      "org.scalax" %% "zsg-debug"       % zsgVersion,
-      "org.scalax" %% "zsg-scala-tuple" % zsgVersion
+      "org.scalax" %% "zsg-macros"      % zsgVersion ,
+       "org.scalax" %% "zsg-debug"       % zsgVersion // ,
+      // "org.scalax" %% "zsg-scala-tuple" % zsgVersion
     )
   )
 

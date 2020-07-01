@@ -14,8 +14,8 @@ case class responseBody[T](body: T) extends ValidateResult[T]
 
 object ValidateResult {
   object EmptyTable
-  implicit def circeEncoder[T](implicit bodyEncoder: Encoder[T]): VersionCompat.ObjectEncoderType[ValidateResult[T]] = UCirce.encodeSealed
-  implicit def circeDecoder[T](implicit bodyDecoder: Decoder[T]): Decoder[ValidateResult[T]]                         = UCirce.decodeSealed
+  implicit def circeEncoder[T](implicit bodyEncoder: Encoder[T]): VersionCompat.ObjectEncoderType[ValidateResult[T]] = UCirce.encodeSealed(implicit c => _.encodeSealed)
+  implicit def circeDecoder[T](implicit bodyDecoder: Decoder[T]): Decoder[ValidateResult[T]]                         = UCirce.decodeSealed(implicit c => _.decodeSealed)
 }
 
 object errorMessage {
@@ -26,11 +26,11 @@ object errorMessage {
 
   case class ErrorMessageImpl(fields: List[ErrorField], total: Set[String])
   object ErrorMessageImpl {
-    implicit val circeEncoder1: Encoder[ErrorMessageImpl] = UCirce.encodeCaseClass
+    implicit val circeEncoder1: Encoder[ErrorMessageImpl] = UCirce.encodeCaseClass(implicit c => _.encodeCaseClass)
   }
   object EmptyTable
   implicit val circeEncoder: Encoder[errorMessage] = Encoder[ErrorMessageImpl].contramap(err => ErrorMessageImpl(err.fields, err.total))
-  implicit val circeDecoder: Decoder[errorMessage] = UCirce.decodeCaseClass
+  implicit val circeDecoder: Decoder[errorMessage] = UCirce.decodeCaseClass(implicit c => _.decodeCaseClass)
 
   implicit def validateCirceEncoder[T](implicit bodyEncoder: Encoder[T]): Encoder[Validated[errorMessage, T]] =
     Encoder[ValidateResult[T]].contramap { (s) =>
@@ -60,6 +60,7 @@ object errorMessage {
 }
 
 object responseBody {
-  implicit def circeEncoder[T](implicit bodyEncoder: Encoder[T]): VersionCompat.ObjectEncoderType[responseBody[T]] = UCirce.encodeCaseClass
-  implicit def circeDecoder[T](implicit bodyDecoder: Decoder[T]): Decoder[responseBody[T]]                         = UCirce.decodeCaseClass
+  implicit def circeEncoder[T](implicit bodyEncoder: Encoder[T]): VersionCompat.ObjectEncoderType[responseBody[T]] =
+    UCirce.encodeCaseClass(implicit c => _.encodeCaseClass)
+  implicit def circeDecoder[T](implicit bodyDecoder: Decoder[T]): Decoder[responseBody[T]] = UCirce.decodeCaseClass(implicit c => _.decodeCaseClass)
 }

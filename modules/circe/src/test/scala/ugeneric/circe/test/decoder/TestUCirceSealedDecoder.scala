@@ -10,10 +10,10 @@ import ugeneric.circe.test.decoder.model.SimpleSealed._
 class TestUCirceSealedDecoder extends AnyFunSpec with Matchers {
 
   object DecoderContent {
-    implicit val decodeParentTrait: Decoder[ParentTrait] = UCirce.decodeSealed
-    implicit val decodeTest01: Decoder[Test01]           = UCirce.decodeCaseClass
+    implicit val decodeParentTrait: Decoder[ParentTrait] = UCirce.decodeSealed(implicit c => _.decodeSealed)
+    implicit val decodeTest01: Decoder[Test01]           = UCirce.decodeCaseClass(implicit c => _.decodeCaseClass)
     implicit val decodeTest02: Decoder[Test02.type]      = Decoder.instance(_ => Right(Test02))
-    implicit val decodeTest03: Decoder[Test03]           = UCirce.decodeCaseClass
+    implicit val decodeTest03: Decoder[Test03]           = UCirce.decodeCaseClass(implicit c => _.decodeCaseClass)
   }
 
   val test01 = Test01(i1 = "pro1", i2 = 2)
