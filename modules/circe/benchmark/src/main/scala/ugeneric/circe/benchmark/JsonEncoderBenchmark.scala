@@ -44,7 +44,7 @@ class JsonEncoderBenchmark {
   }
 
   @Benchmark
-  def rawCirceTest: String = {
+  def vBaseCirceTest: String = {
     rawCirceEncoder.a1(model).noSpaces
   }
 
