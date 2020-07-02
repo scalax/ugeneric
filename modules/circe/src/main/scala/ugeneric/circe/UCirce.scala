@@ -38,6 +38,33 @@ import ugeneric.circe.encoder.{
   PluginJsonObjectContext
 }
 
+abstract class EncodeCaseClassApply1[Model] {
+  implicit val iiiic: Context3[JsonObjectContent] = JsonObjectContext
+  def encodeCaseClass(implicit n: EncodeCaseClassApply[Model]): VersionCompat.ObjectEncoderType[Model]
+  class IIII[Model] extends EncodeCaseClassApply[Model]
+}
+
+class EncodeCaseClassApply[Model] {
+  class IIII[Model] extends EncodeCaseClassApply[Model]
+  def encodeCaseClass[R, Prop, Name](
+    implicit
+    //context1111: Context3[JsonObjectContent] = JsonObjectContext,
+    ll: ZsgGeneric.Aux[Model, R],
+    nImplicit: ZsgLabelledTypeGeneric.Aux[Model, Name],
+    app: Application3[JsonObjectContent, R, Name, Prop],
+    cv2: ZsgGetterGeneric[Model, Prop]
+  ): VersionCompat.ObjectEncoderType[Model] = {
+    val applicationEncoder = app.application
+    new VersionCompat.ObjectEncoderType[Model] {
+      override def encodeObject(a: Model): JsonObject = {
+        val link = new util.LinkedHashMap[String, Json]
+        applicationEncoder.getAppender(cv2.getter(a), link)
+        FromLinkHashMap.from(link)
+      }
+    }
+  }
+}
+
 object UCirce {
 
   /*def encodeCaseClassWithTable[Table, Model, Rep, R <: TupleTag, Obj, Name](table: Table)(
@@ -56,24 +83,6 @@ object UCirce {
     }
   }*/
 
-  class EncodeCaseClassApply[Model] {
-    def encodeCaseClass[R, Prop, Name](
-      implicit ll: ZsgGeneric.Aux[Model, R],
-      nImplicit: ZsgLabelledTypeGeneric.Aux[Model, Name],
-      app: Application3[JsonObjectContent, R, Name, Prop],
-      cv2: ZsgGetterGeneric[Model, Prop]
-    ): VersionCompat.ObjectEncoderType[Model] = {
-      val applicationEncoder = app.application
-      new VersionCompat.ObjectEncoderType[Model] {
-        override def encodeObject(a: Model): JsonObject = {
-          val link = new util.LinkedHashMap[String, Json]
-          applicationEncoder.getAppender(cv2.getter(a), link)
-          FromLinkHashMap.from(link)
-        }
-      }
-    }
-  }
-
   object EncodeCaseClassApply {
     val value: EncodeCaseClassApply[Any]  = new EncodeCaseClassApply[Any]
     def apply[T]: EncodeCaseClassApply[T] = value.asInstanceOf[EncodeCaseClassApply[T]]
@@ -82,6 +91,10 @@ object UCirce {
   def encodeCaseClass[Model](
     n: Context3[JsonObjectContent] => EncodeCaseClassApply[Model] => VersionCompat.ObjectEncoderType[Model]
   ): VersionCompat.ObjectEncoderType[Model] = n(JsonObjectContext)(EncodeCaseClassApply.apply)
+
+  def encodeCaseClass1[Model](
+    n: EncodeCaseClassApply1[Model]
+  ): VersionCompat.ObjectEncoderType[Model] = n.encodeCaseClass(new EncodeCaseClassApply[Model])
 
   class EncodeCaseClassWithPlugin[Model] {
     def encodeCaseClassWithPlugin[R, Prop, Name](p: Option[NameTranslator])(
