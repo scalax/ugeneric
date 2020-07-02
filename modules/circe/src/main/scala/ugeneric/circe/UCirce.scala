@@ -1,5 +1,7 @@
 package ugeneric.circe
 
+import java.util
+
 import zsg.macros.multiply.{ZsgMultiplyGeneric, ZsgMultiplyRepGeneric}
 import zsg.macros.single.{
   ZsgDefaultValueGeneric,
@@ -13,7 +15,7 @@ import zsg.macros.single.{
   ZsgSetterGeneric
 }
 import zsg.{Application2, Application3, Application4, Application6, Context2, Context3, Context4}
-import io.circe.{Decoder, JsonObject}
+import io.circe.{Decoder, FromLinkHashMap, Json, JsonObject}
 import org.scalax.ugeneric.circe.decoder.{ValidatedDecodeContent, ValidatedDecodeContext, ValidatedDecoder}
 import ugeneric.circe.decoder.{
   DecodeContent,
@@ -62,16 +64,24 @@ object UCirce {
       cv2: ZsgGetterGeneric[Model, Prop]
     ): VersionCompat.ObjectEncoderType[Model] = {
       val applicationEncoder = app.application
-      VersionCompat.ObjectEncoderValue.instance { o =>
-        val jsonList = applicationEncoder.getAppender(cv2.getter(o), List.empty)
-        JsonObject.fromIterable(jsonList)
+      new VersionCompat.ObjectEncoderType[Model] {
+        override def encodeObject(a: Model): JsonObject = {
+          val link = new util.LinkedHashMap[String, Json]
+          applicationEncoder.getAppender(cv2.getter(a), link)
+          FromLinkHashMap.from(link)
+        }
       }
     }
   }
 
+  object EncodeCaseClassApply {
+    val value: EncodeCaseClassApply[Any]  = new EncodeCaseClassApply[Any]
+    def apply[T]: EncodeCaseClassApply[T] = value.asInstanceOf[EncodeCaseClassApply[T]]
+  }
+
   def encodeCaseClass[Model](
     n: Context3[JsonObjectContent] => EncodeCaseClassApply[Model] => VersionCompat.ObjectEncoderType[Model]
-  ): VersionCompat.ObjectEncoderType[Model] = n(JsonObjectContext)(new EncodeCaseClassApply)
+  ): VersionCompat.ObjectEncoderType[Model] = n(JsonObjectContext)(EncodeCaseClassApply.apply)
 
   class EncodeCaseClassWithPlugin[Model] {
     def encodeCaseClassWithPlugin[R, Prop, Name](p: Option[NameTranslator])(

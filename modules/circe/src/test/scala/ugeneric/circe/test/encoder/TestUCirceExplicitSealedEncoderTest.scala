@@ -41,6 +41,10 @@ class TestUCirceExplicitSealedEncoderTest extends AnyFunSpec with Matchers {
       (compareTest01: NamedSealed.ParentTrait2).asJson(EncoderContent.encodeParentTrait) shouldEqual DecoderModel.test01Json
       (compareTest02: NamedSealed.ParentTrait2).asJson(EncoderContent.encodeParentTrait) shouldEqual DecoderModel.test02Json
       (compareTest03: NamedSealed.ParentTrait2).asJson(EncoderContent.encodeParentTrait) shouldEqual DecoderModel.test03Json
+
+      (compareTest01: NamedSealed.ParentTrait2).asJson(EncoderContent.encodeParentTrait).noSpaces shouldEqual DecoderModel.test01Json.noSpaces
+      (compareTest02: NamedSealed.ParentTrait2).asJson(EncoderContent.encodeParentTrait).noSpaces shouldEqual DecoderModel.test02Json.noSpaces
+      (compareTest03: NamedSealed.ParentTrait2).asJson(EncoderContent.encodeParentTrait).noSpaces shouldEqual DecoderModel.test03Json.noSpaces
     }
   }
 

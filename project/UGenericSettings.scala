@@ -5,7 +5,7 @@ object UGenericSettings {
 
   val versionSetting = Seq(version := "0.0.1-SNAP2020070101", organization := "org.scalax")
 
-  val currentScalaVersion = "2.13.2"
+  val currentScalaVersion = "2.13.3"
   val scala_212_Version   = "2.12.11"
   val scala_211_Version   = "2.11.12"
 
