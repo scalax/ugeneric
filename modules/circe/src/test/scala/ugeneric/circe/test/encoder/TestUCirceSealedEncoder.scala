@@ -13,9 +13,11 @@ import zsg.Context3
 class TestUCirceSealedEncoder extends AnyFunSpec with Matchers {
 
   object EncoderContent {
-    implicit val decodeTest01: VersionCompat.ObjectEncoderType[Test01] = UCirce.encodeCaseClass1(s => new s.IIII[Test01] {
-      override def encodeCaseClass(n: EncodeCaseClassApply[Test01]): ObjectEncoderType[Test01] = n.encodeCaseClass
-    })
+    implicit val decodeTest01: VersionCompat.ObjectEncoderType[Test01] = UCirce.encodeCaseClass1(s =>
+      new s.IIII[Test01] {
+        override def encodeCaseClass(n: EncodeCaseClassApply[Test01]): ObjectEncoderType[Test01] = n.encodeCaseClass
+      }
+    )
 
     //val decodeTest0111: VersionCompat.ObjectEncoderType[Test01] = UCirce.encodeCaseClass1[Test01]((s: EncodeCaseClassApply[Test01]) => s.encodeCaseClass)
 
