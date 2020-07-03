@@ -4,13 +4,21 @@ import io.circe.Encoder
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 import io.circe.syntax._
-import ugeneric.circe.UCirce
+import ugeneric.circe.{EncodeCaseClassApply, EncodeCaseClassApply1, UCirce, VersionCompat}
+import ugeneric.circe.VersionCompat.ObjectEncoderType
+import ugeneric.circe.encoder.JsonObjectContent
 import ugeneric.circe.test.encoder.model.SimpleSealed._
+import zsg.Context3
 
 class TestUCirceSealedEncoder extends AnyFunSpec with Matchers {
 
   object EncoderContent {
-    implicit val decodeTest01: Encoder[Test01]           = UCirce.encodeCaseClass(implicit c => _.encodeCaseClass)
+    implicit val decodeTest01: VersionCompat.ObjectEncoderType[Test01] = UCirce.encodeCaseClass1(s => new s.IIII[Test01] {
+      override def encodeCaseClass(n: EncodeCaseClassApply[Test01]): ObjectEncoderType[Test01] = n.encodeCaseClass
+    })
+
+    //val decodeTest0111: VersionCompat.ObjectEncoderType[Test01] = UCirce.encodeCaseClass1[Test01]((s: EncodeCaseClassApply[Test01]) => s.encodeCaseClass)
+
     implicit val decodeTest02: Encoder[Test02.type]      = UCirce.encodeCaseObject
     implicit val decodeTest03: Encoder[Test03]           = UCirce.encodeCaseClass(implicit c => _.encodeCaseClass)
     implicit val encodeParentTrait: Encoder[ParentTrait] = UCirce.encodeSealed(implicit c => _.encodeSealed)
