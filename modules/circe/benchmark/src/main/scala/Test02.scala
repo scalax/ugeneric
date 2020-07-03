@@ -71,14 +71,14 @@ class Test02 {
 
   object asunaEncoder {
     implicit val _w2: Encoder[A]        = UCirce.encodeSealed(implicit c => _.encodeSealed)
-    implicit val _w3: Encoder[B]        = UCirce.encodeCaseClass(implicit c => _.encodeCaseClass)
-    implicit val _w4: Encoder[C]        = UCirce.encodeCaseClass(implicit c => _.encodeCaseClass)
+    implicit val _w3: Encoder[B]        = UCirce.encodeCaseClass
+    implicit val _w4: Encoder[C]        = UCirce.encodeCaseClass
     implicit val _w5: Encoder[LL]       = UCirce.encodeSealed(implicit c => _.encodeSealed)
-    implicit val _w6: Encoder[Node]     = UCirce.encodeCaseClass(implicit c => _.encodeCaseClass)
+    implicit val _w6: Encoder[Node]     = UCirce.encodeCaseClass
     implicit val _w7: Encoder[End.type] = UCirce.encodeCaseObject
-    implicit val _w8: Encoder[ADTc]     = UCirce.encodeCaseClass(implicit c => _.encodeCaseClass)
-    implicit val _w9: Encoder[ADT0]     = UCirce.encodeCaseClass(implicit c => _.encodeCaseClass)
-    implicit val _wData: Encoder[Data]  = UCirce.encodeCaseClass(implicit c => _.encodeCaseClass)
+    implicit val _w8: Encoder[ADTc]     = UCirce.encodeCaseClass
+    implicit val _w9: Encoder[ADT0]     = UCirce.encodeCaseClass
+    implicit val _wData: Encoder[Data]  = UCirce.encodeCaseClass
   }
 
   @Benchmark
