@@ -11,9 +11,9 @@ import ugeneric.circe.test.encoder.model.{NamedSealed, SimpleSealed}
 class TestUCirceExplicitSealedEncoderTest extends AnyFunSpec with Matchers {
 
   object EncoderContent {
-    implicit val encodeTest01: Encoder[NamedSealed.Test01]       = UCirce.encodeCaseClass(implicit c => _.encodeCaseClass)
+    implicit val encodeTest01: Encoder[NamedSealed.Test01]       = UCirce.encodeCaseClass
     implicit val encodeTest02: Encoder[NamedSealed.Test02.type]  = UCirce.encodeCaseObject
-    implicit val encodeTest04: Encoder[NamedSealed.ParentTest04] = UCirce.encodeCaseClass(implicit c => _.encodeCaseClass)
+    implicit val encodeTest04: Encoder[NamedSealed.ParentTest04] = UCirce.encodeCaseClass
     implicit val encodeTest03 /*: EncodeSealedApplication[enImpl2.ParentTest03, enImpl2.ParentTrait2]*/ =
       EncodeSealedApplication[NamedSealed.ParentTest03, NamedSealed.ParentTrait2]((name, value) =>
         ("Test03", NamedSealed.ParentTest04(value.i1, value.i2.toString).asJson(encodeTest04))

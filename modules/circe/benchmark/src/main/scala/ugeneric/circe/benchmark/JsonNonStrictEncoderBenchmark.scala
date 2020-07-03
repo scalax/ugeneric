@@ -26,8 +26,8 @@ class JsonNonStrictEncoderBenchmark {
   }
 
   object zsgEncoder {
-    implicit def a1: Encoder[Bar] = UCirce.encodeCaseClass(implicit c => _.encodeCaseClass)
-    implicit def a2: Encoder[Foo] = UCirce.encodeCaseClass(implicit c => _.encodeCaseClass)
+    implicit def a1: Encoder[Bar] = UCirce.encodeCaseClass
+    implicit def a2: Encoder[Foo] = UCirce.encodeCaseClass
   }
 
   val model: Bar = Model1.bar
