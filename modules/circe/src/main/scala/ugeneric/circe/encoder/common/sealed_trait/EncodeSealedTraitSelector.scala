@@ -3,6 +3,7 @@ package ugeneric.circe.encoder
 import zsg.macros.ByNameImplicit
 import zsg.macros.single.SealedTag
 import io.circe.{Encoder, Json}
+import zsg.Context3
 
 class EncodeSealedTraitSelector[H] {
   abstract class JsonEncoder[M, T, II] {
@@ -28,5 +29,7 @@ object EncodeSealedTraitSelector {
       }
     }
   }
+
+  implicit def c[H]: Context3[EncodeSealedTraitSelector[H]#JsonEncoder] = EncodeSealedContext[H]
 
 }

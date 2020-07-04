@@ -20,6 +20,6 @@ object JsonObjectContent {
     override def getAppender(data: T, l: util.LinkedHashMap[String, Json]): Unit = l.put(nameImplicit.value, t.value(data))
   }
 
-  // implicit val c: Context3[JsonObjectContent] = JsonObjectContext
+  implicit val c: Context3[JsonObjectContent] = JsonObjectContext
 
 }

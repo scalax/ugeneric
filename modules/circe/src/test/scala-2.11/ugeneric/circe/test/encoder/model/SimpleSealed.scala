@@ -1,15 +1,15 @@
 package ugeneric.circe.test.encoder.model
 
 import io.circe.Encoder
-import ugeneric.circe.UCirce
+import ugeneric.circe.{UCirce, VersionCompat}
 
 package object SimpleSealed {
   sealed trait ParentTrait
   object ParentTrait {
-    private implicit val decodeTest01: UCirce.OEncoder[Test01]   = UCirce.OEncoder.builder_211(implicit e => _.encode)
-    private implicit val decodeTest02: Encoder[Test02.type]      = UCirce.encodeCaseObject
-    private implicit val decodeTest03: UCirce.OEncoder[Test03]   = UCirce.OEncoder.builder_211(implicit e => _.encode)
-    implicit val encodeParentTrait: UCirce.SEncoder[ParentTrait] = UCirce.SEncoder.builder_211(implicit c => _.encode)
+    private implicit val decodeTest01: VersionCompat.ObjectEncoderType[Test01]   = UCirce.encodeCaseClass
+    private implicit val decodeTest02: Encoder[Test02.type]                      = UCirce.encodeCaseObject
+    private implicit val decodeTest03: VersionCompat.ObjectEncoderType[Test03]   = UCirce.encodeCaseClass
+    implicit val encodeParentTrait: VersionCompat.ObjectEncoderType[ParentTrait] = UCirce.encodeSealed
   }
 
   case class Test01(i1: String, i2: Int)    extends ParentTrait
