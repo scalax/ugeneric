@@ -2,21 +2,19 @@ package ugeneric.circe
 
 import java.util
 
-import zsg.macros.multiply.{ZsgMultiplyGeneric, ZsgMultiplyRepGeneric}
 import zsg.macros.single.{
   ZsgDefaultValueGeneric,
   ZsgGeneric,
   ZsgGetterGeneric,
-  ZsgLabelledGeneric,
   ZsgLabelledTypeGeneric,
   ZsgSealedClassGeneric,
   ZsgSealedGeneric,
   ZsgSealedLabelledGeneric,
   ZsgSetterGeneric
 }
-import zsg.{Application2, Application3, Application4, Application6, Context2, Context3, Context4}
+import zsg.{Application2, Application3, Application4, Context2, Context3, Context4}
 import io.circe.{Decoder, FromLinkHashMap, Json, JsonObject}
-import org.scalax.ugeneric.circe.decoder.{ValidatedDecodeContent, ValidatedDecodeContext, ValidatedDecoder}
+import ugeneric.circe.VersionCompat.ObjectEncoderType
 import ugeneric.circe.decoder.{
   DecodeContent,
   DecodeContext,
@@ -38,50 +36,53 @@ import ugeneric.circe.encoder.{
   PluginJsonObjectContext
 }
 
-/*abstract class EncodeCaseClassApply1[Model] {
-  implicit val iiiic: Context3[JsonObjectContent] = JsonObjectContext
-  def encodeCaseClass(implicit n: EncodeCaseClassApply[Model]): VersionCompat.ObjectEncoderType[Model]
-  class IIII[Model] extends EncodeCaseClassApply[Model]
-}
-
-class EncodeCaseClassApply[Model] {
-  class IIII[Model] extends EncodeCaseClassApply[Model]
-  def encodeCaseClass[R, Prop, Name](
-    implicit
-    //context1111: Context3[JsonObjectContent] = JsonObjectContext,
-    ll: ZsgGeneric.Aux[Model, R],
-    nImplicit: ZsgLabelledTypeGeneric.Aux[Model, Name],
-    app: Application3[JsonObjectContent, R, Name, Prop],
-    cv2: ZsgGetterGeneric[Model, Prop]
-  ): VersionCompat.ObjectEncoderType[Model] = {
-    val applicationEncoder = app.application
-    new VersionCompat.ObjectEncoderType[Model] {
-      override def encodeObject(a: Model): JsonObject = {
-        val link = new util.LinkedHashMap[String, Json]
-        applicationEncoder.getAppender(cv2.getter(a), link)
-        FromLinkHashMap.from(link)
-      }
-    }
-  }
-}*/
-
 object UCirce {
 
-  /*def encodeCaseClassWithTable[Table, Model, Rep, R <: TupleTag, Obj, Name](table: Table)(
-    implicit ll: AsunaMultiplyGeneric.Aux[Table, Model, R],
-    app: Application3[JsonObjectContent, R, Obj, Name, Rep],
-    repGeneric: AsunaMultiplyRepGeneric[Table, Model, Rep],
-    cv1: AsunaLabelledGeneric[Model, Name],
-    cv2: AsunaGetterGeneric[Model, Obj]
-  ): Encoder.AsObject[Model] = {
-    val names              = cv1.names()
-    val applicationEncoder = app.application(JsonObjectContext)
-    val application2       = applicationEncoder.appendField(names, repGeneric.rep(table))
-    Encoder.AsObject.instance { o: Model =>
-      val jsonList = application2.appendField(cv2.getter(o), List.empty)
-      JsonObject.fromIterable(jsonList)
+  trait OEncoder[Model] extends VersionCompat.ObjectEncoderType[Model] {
+    def contextImpl(context: Context3[JsonObjectContent]): OEncoder.InnerOEncoder2[Model]
+
+    override def encodeObject(a: Model): JsonObject = {
+      contextImpl(JsonObjectContext).toEncoder(OEncoder.InnerOEncoder[Model]).encodeObject(a)
     }
-  }*/
+  }
+
+  object OEncoder {
+    def builder_211[T](n: Context3[JsonObjectContent] => OEncoder.InnerOEncoder[T] => VersionCompat.ObjectEncoderType[T]): OEncoder[T] = {
+      new OEncoder[T] {
+        override def contextImpl(context: Context3[JsonObjectContent]): InnerOEncoder2[T] = new InnerOEncoder2[T] {
+          override def toEncoder(inner: InnerOEncoder[T]): ObjectEncoderType[T] = n(context)(inner)
+        }
+      }
+    }
+
+    class InnerOEncoder[Model] {
+      def encode[R, Prop, Name](
+        implicit
+        ll: ZsgGeneric.Aux[Model, R],
+        nImplicit: ZsgLabelledTypeGeneric.Aux[Model, Name],
+        app: Application3[JsonObjectContent, R, Name, Prop],
+        cv2: ZsgGetterGeneric[Model, Prop]
+      ): VersionCompat.ObjectEncoderType[Model] = {
+        val applicationEncoder = app.application
+        new VersionCompat.ObjectEncoderType[Model] {
+          override def encodeObject(a: Model): JsonObject = {
+            val link = new util.LinkedHashMap[String, Json]
+            applicationEncoder.getAppender(cv2.getter(a), link)
+            FromLinkHashMap.from(link)
+          }
+        }
+      }
+    }
+
+    object InnerOEncoder {
+      val innerOEncoder: InnerOEncoder[Any] = new InnerOEncoder[Any]
+      def apply[T]: InnerOEncoder[T]        = innerOEncoder.asInstanceOf[InnerOEncoder[T]]
+    }
+
+    abstract class InnerOEncoder2[Model] {
+      def toEncoder(inner: InnerOEncoder[Model]): VersionCompat.ObjectEncoderType[Model]
+    }
+  }
 
   /*object EncodeCaseClassApply {
     val value: EncodeCaseClassApply[Any]  = new EncodeCaseClassApply[Any]
@@ -92,7 +93,7 @@ object UCirce {
     n: Context3[JsonObjectContent] => EncodeCaseClassApply[Model] => VersionCompat.ObjectEncoderType[Model]
   ): VersionCompat.ObjectEncoderType[Model] = n(JsonObjectContext)(EncodeCaseClassApply.apply)*/
 
-  def encodeCaseClass[Model, R, Prop, Name](
+  /*def encodeCaseClass[Model, R, Prop, Name](
     implicit
     ll: ZsgGeneric.Aux[Model, R],
     nImplicit: ZsgLabelledTypeGeneric.Aux[Model, Name],
@@ -107,7 +108,7 @@ object UCirce {
         FromLinkHashMap.from(link)
       }
     }
-  }
+  }*/
 
   /*def encodeCaseClass1[Model](
     n: EncodeCaseClassApply1[Model]
@@ -134,7 +135,7 @@ object UCirce {
 
   final def encodeCaseObject[T]: VersionCompat.ObjectEncoderType[T] = VersionCompat.ObjectEncoderValue.instance(_ => JsonObject.empty)
 
-  class EncodeSealedApply[H] {
+  /*class EncodeSealedApply[H] {
     final def encodeSealed[R, Cls, Lab](
       implicit ll: ZsgSealedGeneric.Aux[H, R],
       app: Application3[EncodeSealedTraitSelector[H]#JsonEncoder, R, Cls, Lab],
@@ -150,7 +151,48 @@ object UCirce {
 
   def encodeSealed[H](
     n: Context3[EncodeSealedTraitSelector[H]#JsonEncoder] => EncodeSealedApply[H] => VersionCompat.ObjectEncoderType[H]
-  ): VersionCompat.ObjectEncoderType[H] = n(EncodeSealedContext[H])(new EncodeSealedApply)
+  ): VersionCompat.ObjectEncoderType[H] = n(EncodeSealedContext[H])(new EncodeSealedApply)*/
+
+  trait SEncoder[Model] extends VersionCompat.ObjectEncoderType[Model] {
+    def contextImpl(context: Context3[EncodeSealedTraitSelector[Model]#JsonEncoder]): SEncoder.InnerSEncoder2[Model]
+
+    override def encodeObject(a: Model): JsonObject = {
+      contextImpl(EncodeSealedContext[Model]).toEncoder(SEncoder.InnerSEncoder[Model]).encodeObject(a)
+    }
+  }
+
+  object SEncoder {
+    def builder_211[T](n: Context3[EncodeSealedTraitSelector[T]#JsonEncoder] => SEncoder.InnerSEncoder[T] => VersionCompat.ObjectEncoderType[T]): SEncoder[T] = {
+      new SEncoder[T] {
+        override def contextImpl(context: Context3[EncodeSealedTraitSelector[T]#JsonEncoder]): InnerSEncoder2[T] = new InnerSEncoder2[T] {
+          override def toEncoder(inner: InnerSEncoder[T]): VersionCompat.ObjectEncoderType[T] = n(EncodeSealedContext[T])(inner)
+        }
+      }
+    }
+
+    class InnerSEncoder[Model] {
+      final def encode[R, Cls, Lab](
+        implicit ll: ZsgSealedGeneric.Aux[Model, R],
+        app: Application3[EncodeSealedTraitSelector[Model]#JsonEncoder, R, Cls, Lab],
+        cv1: ZsgSealedLabelledGeneric[Model, Lab],
+        cv2: ZsgSealedClassGeneric[Model, Cls]
+      ): VersionCompat.ObjectEncoderType[Model] = {
+        val name1              = cv1.names
+        val name2              = cv2.names
+        val applicationEncoder = app.application
+        VersionCompat.ObjectEncoderValue.instance { o => JsonObject.fromIterable(applicationEncoder.subClassToJsonOpt(o, name2, name1)) }
+      }
+    }
+
+    object InnerSEncoder {
+      val innerSEncoder: InnerSEncoder[Any] = new InnerSEncoder[Any]
+      def apply[T]: InnerSEncoder[T]        = innerSEncoder.asInstanceOf[InnerSEncoder[T]]
+    }
+
+    abstract class InnerSEncoder2[Model] {
+      def toEncoder(inner: InnerSEncoder[Model]): VersionCompat.ObjectEncoderType[Model]
+    }
+  }
 
   class EncodeSealedWithPluginApply[H] {
     final def encodeSealedWithPlugin[R, Cls, Lab](nameTranslator: Option[NameTranslator])(
