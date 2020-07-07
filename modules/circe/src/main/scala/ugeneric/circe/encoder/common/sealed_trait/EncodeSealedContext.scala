@@ -25,6 +25,6 @@ class EncodeSealedContext[H] extends Context3[EncodeSealedTraitSelector[H]#JsonE
 }
 
 object EncodeSealedContext {
-  private val value                    = new EncodeSealedContext[Any]
-  def apply[T]: EncodeSealedContext[T] = value.asInstanceOf[EncodeSealedContext[T]]
+  private val value                             = new EncodeSealedContext[Any]
+  implicit def apply[T]: EncodeSealedContext[T] = value.asInstanceOf[EncodeSealedContext[T]]
 }

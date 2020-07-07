@@ -15,8 +15,8 @@ class PluginDecodeSealedTraitSelector[P] {
 
 object PluginDecodeSealedTraitSelector {
 
-  def apply[T]: PluginDecodeSealedTraitSelector[T]        = value.asInstanceOf[PluginDecodeSealedTraitSelector[T]]
-  private val value: PluginDecodeSealedTraitSelector[Any] = new PluginDecodeSealedTraitSelector[Any]
+  implicit def apply[T]: PluginDecodeSealedTraitSelector[T] = value.asInstanceOf[PluginDecodeSealedTraitSelector[T]]
+  private val value: PluginDecodeSealedTraitSelector[Any]   = new PluginDecodeSealedTraitSelector[Any]
 
   implicit def asunaCirceSealedDecoder[T, R <: T](
     implicit t: ByNameImplicit[Decoder[R]]

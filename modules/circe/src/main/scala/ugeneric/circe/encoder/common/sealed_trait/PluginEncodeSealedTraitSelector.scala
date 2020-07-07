@@ -13,8 +13,8 @@ class PluginEncodeSealedTraitSelector[H] {
 
 object PluginEncodeSealedTraitSelector {
 
-  private val value                                = new PluginEncodeSealedTraitSelector[Any]
-  def apply[T]: PluginEncodeSealedTraitSelector[T] = value.asInstanceOf[PluginEncodeSealedTraitSelector[T]]
+  private val value                                         = new PluginEncodeSealedTraitSelector[Any]
+  implicit def apply[T]: PluginEncodeSealedTraitSelector[T] = value.asInstanceOf[PluginEncodeSealedTraitSelector[T]]
 
   implicit final def asunaCirceSealedEncoder[T, R](
     implicit t: ByNameImplicit[Encoder[R]]

@@ -18,7 +18,7 @@ object USlick {
   )(
     implicit p: ZsgMultiplyGeneric.Aux[Table, Data, P],
     modelGeneric: ZsgGeneric.Aux[Data, HListDataType],
-    app: Application6[RepNode, P, HListDataType, RepType, DataType, EncodeRef, Packed1],
+    app: Application6[RepNode, RepContext, P, HListDataType, RepType, DataType, EncodeRef, Packed1],
     zsgMultiplyRepGeneric: ZsgMultiplyRepGeneric[Table, Data, RepType],
     zsgGetterGeneric: ZsgGetterGeneric[Data, DataType],
     zsgSetterGeneric: ZsgSetterGeneric[Data, DataType],

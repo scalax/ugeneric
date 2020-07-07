@@ -30,6 +30,6 @@ class PluginDecodeSealedContext[P] extends Context2[PluginDecodeSealedTraitSelec
 }
 
 object PluginDecodeSealedContext {
-  private val value                          = new PluginDecodeSealedContext[Any]
-  def apply[T]: PluginDecodeSealedContext[T] = value.asInstanceOf[PluginDecodeSealedContext[T]]
+  private val value                                   = new PluginDecodeSealedContext[Any]
+  implicit def apply[T]: PluginDecodeSealedContext[T] = value.asInstanceOf[PluginDecodeSealedContext[T]]
 }

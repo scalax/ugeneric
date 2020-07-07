@@ -26,5 +26,5 @@ class DecodeContext extends Context3[DecodeContent] {
 }
 
 object DecodeContext {
-  implicit  val value: DecodeContext = new DecodeContext
+  implicit val value: DecodeContext = new DecodeContext
 }

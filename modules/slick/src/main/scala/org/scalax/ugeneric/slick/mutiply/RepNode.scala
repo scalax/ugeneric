@@ -27,6 +27,4 @@ object RepNode {
       override def buildParams(extract: Any => Data): Out                  = dd.packedShape.buildParams(extract)
     }
 
-  implicit val c: Context6[RepNode] = RepContext
-
 }

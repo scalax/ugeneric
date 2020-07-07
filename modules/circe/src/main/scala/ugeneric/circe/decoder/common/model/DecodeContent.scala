@@ -1,7 +1,7 @@
 package ugeneric.circe.decoder
 
 import zsg.macros.ByNameImplicit
-import zsg.{Context3, PropertyTag}
+import zsg.PropertyTag
 import io.circe._
 import zsg.macros.single.{ColumnName, GenericColumnName, StringName}
 
@@ -17,7 +17,5 @@ object DecodeContent {
   ): DecodeContent[PropertyTag[Model], ColumnName[N], Model] = new DecodeContent[PropertyTag[Model], ColumnName[N], Model] {
     override def getDecoder: Decoder[Model] = Decoder.instance(_.get(genName.value)(dd.value))
   }
-
-  implicit val c: Context3[DecodeContent] = DecodeContext
 
 }
