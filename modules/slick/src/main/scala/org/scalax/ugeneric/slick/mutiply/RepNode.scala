@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.slick.mutiply
 
-import zsg.PropertyTag
+import zsg.{Context6, PropertyTag}
 import slick.ast.{ElementSymbol, Node, Select}
 import slick.lifted.{Shape, ShapeLevel}
 
@@ -26,5 +26,7 @@ object RepNode {
       override def pack(u: Rep): Out                                       = dd.pack(u)
       override def buildParams(extract: Any => Data): Out                  = dd.packedShape.buildParams(extract)
     }
+
+  implicit val c: Context6[RepNode] = RepContext
 
 }

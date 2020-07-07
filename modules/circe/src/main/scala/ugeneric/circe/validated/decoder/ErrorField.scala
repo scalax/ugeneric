@@ -9,5 +9,5 @@ case class ErrorField(path: List[Path], messages: Set[String]) {
 
 object ErrorField {
   implicit val circeEncoder: VersionCompat.ObjectEncoderType[ErrorField] = UCirce.encodeCaseClass
-  implicit val circeDecoder: Decoder[ErrorField]                         = UCirce.decodeCaseClass(implicit c => _.decodeCaseClass)
+  implicit val circeDecoder: Decoder[ErrorField]                         = UCirce.decodeCaseClass
 }
