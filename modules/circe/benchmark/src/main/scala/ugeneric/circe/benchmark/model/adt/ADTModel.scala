@@ -1,4 +1,4 @@
-package ugeneric.circe.encoder.benchmark.model
+package ugeneric.circe.benchmark.model.adt
 
 object ADTs {
   case class ADT0(i1: String)
