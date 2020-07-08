@@ -1,7 +1,7 @@
 val circe          = (project in (file(".") / "modules" / "circe"))
 val circeBenchmark = (project in (file(".") / "modules" / "circe" / "benchmark")).dependsOn(circe).aggregate(circe)
 val slick          = (project in (file(".") / "modules" / "slick"))
-val poi            = (project in (file(".") / "modules" / "poi"))
+val poi            = (project in (file(".") / "modules" / "poi")).dependsOn(circe)
 
 UGenericSettings.scalaVersionSetting
 

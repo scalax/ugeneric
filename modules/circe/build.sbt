@@ -2,7 +2,7 @@ UGenericSettings.scalaSetting
 UGenericSettings.scala_211_212_213_cross
 UGenericSettings.scalaVersionSetting
 
-Dependencies.fsg
+Dependencies.zsg
 libraryDependencies += Dependencies.shapeless
 
 libraryDependencies ++= Dependencies.circe(scalaVersion.value)
