@@ -20,6 +20,9 @@ object Dependencies {
     "mysql"              % "mysql-connector-java" % "8.0.17"
   )
 
+
+  val cpoi = List("net.scalax" %% "poi-collection" % "0.4.0-M8")
+
   val shapeless = "com.chuusai" %% "shapeless" % "2.3.3"
 
   def circe(scalaVersionM: String) =

@@ -1,10 +1,11 @@
 package org.scalax.kirito.poi.reader
 
-import asuna.{Application3, Context3, PropertyTag1}
-import asuna.macros.ByNameImplicit
+import zsg.{Application3, Context3, PropertyTag}
+import zsg.macros.ByNameImplicit
 import cats.data.Validated
 import cats.implicits._
 import net.scalax.cpoi.api._
+
 import scala.collection.compat._
 
 object ReaderFieldMeta extends ReaderMeta.FieldMetaWithNotType[ReaderMeta.RequireImplicit] {
@@ -19,34 +20,31 @@ object ReaderMeta {
   object RequireImplicit {
     implicit def asunaPoiUntypedReader[T](
       implicit dd: ByNameImplicit[CellReader[T]]
-    ): Application3[ReaderContent, PropertyTag1[FieldMetaWithNotType[RequireImplicit], T], T, String, FieldMetaWithNotType[RequireImplicit]] =
-      new Application3[ReaderContent, PropertyTag1[FieldMetaWithNotType[RequireImplicit], T], T, String, FieldMetaWithNotType[RequireImplicit]] {
-        override def application(context: Context3[ReaderContent]): ReaderContent[T, String, FieldMetaWithNotType[RequireImplicit]] = {
-          def getName(rep: FieldMetaWithNotType[RequireImplicit], name: String): String = rep.fieldNameMeta.getOrElse(name)
-          new ReaderContent[T, String, FieldMetaWithNotType[RequireImplicit]] {
-            override def getNames(name: String, rep: FieldMetaWithNotType[RequireImplicit], col: List[String]): List[String] = getName(rep, name) :: col
-            override def getValue(name: String, rep: FieldMetaWithNotType[RequireImplicit]): RowReader[T] = {
-              val repName = getName(rep, name)
-              new RowReader[T] {
-                override def read(data: Map[String, CellContentAbs], rowIndex: Int): Validated[rowMessageContent, T] = {
-                  data.get(repName) match {
-                    case Some(cellContent) =>
-                      cellContent.tryValue(dd.value) match {
-                        case Left(r)  => Validated.invalid(rowMessageContent.build(rowIndex, name, s"${repName}列数据格式不符合"))
-                        case Right(r) => Validated.valid(r)
-                      }
-                    case _ =>
-                      CPoi.wrapCell(Option.empty).tryValue(dd.value) match {
-                        case Left(r)  => Validated.invalid(rowMessageContent.build(rowIndex, name, s"${repName}列不能为空"))
-                        case Right(r) => Validated.valid(r)
-                      }
+    ): ReaderContent[PropertyTag[PropertyTag[FieldMetaWithNotType[RequireImplicit]]], PropertyTag[T], T, String, FieldMetaWithNotType[RequireImplicit]] = {
+      def getName(rep: FieldMetaWithNotType[RequireImplicit], name: String): String = rep.fieldNameMeta.getOrElse(name)
+      new ReaderContent[PropertyTag[PropertyTag[FieldMetaWithNotType[RequireImplicit]]], PropertyTag[T], T, String, FieldMetaWithNotType[RequireImplicit]] {
+        override def getNames(name: String, rep: FieldMetaWithNotType[RequireImplicit], col: List[String]): List[String] = getName(rep, name) :: col
+        override def getValue(name: String, rep: FieldMetaWithNotType[RequireImplicit]): RowReader[T] = {
+          val repName = getName(rep, name)
+          new RowReader[T] {
+            override def read(data: Map[String, CellContentAbs], rowIndex: Int): Validated[rowMessageContent, T] = {
+              data.get(repName) match {
+                case Some(cellContent) =>
+                  cellContent.tryValue(dd.value) match {
+                    case Left(r)  => Validated.invalid(rowMessageContent.build(rowIndex, name, s"${repName}列数据格式不符合"))
+                    case Right(r) => Validated.valid(r)
                   }
-                }
+                case _ =>
+                  CPoi.wrapCell(Option.empty).tryValue(dd.value) match {
+                    case Left(r)  => Validated.invalid(rowMessageContent.build(rowIndex, name, s"${repName}列不能为空"))
+                    case Right(r) => Validated.valid(r)
+                  }
               }
             }
           }
         }
       }
+    }
 
     implicit def asunaPoiTypedReader[R, T](
       implicit dd: ByNameImplicit[CellReader[R]]
