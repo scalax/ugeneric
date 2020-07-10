@@ -3,7 +3,7 @@ package org.scalax.ugeneric.slick.mutiply
 import zsg.{Context6, Plus6, ZsgTuple0}
 import slick.ast.Node
 
-object RepContext extends Context6[RepNode] {
+class RepContext extends Context6[RepNode] {
   override def append[X1, X2, X3, X4, X5, X6, Y1, Y2, Y3, Y4, Y5, Y6, Z1, Z2, Z3, Z4, Z5, Z6](x: RepNode[X1, X2, X3, X4, X5, X6], y: RepNode[Y1, Y2, Y3, Y4, Y5, Y6])(
     p: Plus6[X1, X2, X3, X4, X5, X6, Y1, Y2, Y3, Y4, Y5, Y6, Z1, Z2, Z3, Z4, Z5, Z6]
   ): RepNode[Z1, Z2, Z3, Z4, Z5, Z6] = new RepNode[Z1, Z2, Z3, Z4, Z5, Z6] {
@@ -32,4 +32,8 @@ object RepContext extends Context6[RepNode] {
       override def buildParams(extract: Any => ZsgTuple0): ZsgTuple0                   = ZsgTuple0.value
       override def pack(u: ZsgTuple0): ZsgTuple0                                       = u
     }
+}
+
+object RepContext {
+  val value: RepContext = new RepContext
 }

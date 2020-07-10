@@ -3,7 +3,7 @@ package ugeneric.circe.decoder
 import zsg.{Context3, Plus3, ZsgTuple0}
 import io.circe.Decoder
 
-object DecodeContext extends Context3[DecodeContent] {
+class DecodeContext extends Context3[DecodeContent] {
 
   private val zeroValue                       = Right(ZsgTuple0.value)
   private val zeroDecoder: Decoder[ZsgTuple0] = Decoder.instance { _ => zeroValue }
@@ -23,4 +23,8 @@ object DecodeContext extends Context3[DecodeContent] {
     override def getDecoder: Decoder[ZsgTuple0] = zeroDecoder
   }
 
+}
+
+object DecodeContext {
+  val value: DecodeContext = new DecodeContext
 }

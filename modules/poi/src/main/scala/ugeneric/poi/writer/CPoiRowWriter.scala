@@ -1,10 +1,11 @@
 package org.scalax.kirito.poi.writer
 
-import asuna.{Application3, Context3, PropertyTag1}
+import zsg.{Application3, Context3, PropertyTag}
 import cats.Contravariant
 import net.scalax.cpoi.content.{CellDataAbs, CellDataImpl}
 import net.scalax.cpoi.rw.CellWriter
 import net.scalax.cpoi.style.StyleTransform
+
 import scala.collection.compat._
 
 trait CPoiRowWriter[H] {
@@ -53,15 +54,11 @@ object CPoiRowWriter {
     }
   }
 
-  implicit def cPoiRowWriterImplicit[H]: Application3[RowWriterContent, PropertyTag1[CPoiRowWriter[H], H], H, String, CPoiRowWriter[H]] =
-    new Application3[RowWriterContent, PropertyTag1[CPoiRowWriter[H], H], H, String, CPoiRowWriter[H]] {
-      override def application(context: Context3[RowWriterContent]): RowWriterContent[H, String, CPoiRowWriter[H]] = {
-        new RowWriterContent[H, String, CPoiRowWriter[H]] {
-          override def appendColumnTitle(names: String, rep: CPoiRowWriter[H], titles: List[String]): List[String] = rep.title :: titles
-          override def appendField(tt: H, name: String, rep: CPoiRowWriter[H], data: List[(String, CellDataAbs)]): List[(String, CellDataAbs)] =
-            (rep.title, rep.wrapData(tt)) :: data
-        }
-      }
+  implicit def cPoiRowWriterImplicit[H]: RowWriterContent[PropertyTag[CPoiRowWriter[H]], PropertyTag[H], H, String, CPoiRowWriter[H]] =
+    new RowWriterContent[PropertyTag[CPoiRowWriter[H]], PropertyTag[H], H, String, CPoiRowWriter[H]] {
+      override def appendColumnTitle(names: String, rep: CPoiRowWriter[H], titles: List[String]): List[String] = rep.title :: titles
+      override def appendField(tt: H, name: String, rep: CPoiRowWriter[H], data: List[(String, CellDataAbs)]): List[(String, CellDataAbs)] =
+        (rep.title, rep.wrapData(tt)) :: data
     }
 
 }

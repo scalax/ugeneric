@@ -26,7 +26,7 @@ object errorMessage {
 
   case class ErrorMessageImpl(fields: List[ErrorField], total: Set[String])
   object ErrorMessageImpl {
-    implicit val circeEncoder1: Encoder[ErrorMessageImpl] = UCirce.encodeCaseClass
+    implicit val circeEncoder1: VersionCompat.ObjectEncoderType[ErrorMessageImpl] = UCirce.encodeCaseClass
   }
   object EmptyTable
   implicit val circeEncoder: Encoder[errorMessage] = Encoder[ErrorMessageImpl].contramap(err => ErrorMessageImpl(err.fields, err.total))

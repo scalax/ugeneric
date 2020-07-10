@@ -3,13 +3,13 @@ import sbt.Keys._
 
 object Dependencies {
 
-  val asunaVersion = "0.0.4-SNAP2020060801"
-  val fsg = Seq(
+  val zsgVersion = "0.0.4-SNAP2020071003"
+  val zsg = Seq(
     resolvers += Resolver.bintrayRepo("scalax", "zsg"),
     libraryDependencies ++= List(
-      "org.scalax" %% "zsg-macros"      % asunaVersion,
-      "org.scalax" %% "zsg-debug"       % asunaVersion,
-      "org.scalax" %% "zsg-scala-tuple" % asunaVersion
+      "org.scalax" %% "zsg-macros" % zsgVersion,
+      "org.scalax" %% "zsg-debug"  % zsgVersion // ,
+      // "org.scalax" %% "zsg-scala-tuple" % zsgVersion
     )
   )
 
@@ -19,6 +19,8 @@ object Dependencies {
     "com.typesafe.slick" %% "slick-codegen"       % slickVersion,
     "mysql"              % "mysql-connector-java" % "8.0.17"
   )
+
+  val cpoi = List("net.scalax" %% "poi-collection" % "0.4.0-M8")
 
   val shapeless = "com.chuusai" %% "shapeless" % "2.3.3"
 

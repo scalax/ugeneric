@@ -3,7 +3,8 @@ package org.scalax.kirito.poi.reader
 import cats.Semigroup
 import cats.data.Validated
 import io.circe._
-import org.scalax.ugeneric.circe.UCirce
+import ugeneric.circe.{UCirce, VersionCompat}
+
 import scala.collection.compat._
 
 sealed trait RowResult[+T]
@@ -14,16 +15,16 @@ case class rowBody[T](body: T) extends RowResult[T]
 
 object RowResult {
   object EmptyTable
-  implicit def circeEncoder[T](implicit bodyEncoder: Encoder[T]): Encoder.AsObject[RowResult[T]] = UCirce.encodeSealed
-  implicit def circeDecoder[T](implicit bodyDecoder: Decoder[T]): Decoder[RowResult[T]]          = UCirce.decodeSealed
+  implicit def circeEncoder[T](implicit bodyEncoder: Encoder[T]): VersionCompat.ObjectEncoderType[RowResult[T]] = UCirce.encodeSealed
+  implicit def circeDecoder[T](implicit bodyDecoder: Decoder[T]): Decoder[RowResult[T]]                         = UCirce.decodeSealed
 }
 
 object rowMessageContent {
   def build(rowNum: Int, fieldName: String, message: String): rowMessageContent        = rowMessageContent(List(RowMessage(rowNum, fieldName, message)))
   def build(rowNum: Int, fieldName: String, messages: List[String]): rowMessageContent = rowMessageContent(messages.map(r => RowMessage(rowNum, fieldName, r)).to(List))
 
-  implicit val circeEncoder: Encoder.AsObject[rowMessageContent] = UCirce.encodeCaseClass
-  implicit val circeDecoder: Decoder[rowMessageContent]          = UCirce.decodeCaseClass
+  implicit val circeEncoder: VersionCompat.ObjectEncoderType[rowMessageContent] = UCirce.encodeCaseClass
+  implicit val circeDecoder: Decoder[rowMessageContent]                         = UCirce.decodeCaseClass
 
   implicit val semigroupTypeClass: Semigroup[rowMessageContent] = new Semigroup[rowMessageContent] {
     override def combine(x: rowMessageContent, y: rowMessageContent): rowMessageContent = rowMessageContent(x.rowMsg ::: y.rowMsg)
@@ -48,6 +49,6 @@ object rowMessageContent {
 }
 
 object rowBody {
-  implicit def circeEncoder[T](implicit bodyEncoder: Encoder[T]): Encoder.AsObject[rowBody[T]] = UCirce.encodeCaseClass
-  implicit def circeDecoder[T](implicit bodyDecoder: Decoder[T]): Decoder[rowBody[T]]          = UCirce.decodeCaseClass
+  implicit def circeEncoder[T](implicit bodyEncoder: Encoder[T]): VersionCompat.ObjectEncoderType[rowBody[T]] = UCirce.encodeCaseClass
+  implicit def circeDecoder[T](implicit bodyDecoder: Decoder[T]): Decoder[rowBody[T]]                         = UCirce.decodeCaseClass
 }

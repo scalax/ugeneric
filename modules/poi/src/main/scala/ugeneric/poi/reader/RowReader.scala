@@ -2,15 +2,15 @@ package org.scalax.kirito.poi.reader
 
 import cats.data.Validated
 import cats.Functor
-import io.circe.{Decoder, Encoder}
+import io.circe.Decoder
 import net.scalax.cpoi.api._
-import org.scalax.ugeneric.circe.UCirce
+import ugeneric.circe.{UCirce, VersionCompat}
 
 case class RowMessage(rowNum: Int, fieldName: String, message: String)
 
 object RowMessage {
-  implicit val circeEncoder: Encoder.AsObject[RowMessage] = UCirce.encodeCaseClass
-  implicit val circeDecoder: Decoder[RowMessage]          = UCirce.decodeCaseClass
+  implicit val circeEncoder: VersionCompat.ObjectEncoderType[RowMessage] = UCirce.encodeCaseClass
+  implicit val circeDecoder: Decoder[RowMessage]                         = UCirce.decodeCaseClass
 }
 
 trait RowReader[D] extends Any {

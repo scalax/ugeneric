@@ -1,8 +1,8 @@
 package org.scalax.kirito.poi
 
-import asuna.{Application3, TupleTag}
-import asuna.macros.multiply.{AsunaMultiplyGeneric, AsunaMultiplyRepGeneric}
-import asuna.macros.single.{AsunaGetterGeneric, AsunaLabelledGeneric, AsunaSetterGeneric}
+import zsg.ApplicationX5
+import zsg.macros.multiply.{ZsgMultiplyGeneric, ZsgMultiplyRepGeneric}
+import zsg.macros.single.{ZsgGeneric, ZsgGetterGeneric, ZsgLabelledGeneric, ZsgSetterGeneric}
 import cats.{Contravariant, Functor, Semigroupal}
 import cats.data.Validated
 import cats.syntax.all._
@@ -68,15 +68,16 @@ object KPoi {
 
   }
 
-  def writeCaseClassWithTable[Table, Model, Rep, R <: TupleTag, Obj, Name](table: Table)(
-    implicit ll: AsunaMultiplyGeneric.Aux[Table, Model, R],
-    app: Application3[RowWriterContent, R, Obj, Name, Rep],
-    repGeneric: AsunaMultiplyRepGeneric[Table, Model, Rep],
-    cv1: AsunaLabelledGeneric[Model, Name],
-    cv2: AsunaGetterGeneric[Model, Obj]
+  def writeCaseClassWithTable[Table, Model, Rep, R, ModelR, Obj, Name](table: Table)(
+    implicit ll: ZsgMultiplyGeneric.Aux[Table, Model, R],
+    p: ZsgGeneric.Aux[Model, ModelR],
+    app: ApplicationX5[RowWriterContent, RowWriterContext, R, ModelR, Obj, Name, Rep],
+    repGeneric: ZsgMultiplyRepGeneric[Table, Model, Rep],
+    cv1: ZsgLabelledGeneric[Model, Name],
+    cv2: ZsgGetterGeneric[Model, Obj]
   ): CPoiRowWriter[Model] = {
     val names              = cv1.names
-    val applicationEncoder = app.application(RowWriterContext)
+    val applicationEncoder = app.application(RowWriterContext.value)
     val titles             = applicationEncoder.appendColumnTitle(names, repGeneric.rep(table), List.empty)
     new CPoiRowWriter[Model] {
       def keys: List[String] = titles
@@ -160,14 +161,15 @@ object KPoi {
     }
   }
 
-  def readCaseClassWithTable[Table, Model, R <: TupleTag, Prop, Nam, Rep](table: Table)(
-    implicit ll: AsunaMultiplyGeneric.Aux[Table, Model, R],
-    app: Application3[reader.ReaderContent, R, Prop, Nam, Rep],
-    repGeneric: AsunaMultiplyRepGeneric[Table, Model, Rep],
-    cv1: AsunaLabelledGeneric[Model, Nam],
-    cv3: AsunaSetterGeneric[Model, Prop]
+  def readCaseClassWithTable[Table, Model, R, ModelR, Prop, Nam, Rep](table: Table)(
+    implicit ll: ZsgMultiplyGeneric.Aux[Table, Model, R],
+    p: ZsgGeneric.Aux[Model, ModelR],
+    app: ApplicationX5[reader.ReaderContent, reader.ReaderContext, R, ModelR, Prop, Nam, Rep],
+    repGeneric: ZsgMultiplyRepGeneric[Table, Model, Rep],
+    cv1: ZsgLabelledGeneric[Model, Nam],
+    cv3: ZsgSetterGeneric[Model, Prop]
   ): CPoiRowReader[Model] = {
-    val i   = app.application(reader.ReaderContext)
+    val i   = app.application(reader.ReaderContext.value)
     val rep = repGeneric.rep(table)
     new CPoiRowReader[Model] {
       override def keys: List[String] = i.getNames(cv1.names, rep, List.empty)

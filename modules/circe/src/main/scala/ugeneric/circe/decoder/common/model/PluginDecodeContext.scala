@@ -4,7 +4,7 @@ import zsg.{Context4, Plus4, ZsgTuple0}
 import io.circe.Decoder
 import ugeneric.circe.NameTranslator
 
-object PluginDecodeContext extends Context4[PluginDecodeContent] {
+class PluginDecodeContext extends Context4[PluginDecodeContent] {
 
   private val zeroValue                       = Right(ZsgTuple0.value)
   private val zeroDecoder: Decoder[ZsgTuple0] = Decoder.instance(_ => zeroValue)
@@ -26,4 +26,8 @@ object PluginDecodeContext extends Context4[PluginDecodeContent] {
     override def getDecoder(defaultValue: ZsgTuple0, p: Option[NameTranslator], useDefaultValue: Boolean): Decoder[ZsgTuple0] = zeroDecoder
   }
 
+}
+
+object PluginDecodeContext {
+  val value: PluginDecodeContext = new PluginDecodeContext
 }

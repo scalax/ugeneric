@@ -1,9 +1,9 @@
 package org.scalax.kirito.poi.writer
 
-import asuna.{Application3, Context3, PropertyTag1}
 import net.scalax.cpoi.content.{CellDataAbs, CellDataImpl}
 import net.scalax.cpoi.rw.CellWriter
 import net.scalax.cpoi.api._
+import zsg.PropertyTag
 
 import scala.collection.compat._
 
@@ -22,46 +22,40 @@ object WriterMeta {
   object RequireImplicit {
     implicit def untypedApplication[H](
       implicit writer: CellWriter[H]
-    ): Application3[RowWriterContent, PropertyTag1[FieldMetaWithNotType[RequireImplicit], H], H, String, FieldMetaWithNotType[RequireImplicit]] =
-      new Application3[RowWriterContent, PropertyTag1[FieldMetaWithNotType[RequireImplicit], H], H, String, FieldMetaWithNotType[RequireImplicit]] {
-        override def application(context: Context3[RowWriterContent]): RowWriterContent[H, String, FieldMetaWithNotType[RequireImplicit]] =
-          new RowWriterContent[H, String, FieldMetaWithNotType[RequireImplicit]] {
-            override def appendColumnTitle(name: String, rep: FieldMetaWithNotType[RequireImplicit], titles: List[String]): List[String] = {
-              if (rep.literaMeta.isDefined) {
-                throw new Exception("需要隐式 CellWriter 的列不能有字面量类型")
-              }
-              if (rep.ignoreMeta) titles else rep.fieldNameMeta.getOrElse(name) :: titles
-            }
-            override def appendField(tt: H, name: String, rep: FieldMetaWithNotType[RequireImplicit], data: List[(String, CellDataAbs)]): List[(String, CellDataAbs)] = {
-              if (rep.ignoreMeta) data
-              else {
-                ((rep.fieldNameMeta.getOrElse(name), CPoi.wrapData(tt).addTransform(rep.cellStyleMeta))) :: data
-              }
-            }
+    ): RowWriterContent[PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[H], H, String, FieldMetaWithNotType[RequireImplicit]] =
+      new RowWriterContent[PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[H], H, String, FieldMetaWithNotType[RequireImplicit]] {
+        override def appendColumnTitle(name: String, rep: FieldMetaWithNotType[RequireImplicit], titles: List[String]): List[String] = {
+          if (rep.literaMeta.isDefined) {
+            throw new Exception("需要隐式 CellWriter 的列不能有字面量类型")
           }
+          if (rep.ignoreMeta) titles else rep.fieldNameMeta.getOrElse(name) :: titles
+        }
+        override def appendField(tt: H, name: String, rep: FieldMetaWithNotType[RequireImplicit], data: List[(String, CellDataAbs)]): List[(String, CellDataAbs)] = {
+          if (rep.ignoreMeta) data
+          else {
+            ((rep.fieldNameMeta.getOrElse(name), CPoi.wrapData(tt).addTransform(rep.cellStyleMeta))) :: data
+          }
+        }
       }
 
     implicit def typedApplication[H, I](
       implicit writer: CellWriter[I]
-    ): Application3[RowWriterContent, PropertyTag1[FieldMetaWithType[RequireImplicit, H, I], H], H, String, FieldMetaWithType[RequireImplicit, H, I]] =
-      new Application3[RowWriterContent, PropertyTag1[FieldMetaWithType[RequireImplicit, H, I], H], H, String, FieldMetaWithType[RequireImplicit, H, I]] {
-        override def application(context: Context3[RowWriterContent]): RowWriterContent[H, String, FieldMetaWithType[RequireImplicit, H, I]] =
-          new RowWriterContent[H, String, FieldMetaWithType[RequireImplicit, H, I]] {
-            override def appendColumnTitle(name: String, rep: FieldMetaWithType[RequireImplicit, H, I], titles: List[String]): List[String] = {
-              if (rep.writerMeta.isDefined) {
-                throw new Exception("需要隐式 CellWriter 的列不能定义 CellWriter")
-              }
-              if (rep.ignoreMeta) titles else rep.fieldNameMeta.getOrElse(name) :: titles
-            }
-            override def appendField(
-              tt: H,
-              name: String,
-              rep: FieldMetaWithType[RequireImplicit, H, I],
-              data: List[(String, CellDataAbs)]
-            ): List[(String, CellDataAbs)] = {
-              if (rep.ignoreMeta) data else ((rep.fieldNameMeta.getOrElse(name), CPoi.wrapData(rep.mapperMeta(tt)).addTransform(rep.cellStyleMeta))) :: data
-            }
+    ): RowWriterContent[PropertyTag[FieldMetaWithType[RequireImplicit, H, I]], PropertyTag[H], H, String, FieldMetaWithType[RequireImplicit, H, I]] =
+      new RowWriterContent[PropertyTag[FieldMetaWithType[RequireImplicit, H, I]], PropertyTag[H], H, String, FieldMetaWithType[RequireImplicit, H, I]] {
+        override def appendColumnTitle(name: String, rep: FieldMetaWithType[RequireImplicit, H, I], titles: List[String]): List[String] = {
+          if (rep.writerMeta.isDefined) {
+            throw new Exception("需要隐式 CellWriter 的列不能定义 CellWriter")
           }
+          if (rep.ignoreMeta) titles else rep.fieldNameMeta.getOrElse(name) :: titles
+        }
+        override def appendField(
+          tt: H,
+          name: String,
+          rep: FieldMetaWithType[RequireImplicit, H, I],
+          data: List[(String, CellDataAbs)]
+        ): List[(String, CellDataAbs)] = {
+          if (rep.ignoreMeta) data else ((rep.fieldNameMeta.getOrElse(name), CPoi.wrapData(rep.mapperMeta(tt)).addTransform(rep.cellStyleMeta))) :: data
+        }
       }
   }
 
@@ -69,52 +63,45 @@ object WriterMeta {
 
   object NotRequireImplicit {
     implicit def untypedApplication[H]
-      : Application3[RowWriterContent, PropertyTag1[FieldMetaWithNotType[NotRequireImplicit], H], H, String, FieldMetaWithNotType[NotRequireImplicit]] =
-      new Application3[RowWriterContent, PropertyTag1[FieldMetaWithNotType[NotRequireImplicit], H], H, String, FieldMetaWithNotType[NotRequireImplicit]] {
-        override def application(context: Context3[RowWriterContent]): RowWriterContent[H, String, FieldMetaWithNotType[NotRequireImplicit]] =
-          new RowWriterContent[H, String, FieldMetaWithNotType[NotRequireImplicit]] {
-            override def appendColumnTitle(name: String, rep: FieldMetaWithNotType[NotRequireImplicit], titles: List[String]): List[String] = {
-              if (rep.ignoreMeta) titles else rep.fieldNameMeta.getOrElse(name) :: titles
-            }
-            override def appendField(
-              tt: H,
-              name: String,
-              rep: FieldMetaWithNotType[NotRequireImplicit],
-              data: List[(String, CellDataAbs)]
-            ): List[(String, CellDataAbs)] = {
-              if (rep.ignoreMeta) data
-              else {
-                rep.literaMeta
-                  .map(meta => ((rep.fieldNameMeta.getOrElse(name), meta.toCellDataAbs.addTransform(rep.cellStyleMeta))) :: data)
-                  .getOrElse(throw new Exception("没有被忽略的不需要隐式 CellWriter 的列必须含有字面量"))
-
-              }
-            }
+      : RowWriterContent[PropertyTag[FieldMetaWithNotType[NotRequireImplicit]], PropertyTag[H], H, String, FieldMetaWithNotType[NotRequireImplicit]] =
+      new RowWriterContent[PropertyTag[FieldMetaWithNotType[NotRequireImplicit]], PropertyTag[H], H, String, FieldMetaWithNotType[NotRequireImplicit]] {
+        override def appendColumnTitle(name: String, rep: FieldMetaWithNotType[NotRequireImplicit], titles: List[String]): List[String] = {
+          if (rep.ignoreMeta) titles else rep.fieldNameMeta.getOrElse(name) :: titles
+        }
+        override def appendField(
+          tt: H,
+          name: String,
+          rep: FieldMetaWithNotType[NotRequireImplicit],
+          data: List[(String, CellDataAbs)]
+        ): List[(String, CellDataAbs)] = {
+          if (rep.ignoreMeta) data
+          else {
+            rep.literaMeta
+              .map(meta => ((rep.fieldNameMeta.getOrElse(name), meta.toCellDataAbs.addTransform(rep.cellStyleMeta))) :: data)
+              .getOrElse(throw new Exception("没有被忽略的不需要隐式 CellWriter 的列必须含有字面量"))
           }
+        }
       }
 
     implicit def typedApplication[H, I]
-      : Application3[RowWriterContent, PropertyTag1[FieldMetaWithType[NotRequireImplicit, H, I], H], H, String, FieldMetaWithType[NotRequireImplicit, H, I]] =
-      new Application3[RowWriterContent, PropertyTag1[FieldMetaWithType[NotRequireImplicit, H, I], H], H, String, FieldMetaWithType[NotRequireImplicit, H, I]] {
-        override def application(context: Context3[RowWriterContent]): RowWriterContent[H, String, FieldMetaWithType[NotRequireImplicit, H, I]] =
-          new RowWriterContent[H, String, FieldMetaWithType[NotRequireImplicit, H, I]] {
-            override def appendColumnTitle(name: String, rep: FieldMetaWithType[NotRequireImplicit, H, I], titles: List[String]): List[String] = {
-              if (rep.ignoreMeta) titles else rep.fieldNameMeta.getOrElse(name) :: titles
-            }
-            override def appendField(
-              tt: H,
-              name: String,
-              rep: FieldMetaWithType[NotRequireImplicit, H, I],
-              data: List[(String, CellDataAbs)]
-            ): List[(String, CellDataAbs)] = {
-              if (rep.ignoreMeta) data
-              else {
-                rep.writerMeta
-                  .map(i => ((rep.fieldNameMeta.getOrElse(name), CPoi.wrapData(rep.mapperMeta(tt))(i).addTransform(rep.cellStyleMeta))) :: data)
-                  .getOrElse(throw new Exception("没有被忽略的不需要 CellWriter 的列必须提供内部 CellWriter"))
-              }
-            }
+      : RowWriterContent[PropertyTag[FieldMetaWithType[NotRequireImplicit, H, I]], PropertyTag[H], H, String, FieldMetaWithType[NotRequireImplicit, H, I]] =
+      new RowWriterContent[PropertyTag[FieldMetaWithType[NotRequireImplicit, H, I]], PropertyTag[H], H, String, FieldMetaWithType[NotRequireImplicit, H, I]] {
+        override def appendColumnTitle(name: String, rep: FieldMetaWithType[NotRequireImplicit, H, I], titles: List[String]): List[String] = {
+          if (rep.ignoreMeta) titles else rep.fieldNameMeta.getOrElse(name) :: titles
+        }
+        override def appendField(
+          tt: H,
+          name: String,
+          rep: FieldMetaWithType[NotRequireImplicit, H, I],
+          data: List[(String, CellDataAbs)]
+        ): List[(String, CellDataAbs)] = {
+          if (rep.ignoreMeta) data
+          else {
+            rep.writerMeta
+              .map(i => ((rep.fieldNameMeta.getOrElse(name), CPoi.wrapData(rep.mapperMeta(tt))(i).addTransform(rep.cellStyleMeta))) :: data)
+              .getOrElse(throw new Exception("没有被忽略的不需要 CellWriter 的列必须提供内部 CellWriter"))
           }
+        }
       }
   }
 
