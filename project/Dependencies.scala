@@ -3,7 +3,7 @@ import sbt.Keys._
 
 object Dependencies {
 
-  val zsgVersion = "0.0.4-SNAP2020071001"
+  val zsgVersion = "0.0.4-SNAP2020071002"
   val zsg = Seq(
     resolvers += Resolver.bintrayRepo("scalax", "zsg"),
     libraryDependencies ++= List(
