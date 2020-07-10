@@ -7,8 +7,8 @@ object Dependencies {
   val zsg = Seq(
     resolvers += Resolver.bintrayRepo("scalax", "zsg"),
     libraryDependencies ++= List(
-      "org.scalax" %% "zsg-macros" % zsgVersion // ,
-      // "org.scalax" %% "zsg-debug"  % zsgVersion // ,
+      "org.scalax" %% "zsg-macros" % zsgVersion,
+      "org.scalax" %% "zsg-debug"  % zsgVersion // ,
       // "org.scalax" %% "zsg-scala-tuple" % zsgVersion
     )
   )
@@ -19,7 +19,6 @@ object Dependencies {
     "com.typesafe.slick" %% "slick-codegen"       % slickVersion,
     "mysql"              % "mysql-connector-java" % "8.0.17"
   )
-
 
   val cpoi = List("net.scalax" %% "poi-collection" % "0.4.0-M8")
 
