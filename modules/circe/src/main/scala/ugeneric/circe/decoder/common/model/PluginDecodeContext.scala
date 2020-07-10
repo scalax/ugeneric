@@ -29,5 +29,5 @@ class PluginDecodeContext extends Context4[PluginDecodeContent] {
 }
 
 object PluginDecodeContext {
-  implicit val value: PluginDecodeContext = new PluginDecodeContext
+  val value: PluginDecodeContext = new PluginDecodeContext
 }

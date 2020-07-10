@@ -11,7 +11,7 @@ class PluginJsonObjectContext extends Context3[PluginJsonObjectContent] {
     override def getAppender(data: Z3, l: List[(String, Json)], np: Option[NameTranslator]): List[(String, Json)] = {
       val data1 = p.takeHead3(data)
       val data2 = p.takeTail3(data)
-      y.getAppender(data2, x.getAppender(data1, l, np), np)
+      x.getAppender(data1, y.getAppender(data2, l, np), np)
     }
   }
 
@@ -21,5 +21,5 @@ class PluginJsonObjectContext extends Context3[PluginJsonObjectContent] {
 }
 
 object PluginJsonObjectContext {
-  implicit val value: PluginJsonObjectContext = new PluginJsonObjectContext
+  val value: PluginJsonObjectContext = new PluginJsonObjectContext
 }

@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.slick
 
-import zsg.{Application6, Context6}
+import zsg.ApplicationX6
 import zsg.macros.multiply.{ZsgMultiplyGeneric, ZsgMultiplyRepGeneric}
 import zsg.macros.single.{ZsgGeneric, ZsgGetterGeneric, ZsgSetterGeneric}
 import org.scalax.ugeneric.slick.mutiply.{RepContext, RepNode}
@@ -18,13 +18,13 @@ object USlick {
   )(
     implicit p: ZsgMultiplyGeneric.Aux[Table, Data, P],
     modelGeneric: ZsgGeneric.Aux[Data, HListDataType],
-    app: Application6[RepNode, RepContext, P, HListDataType, RepType, DataType, EncodeRef, Packed1],
+    app: ApplicationX6[RepNode, RepContext, P, HListDataType, RepType, DataType, EncodeRef, Packed1],
     zsgMultiplyRepGeneric: ZsgMultiplyRepGeneric[Table, Data, RepType],
     zsgGetterGeneric: ZsgGetterGeneric[Data, DataType],
     zsgSetterGeneric: ZsgSetterGeneric[Data, DataType],
     i: ClassTag[Data]
   ): ProvenShape[Data] = {
-    val repType = app.application
+    val repType = app.application(RepContext.value)
     val shape = new Shape[FlatShapeLevel, Packed1, Data, Packed1] { self =>
       override def pack(value: Packed1): Packed1                              = value
       override def packedShape: Shape[FlatShapeLevel, Packed1, Data, Packed1] = self

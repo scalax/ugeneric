@@ -36,5 +36,5 @@ class ReaderContext extends Context5[ReaderContent] {
 }
 
 object ReaderContext {
-  implicit val value: ReaderContext = new ReaderContext
+  val value: ReaderContext = new ReaderContext
 }

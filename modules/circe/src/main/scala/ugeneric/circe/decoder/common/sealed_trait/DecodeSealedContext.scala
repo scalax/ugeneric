@@ -42,6 +42,6 @@ class DecodeSealedContext[P] extends Context2[DecodeSealedTraitSelector[P]#JsonD
 }
 
 object DecodeSealedContext {
-  private val value                             = new DecodeSealedContext[Any]
-  implicit def apply[T]: DecodeSealedContext[T] = value.asInstanceOf[DecodeSealedContext[T]]
+  private val value                    = new DecodeSealedContext[Any]
+  def apply[T]: DecodeSealedContext[T] = value.asInstanceOf[DecodeSealedContext[T]]
 }

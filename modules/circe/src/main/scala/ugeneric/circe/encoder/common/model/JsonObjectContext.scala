@@ -10,10 +10,10 @@ class JsonObjectContext extends Context3[JsonObjectContent] {
     p: Plus3[X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3]
   ): JsonObjectContent[Z1, Z2, Z3] = new JsonObjectContent[Z1, Z2, Z3] {
     override def getAppender(data: Z3, l: util.LinkedHashMap[String, Json]): Unit = {
-      val data1 = p.takeHead3(data)
       val data2 = p.takeTail3(data)
-      y.getAppender(data2, l)
+      val data1 = p.takeHead3(data)
       x.getAppender(data1, l)
+      y.getAppender(data2, l)
     }
   }
 
@@ -23,5 +23,5 @@ class JsonObjectContext extends Context3[JsonObjectContent] {
 }
 
 object JsonObjectContext {
-  implicit val value: JsonObjectContext = new JsonObjectContext
+  val value: JsonObjectContext = new JsonObjectContext
 }

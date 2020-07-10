@@ -66,5 +66,5 @@ class RowWriterContext extends Context5[RowWriterContent] {
 }
 
 object RowWriterContext {
-  implicit val value: RowWriterContext = new RowWriterContext
+  val value: RowWriterContext = new RowWriterContext
 }

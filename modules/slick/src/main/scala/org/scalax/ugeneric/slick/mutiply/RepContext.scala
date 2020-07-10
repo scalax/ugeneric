@@ -35,5 +35,5 @@ class RepContext extends Context6[RepNode] {
 }
 
 object RepContext {
-  implicit val value: RepContext = new RepContext
+  val value: RepContext = new RepContext
 }

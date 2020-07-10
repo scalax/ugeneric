@@ -1,6 +1,6 @@
 package org.scalax.kirito.poi
 
-import zsg.{Application4, Application5}
+import zsg.ApplicationX5
 import zsg.macros.multiply.{ZsgMultiplyGeneric, ZsgMultiplyRepGeneric}
 import zsg.macros.single.{ZsgGeneric, ZsgGetterGeneric, ZsgLabelledGeneric, ZsgSetterGeneric}
 import cats.{Contravariant, Functor, Semigroupal}
@@ -71,13 +71,13 @@ object KPoi {
   def writeCaseClassWithTable[Table, Model, Rep, R, ModelR, Obj, Name](table: Table)(
     implicit ll: ZsgMultiplyGeneric.Aux[Table, Model, R],
     p: ZsgGeneric.Aux[Model, ModelR],
-    app: Application5[RowWriterContent, RowWriterContext, R, ModelR, Obj, Name, Rep],
+    app: ApplicationX5[RowWriterContent, RowWriterContext, R, ModelR, Obj, Name, Rep],
     repGeneric: ZsgMultiplyRepGeneric[Table, Model, Rep],
     cv1: ZsgLabelledGeneric[Model, Name],
     cv2: ZsgGetterGeneric[Model, Obj]
   ): CPoiRowWriter[Model] = {
     val names              = cv1.names
-    val applicationEncoder = app.application
+    val applicationEncoder = app.application(RowWriterContext.value)
     val titles             = applicationEncoder.appendColumnTitle(names, repGeneric.rep(table), List.empty)
     new CPoiRowWriter[Model] {
       def keys: List[String] = titles
@@ -164,12 +164,12 @@ object KPoi {
   def readCaseClassWithTable[Table, Model, R, ModelR, Prop, Nam, Rep](table: Table)(
     implicit ll: ZsgMultiplyGeneric.Aux[Table, Model, R],
     p: ZsgGeneric.Aux[Model, ModelR],
-    app: Application5[reader.ReaderContent, reader.ReaderContext, R, ModelR, Prop, Nam, Rep],
+    app: ApplicationX5[reader.ReaderContent, reader.ReaderContext, R, ModelR, Prop, Nam, Rep],
     repGeneric: ZsgMultiplyRepGeneric[Table, Model, Rep],
     cv1: ZsgLabelledGeneric[Model, Nam],
     cv3: ZsgSetterGeneric[Model, Prop]
   ): CPoiRowReader[Model] = {
-    val i   = app.application
+    val i   = app.application(reader.ReaderContext.value)
     val rep = repGeneric.rep(table)
     new CPoiRowReader[Model] {
       override def keys: List[String] = i.getNames(cv1.names, rep, List.empty)
