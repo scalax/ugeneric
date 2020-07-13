@@ -1,6 +1,6 @@
 package org.scalax.kirito.poi.writer
 
-import zsg.{Application3, Context3, PropertyTag}
+import zsg.PropertyTag
 import cats.Contravariant
 import net.scalax.cpoi.content.{CellDataAbs, CellDataImpl}
 import net.scalax.cpoi.rw.CellWriter
