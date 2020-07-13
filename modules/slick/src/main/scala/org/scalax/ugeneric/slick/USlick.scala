@@ -29,6 +29,7 @@ object USlick {
       override def pack(value: Packed1): Packed1                              = value
       override def packedShape: Shape[FlatShapeLevel, Packed1, Data, Packed1] = self
       override def buildParams(extract: Any => Data): Packed1                 = repType.buildParams(extract.andThen(zsgGetterGeneric.getter))
+      // 这里没有 _1，估计会报错
       override def encodeRef(value: Packed, path: Node): Any                  = repType.encodeRef(value, path, 1)
       override def toNode(value: Packed): Node = {
         def toBase(v: Any)   = new ProductWrapper(repType.fieldPlus(zsgGetterGeneric.getter(v.asInstanceOf[Data]), List.empty).to(IndexedSeq))

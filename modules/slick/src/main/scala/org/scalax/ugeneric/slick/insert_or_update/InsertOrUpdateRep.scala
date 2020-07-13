@@ -1,10 +1,11 @@
 package org.scalax.ugeneric.slick.mutiply
 
-import zsg. PropertyTag
+import zsg.PropertyTag
 import slick.ast.{ElementSymbol, Node, Select}
 import slick.lifted.{Shape, ShapeLevel}
+import zsg.macros.utils.PlaceHolder
 
-trait RepNode[RepTag, DataTag, RepType, DataType, EncodeRef, Packed] extends Any {
+trait InsertOrUpdateRep[RepTag, DataTag, PolyTag, RepType, DataType, PolyType, EncodeRef, Packed] extends Any {
   def buildParams(extract: Any => DataType): Packed
   def encodeRef(rep: Packed, path: Node, index: Int): (EncodeRef, Int)
   def pack(u: RepType): Packed
@@ -13,12 +14,12 @@ trait RepNode[RepTag, DataTag, RepType, DataType, EncodeRef, Packed] extends Any
   def fieldTail(l: List[Any]): (DataType, List[Any])
 }
 
-object RepNode {
+object InsertOrUpdateRep {
 
   implicit def slickRepNodeApplication[F <: ShapeLevel, Rep, Data, Out](
     implicit dd: Shape[F, Rep, Data, Out]
-  ): RepNode[PropertyTag[Rep], PropertyTag[Data], Rep, Data, Any, Out] =
-    new RepNode[PropertyTag[Rep], PropertyTag[Data], Rep, Data, Any, Out] {
+  ): InsertOrUpdateRep[PropertyTag[Rep], PropertyTag[Data], PropertyTag[PlaceHolder], Rep, Data, PlaceHolder, Any, Out] =
+    new InsertOrUpdateRep[PropertyTag[Rep], PropertyTag[Data], PropertyTag[PlaceHolder], Rep, Data, PlaceHolder, Any, Out] {
       override def node(rep: Out, l: List[Node]): List[Node]               = dd.packedShape.toNode(rep) :: l
       override def fieldPlus(data: Data, l: List[Any]): List[Any]          = data :: l
       override def fieldTail(l: List[Any]): (Data, List[Any])              = (l.head.asInstanceOf[Data], l.tail)
