@@ -1,6 +1,6 @@
 package org.scalax.kirito.poi.reader
 
-import zsg.{Application3, Context3, PropertyTag}
+import zsg.PropertyTag
 import zsg.macros.ByNameImplicit
 import cats.data.Validated
 import cats.implicits._
