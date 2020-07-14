@@ -69,7 +69,8 @@ object USlick {
       override def packedShape: Shape[FlatShapeLevel, Packed1, Data, Packed1] = self
       override def buildParams(extract: Any => Data): Packed1 =
         throw new SlickException("Insert or update function can not use to Compiled.") // repType.buildParams(extract.andThen(zsgGetterGeneric.getter))
-      override def encodeRef(value: Packed, path: Node): Any = repType.encodeRef(value, path, 1, polyRep)._1
+      override def encodeRef(value: Packed, path: Node): Any =
+        throw new SlickException("Insert or update function can not use to encodeRef.") // repType.encodeRef(value, path, 1, polyRep)._1
       override def toNode(value: Packed): Node = {
         def toBase(v: Any) = new ProductWrapper(repType.fieldPlus(zsgGetterGeneric.getter(v.asInstanceOf[Data]), List.empty, polyRep).to(IndexedSeq))
         def toMapped(v: Any) =

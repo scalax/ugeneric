@@ -38,8 +38,8 @@ class TestSlickUpdate extends AnyFunSpec with Matchers {
     }
 
     it("can dynamic update with PolyModel") {
-      val iOrU1 = USlick.dataMapper(models.userTq, Poly2)
-      models.userTq.map(s => (s.id, s.phone, s.sex)).updateStatement shouldBe iOrU1.updateQ.updateStatement
+      val iOrU1 = USlick.dataMapper(models.userTq.map(t => t).map(t => t).filter(_.age >= 2).map(t => t).map(t => t).map(t => t), Poly2)
+      models.userTq.filter(_.age >= 2).map(s => (s.id, s.phone, s.sex)).updateStatement shouldBe iOrU1.updateQ.updateStatement
     }
 
     it("insert with all column") {
