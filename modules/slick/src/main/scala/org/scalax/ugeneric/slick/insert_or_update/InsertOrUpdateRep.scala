@@ -6,7 +6,7 @@ import slick.lifted.{Shape, ShapeLevel}
 import zsg.macros.utils.PlaceHolder
 
 trait InsertOrUpdateRep[RepTag, DataTag, PolyTag, RepType, DataType, PolyType, EncodeRef, Packed] extends Any {
-  def buildParams(extract: Any => DataType): Packed
+  //def buildParams(extract: Any => DataType): Packed
   def encodeRef(rep: Packed, path: Node, index: Int, polyType: PolyType): (EncodeRef, Int)
   def pack(u: RepType): Packed
   def node(rep: Packed, l: List[Node], polyType: PolyType): List[Node]
@@ -25,8 +25,8 @@ object InsertOrUpdateRep {
       // override def fieldTail(l: List[Any], p: PlaceHolder): (Data, List[Any])     = (l.head.asInstanceOf[Data], l.tail)
       override def encodeRef(rep: Out, path: Node, index: Int, p: PlaceHolder): (Any, Int) =
         (dd.packedShape.encodeRef(rep, Select(path, ElementSymbol(index))), index + 1)
-      override def pack(u: Rep): Out                      = dd.pack(u)
-      override def buildParams(extract: Any => Data): Out = dd.packedShape.buildParams(extract)
+      override def pack(u: Rep): Out = dd.pack(u)
+      //override def buildParams(extract: Any => Data): Out = dd.packedShape.buildParams(extract)
     }
 
 }

@@ -20,8 +20,8 @@ object InserOrUpdateMeta {
         // override def fieldTail(l: List[Any], n: NeedIgnore): (Data, List[Any])     = if (n.ignore) 123 else (l.head.asInstanceOf[Data], l.tail)
         override def encodeRef(rep: Out, path: Node, index: Int, n: NeedIgnore): (Any, Int) =
           if (n.ignore) ((), index) else (dd.packedShape.encodeRef(rep, Select(path, ElementSymbol(index))), index + 1)
-        override def pack(u: Rep): Out                      = dd.pack(u)
-        override def buildParams(extract: Any => Data): Out = dd.packedShape.buildParams(extract)
+        override def pack(u: Rep): Out = dd.pack(u)
+        // override def buildParams(extract: Any => Data): Out = dd.packedShape.buildParams(extract)
       }
   }
 

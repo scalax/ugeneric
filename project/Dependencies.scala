@@ -17,7 +17,7 @@ object Dependencies {
   val slick = List(
     "com.typesafe.slick" %% "slick"               % slickVersion,
     "com.typesafe.slick" %% "slick-codegen"       % slickVersion,
-    "mysql"              % "mysql-connector-java" % "8.0.17"
+    "com.h2database" % "h2"%"1.4.200"
   )
 
   val cpoi = List("net.scalax" %% "poi-collection" % "0.4.0-M8")
