@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.slick
 
-import zsg.{ApplicationX6, ApplicationX8}
+import zsg.{ApplicationX6, ApplicationX7, ApplicationX8}
 import zsg.macros.multiply.{ZsgMultiplyGeneric, ZsgMultiplyRepGeneric}
 import zsg.macros.single.{ZsgGeneric, ZsgGetterGeneric, ZsgSetterGeneric}
 import org.scalax.ugeneric.slick.mutiply.{InsertOrUpdateContext, InsertOrUpdateRep, RepContext, RepNode}
@@ -48,14 +48,14 @@ object USlick {
     def insertQ: profile.InsertActionExtensionMethods[D]
   }
 
-  def dataMapper[Data, Rep, HListDataType, PolyModel, PolyTag, PolyType, Table, C[_], P, RepType, DataType, EncodeRef, Packed1](
+  def dataMapper[Data, Rep, HListDataType, PolyModel, PolyTag, PolyType, Table, C[_], P, RepType, DataType, Packed1](
     query: Query[Table, Data, C],
     poly: PolyModel
   )(
     implicit p: ZsgMultiplyGeneric.Aux[Table, Data, P],
     polyGeneric: ZsgMultiplyGeneric.Aux[PolyModel, Data, PolyTag],
     modelGeneric: ZsgGeneric.Aux[Data, HListDataType],
-    app: ApplicationX8[InsertOrUpdateRep, InsertOrUpdateContext, P, HListDataType, PolyTag, RepType, DataType, PolyType, EncodeRef, Packed1],
+    app: ApplicationX7[InsertOrUpdateRep, InsertOrUpdateContext, P, HListDataType, PolyTag, RepType, DataType, PolyType, Packed1],
     zsgPolyRepGeneric: ZsgMultiplyRepGeneric[PolyModel, Data, PolyType],
     zsgMultiplyRepGeneric: ZsgMultiplyRepGeneric[Table, Data, RepType],
     zsgGetterGeneric: ZsgGetterGeneric[Data, DataType],
@@ -67,16 +67,11 @@ object USlick {
     val shape = new Shape[FlatShapeLevel, Packed1, Data, Packed1] { self =>
       override def pack(value: Packed1): Packed1                              = value
       override def packedShape: Shape[FlatShapeLevel, Packed1, Data, Packed1] = self
-      override def buildParams(extract: Any => Data): Packed1 =
-        throw new SlickException("Insert or update function can not use to Compiled.") // repType.buildParams(extract.andThen(zsgGetterGeneric.getter))
-      override def encodeRef(value: Packed, path: Node): Any =
-        throw new SlickException("Insert or update function can not use to encodeRef.") // repType.encodeRef(value, path, 1, polyRep)._1
+      override def buildParams(extract: Any => Data): Packed1                 = throw new SlickException("Insert or update function can not use to Compiled.")
+      override def encodeRef(value: Packed, path: Node): Any                  = throw new SlickException("Insert or update function can not use to encodeRef.")
       override def toNode(value: Packed): Node = {
-        def toBase(v: Any) = new ProductWrapper(repType.fieldPlus(zsgGetterGeneric.getter(v.asInstanceOf[Data]), List.empty, polyRep).to(IndexedSeq))
-        def toMapped(v: Any) =
-          throw new SlickException(
-            "Insert or update function can not use to search"
-          ) // zsgSetterGeneric.setter(repType.fieldTail(TupleSupport.buildIndexedSeq(v.asInstanceOf[Product]).to(List))._1)
+        def toBase(v: Any)   = new ProductWrapper(repType.fieldPlus(zsgGetterGeneric.getter(v.asInstanceOf[Data]), List.empty, polyRep).to(IndexedSeq))
+        def toMapped(v: Any) = throw new SlickException("Insert or update function can not use to search")
         TypeMapping(ProductNode(ConstArray.from(repType.node(value, List.empty, polyRep))), MappedScalaType.Mapper(toBase, toMapped, None), i)
       }
     }
