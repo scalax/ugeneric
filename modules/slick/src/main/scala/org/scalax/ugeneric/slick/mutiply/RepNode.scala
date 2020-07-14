@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.slick.mutiply
 
-import zsg. PropertyTag
+import zsg.PropertyTag
 import slick.ast.{ElementSymbol, Node, Select}
 import slick.lifted.{Shape, ShapeLevel}
 
