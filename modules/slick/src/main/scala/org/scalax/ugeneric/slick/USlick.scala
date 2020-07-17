@@ -6,7 +6,7 @@ import zsg.macros.single.{ZsgGeneric, ZsgGetterGeneric, ZsgSetterGeneric}
 import org.scalax.ugeneric.slick.mutiply.{InsertOrUpdateContext, InsertOrUpdateRep, RepContext, RepNode}
 import slick.SlickException
 import slick.ast.{MappedScalaType, Node, ProductNode, TypeMapping}
-import slick.jdbc.JdbcProfile
+import slick.jdbc.{JdbcActionComponent, JdbcProfile}
 import slick.lifted.{AbstractTable, FlatShapeLevel, ProvenShape, Query, Shape, ShapedValue}
 import slick.util.{ConstArray, ProductWrapper, TupleSupport}
 
@@ -42,26 +42,25 @@ object USlick {
     ShapedValue(repType.pack(rep), shape)
   }
 
-  trait InsertOrUpdateProfile[Profile <: JdbcProfile, D] {
-    protected val profile: Profile
-    def updateQ: profile.UpdateActionExtensionMethods[D]
-    def insertQ: profile.InsertActionExtensionMethods[D]
+  trait InsertOrUpdateProfile[D] {
+    def updateQ: JdbcActionComponent#UpdateActionExtensionMethods[D]
+    def insertQ: JdbcActionComponent#InsertActionExtensionMethods[D]
   }
 
-  def dataMapper[Data, Rep, HListDataType, PolyModel, PolyTag, PolyType, Table, C[_], P, RepType, DataType, Packed1](
+  def dataMapper[Data, Rep, DataTag, PolyModel, PolyTag, PolyType, Table, C[_], RepTag, RepType, DataType, Packed1](
     query: Query[Table, Data, C],
     poly: PolyModel
   )(
-    implicit p: ZsgMultiplyGeneric.Aux[Table, Data, P],
+    implicit p: ZsgMultiplyGeneric.Aux[Table, Data, RepTag],
     polyGeneric: ZsgMultiplyGeneric.Aux[PolyModel, Data, PolyTag],
-    modelGeneric: ZsgGeneric.Aux[Data, HListDataType],
-    app: ApplicationX7[InsertOrUpdateRep, InsertOrUpdateContext, P, HListDataType, PolyTag, RepType, DataType, PolyType, Packed1],
+    modelGeneric: ZsgGeneric.Aux[Data, DataTag],
+    app: ApplicationX7[InsertOrUpdateRep, InsertOrUpdateContext, RepTag, DataTag, PolyTag, RepType, DataType, PolyType, Packed1],
     zsgPolyRepGeneric: ZsgMultiplyRepGeneric[PolyModel, Data, PolyType],
     zsgMultiplyRepGeneric: ZsgMultiplyRepGeneric[Table, Data, RepType],
     zsgGetterGeneric: ZsgGetterGeneric[Data, DataType],
     i: ClassTag[Data],
     slickJdbcProfile: JdbcProfile
-  ): InsertOrUpdateProfile[slickJdbcProfile.type, Data] = {
+  ): InsertOrUpdateProfile[Data] = {
     val repType = app.application(InsertOrUpdateContext.value)
     val polyRep = zsgPolyRepGeneric.rep(poly)
     val shape = new Shape[FlatShapeLevel, Packed1, Data, Packed1] { self =>
@@ -76,11 +75,9 @@ object USlick {
       }
     }
     val query1 = query.map(table => repType.pack(zsgMultiplyRepGeneric.rep(table)))(shape)
-    slickJdbcProfile.api.queryUpdateActionExtensionMethods(query1)
-    new InsertOrUpdateProfile[slickJdbcProfile.type, Data] {
-      override val profile: slickJdbcProfile.type                      = slickJdbcProfile
-      override def updateQ: profile.UpdateActionExtensionMethods[Data] = profile.api.queryUpdateActionExtensionMethods(query1)
-      override def insertQ: profile.InsertActionExtensionMethods[Data] = profile.api.queryInsertActionExtensionMethods(query1)
+    new InsertOrUpdateProfile[Data] {
+      override def updateQ: JdbcActionComponent#UpdateActionExtensionMethods[Data] = slickJdbcProfile.api.queryUpdateActionExtensionMethods(query1)
+      override def insertQ: JdbcActionComponent#InsertActionExtensionMethods[Data] = slickJdbcProfile.api.queryInsertActionExtensionMethods(query1)
     }
   }
 
