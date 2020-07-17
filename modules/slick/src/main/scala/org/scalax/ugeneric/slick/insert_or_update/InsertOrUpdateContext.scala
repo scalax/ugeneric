@@ -18,7 +18,7 @@ class InsertOrUpdateContext extends Context7[InsertOrUpdateRep] {
 
   override val start: InsertOrUpdateRep[ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0] = {
     new InsertOrUpdateRep[ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0] {
-      override def pack(u: ZsgTuple0): ZsgTuple0                                            = ZsgTuple0.value
+      override def pack(u: ZsgTuple0): ZsgTuple0                                            = u
       override def node(rep: ZsgTuple0, l: List[Node], polyType: ZsgTuple0): List[Node]     = l
       override def fieldPlus(data: ZsgTuple0, l: List[Any], polyType: ZsgTuple0): List[Any] = l
     }
