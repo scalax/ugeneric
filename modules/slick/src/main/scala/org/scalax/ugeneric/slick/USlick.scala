@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.slick
 
-import zsg.{ApplicationX6, ApplicationX7, ApplicationX8}
+import zsg.{ApplicationX6, ApplicationX7}
 import zsg.macros.multiply.{ZsgMultiplyGeneric, ZsgMultiplyRepGeneric}
 import zsg.macros.single.{ZsgGeneric, ZsgGetterGeneric, ZsgSetterGeneric}
 import org.scalax.ugeneric.slick.mutiply.{InsertOrUpdateContext, InsertOrUpdateRep, RepContext, RepNode}
