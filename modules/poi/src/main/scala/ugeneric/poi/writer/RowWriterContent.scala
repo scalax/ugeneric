@@ -13,8 +13,8 @@ trait RowWriterContent[RepType, ModelPro, Pro, Name, Rep] {
 }
 
 object RowWriterContent {
-  implicit def rowWriterContentPlaceHolderImplicit[H](
-    implicit writer: CellWriter[H]
+  implicit def rowWriterContentPlaceHolderImplicit[H](implicit
+    writer: CellWriter[H]
   ): RowWriterContent[PropertyTag[PlaceHolder], PropertyTag[H], H, String, PlaceHolder] =
     new RowWriterContent[PropertyTag[PlaceHolder], PropertyTag[H], H, String, PlaceHolder] {
       override def appendColumnTitle(names: String, rep: PlaceHolder, titles: List[String]): List[String] = names :: titles

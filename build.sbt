@@ -9,4 +9,6 @@ addCommandAlias("jmh1", "circeBenchmark/jmh:run -i 120 -wi 120 -f 1 -t 1 ugeneri
 addCommandAlias("jmh2", "circeBenchmark/jmh:run -i 120 -wi 120 -f 1 -t 1 ugeneric.circe.benchmark.JsonNonStrictEncoderBenchmark.*")
 addCommandAlias("jmh3", "circeBenchmark/jmh:run -i 3 -wi 3 -f 1 -t 1 ugeneric.circe.benchmark.JsonSealedEncoderBenchmark.*")
 
+addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
+
 val ugeneric = (project in file(".")).dependsOn(circe, slick, poi).aggregate(circe, slick, poi)

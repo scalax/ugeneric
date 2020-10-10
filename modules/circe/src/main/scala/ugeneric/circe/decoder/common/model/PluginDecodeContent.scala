@@ -12,8 +12,8 @@ trait PluginDecodeContent[N, Name, Model, DefaultValue] extends Any {
 
 object PluginDecodeContent {
 
-  implicit def zsgDecoderContent[T, N <: StringName](
-    implicit dd: ByNameImplicit[Decoder[T]],
+  implicit def zsgDecoderContent[T, N <: StringName](implicit
+    dd: ByNameImplicit[Decoder[T]],
     genName: GenericColumnName[N]
   ): PluginDecodeContent[PropertyTag[T], ColumnName[N], T, DefaultValue[T]] = {
     new PluginDecodeContent[PropertyTag[T], ColumnName[N], T, DefaultValue[T]] {

@@ -13,8 +13,8 @@ abstract class JsonObjectContent[I, Name, T] {
 
 object JsonObjectContent {
 
-  @inline implicit final def zsgCirceImplicit[T, N <: StringName](
-    implicit t: ByNameImplicit[Encoder[T]],
+  @inline implicit final def zsgCirceImplicit[T, N <: StringName](implicit
+    t: ByNameImplicit[Encoder[T]],
     nameImplicit: GenericColumnName[N]
   ): JsonObjectContent[PropertyTag[T], ColumnName[N], T] = new JsonObjectContent[PropertyTag[T], ColumnName[N], T] {
     override def getAppender(data: T, l: util.LinkedHashMap[String, Json]): Unit = l.put(nameImplicit.value, t.value(data))

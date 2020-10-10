@@ -11,8 +11,8 @@ trait DecodeContent[N, Name, Model] extends Any {
 
 object DecodeContent {
 
-  implicit def ugenericDecoder[Model, N <: StringName](
-    implicit dd: ByNameImplicit[Decoder[Model]],
+  implicit def ugenericDecoder[Model, N <: StringName](implicit
+    dd: ByNameImplicit[Decoder[Model]],
     genName: GenericColumnName[N]
   ): DecodeContent[PropertyTag[Model], ColumnName[N], Model] = new DecodeContent[PropertyTag[Model], ColumnName[N], Model] {
     override def getDecoder: Decoder[Model] = Decoder.instance(_.get(genName.value)(dd.value))

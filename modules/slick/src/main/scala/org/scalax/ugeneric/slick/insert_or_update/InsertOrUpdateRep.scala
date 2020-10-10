@@ -13,8 +13,8 @@ trait InsertOrUpdateRep[RepTag, DataTag, PolyTag, RepType, DataType, PolyType, P
 
 object InsertOrUpdateRep {
 
-  implicit def slickRepNodeApplication[F <: ShapeLevel, Rep, Data, Out](
-    implicit dd: Shape[F, Rep, Data, Out]
+  implicit def slickRepNodeApplication[F <: ShapeLevel, Rep, Data, Out](implicit
+    dd: Shape[F, Rep, Data, Out]
   ): InsertOrUpdateRep[PropertyTag[Rep], PropertyTag[Data], PropertyTag[PlaceHolder], Rep, Data, PlaceHolder, Out] =
     new InsertOrUpdateRep[PropertyTag[Rep], PropertyTag[Data], PropertyTag[PlaceHolder], Rep, Data, PlaceHolder, Out] {
       override def node(rep: Out, l: List[Node], p: PlaceHolder): List[Node]      = dd.packedShape.toNode(rep) :: l

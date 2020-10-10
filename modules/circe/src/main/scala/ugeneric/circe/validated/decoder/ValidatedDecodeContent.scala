@@ -13,8 +13,8 @@ trait ValidatedDecodeContent[RepTag, Model, T, II, D, Rep] extends Any {
 
 object ValidatedDecodeContent {
 
-  implicit def asunaCirceDecoder[T](
-    implicit dd: ByNameImplicit[Decoder[T]]
+  implicit def asunaCirceDecoder[T](implicit
+    dd: ByNameImplicit[Decoder[T]]
   ): ValidatedDecodeContent[PropertyTag[PlaceHolder], PropertyTag[T], T, String, DefaultValue[T], PlaceHolder] =
     new ValidatedDecodeContent[PropertyTag[PlaceHolder], PropertyTag[T], T, String, DefaultValue[T], PlaceHolder] {
       override def getValue(name: String, defaultValue: DefaultValue[T], rep: PlaceHolder): ValidatedDecoder[T] = new ValidatedDecoder[T] {
@@ -50,8 +50,8 @@ object ValidatedDecodeContent {
         }
     }*/
 
-  implicit def asunaValidatedCirceDecoder[T](
-    implicit dd: ByNameImplicit[ValidatedDecoder[T]]
+  implicit def asunaValidatedCirceDecoder[T](implicit
+    dd: ByNameImplicit[ValidatedDecoder[T]]
   ): ValidatedDecodeContent[PropertyTag[PlaceHolder], PropertyTag[T], T, String, DefaultValue[T], PlaceHolder] =
     new ValidatedDecodeContent[PropertyTag[PlaceHolder], PropertyTag[T], T, String, DefaultValue[T], PlaceHolder] {
       override def getValue(name: String, defaultValue: DefaultValue[T], rep: PlaceHolder): ValidatedDecoder[T] = new ValidatedDecoder[T] {

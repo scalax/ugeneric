@@ -17,8 +17,8 @@ object USlick {
 
   def mapWithTable[Data, Rep, HListDataType, Table <: AbstractTable[Data], P, RepType, DataType, EncodeRef, Packed1](
     table: Table
-  )(
-    implicit p: ZsgMultiplyGeneric.Aux[Table, Data, P],
+  )(implicit
+    p: ZsgMultiplyGeneric.Aux[Table, Data, P],
     modelGeneric: ZsgGeneric.Aux[Data, HListDataType],
     app: ApplicationX6[RepNode, RepContext, P, HListDataType, RepType, DataType, EncodeRef, Packed1],
     zsgMultiplyRepGeneric: ZsgMultiplyRepGeneric[Table, Data, RepType],
@@ -50,8 +50,8 @@ object USlick {
   def dataMapper[Data, Rep, DataTag, PolyModel, PolyTag, PolyType, Table, C[_], RepTag, RepType, DataType, Packed1](
     query: Query[Table, Data, C],
     poly: PolyModel
-  )(
-    implicit p: ZsgMultiplyGeneric.Aux[Table, Data, RepTag],
+  )(implicit
+    p: ZsgMultiplyGeneric.Aux[Table, Data, RepTag],
     polyGeneric: ZsgMultiplyGeneric.Aux[PolyModel, Data, PolyTag],
     modelGeneric: ZsgGeneric.Aux[Data, DataTag],
     app: ApplicationX7[InsertOrUpdateRep, InsertOrUpdateContext, RepTag, DataTag, PolyTag, RepType, DataType, PolyType, Packed1],

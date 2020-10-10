@@ -18,8 +18,8 @@ object PluginDecodeSealedTraitSelector {
   implicit def apply[T]: PluginDecodeSealedTraitSelector[T] = value.asInstanceOf[PluginDecodeSealedTraitSelector[T]]
   private val value: PluginDecodeSealedTraitSelector[Any]   = new PluginDecodeSealedTraitSelector[Any]
 
-  implicit def asunaCirceSealedDecoder[T, R <: T](
-    implicit t: ByNameImplicit[Decoder[R]]
+  implicit def asunaCirceSealedDecoder[T, R <: T](implicit
+    t: ByNameImplicit[Decoder[R]]
   ): PluginDecodeSealedTraitSelector[T]#JsonDecoder[SealedTag[R], String] = {
     val con = PluginDecodeSealedTraitSelector[T]
     new con.JsonDecoder[SealedTag[R], String] {
