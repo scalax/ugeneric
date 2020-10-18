@@ -16,9 +16,8 @@ object WriteWithData {
     def titleMap: List[(String, Int)]
 
     override def write(row: Row, model: Model): WriteWithDataImpl[Model] = {
-      val dataList = titleMap.flatMap {
-        case (title, index) =>
-          dataMap(model).get(title).map(cellData => (Option(row.getCell(index)).getOrElse(row.createCell(index)), cellData))
+      val dataList = titleMap.flatMap { case (title, index) =>
+        dataMap(model).get(title).map(cellData => (Option(row.getCell(index)).getOrElse(row.createCell(index)), cellData))
       }
       val newStyleGen = CPoi.multiplySet(styleGen, dataList).get
       new WriteWithDataImpl[Model] {

@@ -26,18 +26,16 @@ object KPoi {
       val styleGen = CPoi.newStyleGen
       import writers._
       val maxIndex = if (row.getLastCellNum >= 0) row.getLastCellNum.toInt else 0
-      val titleMap = self.keys.zipWithIndex.map {
-        case (r, index) =>
-          val autalIndex = maxIndex + index
-          (r, autalIndex)
+      val titleMap = self.keys.zipWithIndex.map { case (r, index) =>
+        val autalIndex = maxIndex + index
+        (r, autalIndex)
       }
       val newStyleGen = CPoi
         .multiplySet(
           styleGen,
-          titleMap.map {
-            case (r, autalIndex) =>
-              val titleWrap = CPoi.wrapData(r).addTransform(TextStyle)
-              (Option(row.getCell(autalIndex)).getOrElse(row.createCell(autalIndex)), titleWrap)
+          titleMap.map { case (r, autalIndex) =>
+            val titleWrap = CPoi.wrapData(r).addTransform(TextStyle)
+            (Option(row.getCell(autalIndex)).getOrElse(row.createCell(autalIndex)), titleWrap)
           }
         )
         .get
@@ -68,8 +66,8 @@ object KPoi {
 
   }
 
-  def writeCaseClassWithTable[Table, Model, Rep, R, ModelR, Obj, Name](table: Table)(
-    implicit ll: ZsgMultiplyGeneric.Aux[Table, Model, R],
+  def writeCaseClassWithTable[Table, Model, Rep, R, ModelR, Obj, Name](table: Table)(implicit
+    ll: ZsgMultiplyGeneric.Aux[Table, Model, R],
     p: ZsgGeneric.Aux[Model, ModelR],
     app: ApplicationX5[RowWriterContent, RowWriterContext, R, ModelR, Obj, Name, Rep],
     repGeneric: ZsgMultiplyRepGeneric[Table, Model, Rep],
@@ -91,20 +89,20 @@ object KPoi {
     val row0     = sheet.createRow(0)
     val styleGen = CPoi.newMutableStyleGen
     import writers._
-    CPoi.multiplySet(styleGen, func.keys.zipWithIndex.map {
-      case (r, index) =>
+    CPoi.multiplySet(
+      styleGen,
+      func.keys.zipWithIndex.map { case (r, index) =>
         val titleWrap = CPoi.wrapData(r).addTransform(TextStyle)
         (row0.createCell(index), titleWrap)
-    })
-    CollectionCompat.seqToLazyList(data).zipWithIndex.foreach {
-      case (rowData, index) =>
-        val row    = sheet.createRow(index + 1)
-        val rowMap = Map.from(func.write(rowData))
-        val dataList = func.keys.zipWithIndex.flatMap {
-          case (title, index) =>
-            rowMap.get(title).flatMap(cellData => Option((row.createCell(index), cellData)))
-        }
-        CPoi.multiplySet(styleGen, dataList)
+      }
+    )
+    CollectionCompat.seqToLazyList(data).zipWithIndex.foreach { case (rowData, index) =>
+      val row    = sheet.createRow(index + 1)
+      val rowMap = Map.from(func.write(rowData))
+      val dataList = func.keys.zipWithIndex.flatMap { case (title, index) =>
+        rowMap.get(title).flatMap(cellData => Option((row.createCell(index), cellData)))
+      }
+      CPoi.multiplySet(styleGen, dataList)
     }
     workbook
   }
@@ -129,9 +127,8 @@ object KPoi {
             (i, CPoi.wrapCell(Option(dataRow).flatMap(r => Option(r.getCell(i)))))
           })
           val dataMap = titleMap
-            .map {
-              case (key, value) =>
-                (key, cells.get(value))
+            .map { case (key, value) =>
+              (key, cells.get(value))
             }
             .collect { case (key, Some(value)) => (key, value) }
           self.read(dataMap, rowIndex)
@@ -161,8 +158,8 @@ object KPoi {
     }
   }
 
-  def readCaseClassWithTable[Table, Model, R, ModelR, Prop, Nam, Rep](table: Table)(
-    implicit ll: ZsgMultiplyGeneric.Aux[Table, Model, R],
+  def readCaseClassWithTable[Table, Model, R, ModelR, Prop, Nam, Rep](table: Table)(implicit
+    ll: ZsgMultiplyGeneric.Aux[Table, Model, R],
     p: ZsgGeneric.Aux[Model, ModelR],
     app: ApplicationX5[reader.ReaderContent, reader.ReaderContext, R, ModelR, Prop, Nam, Rep],
     repGeneric: ZsgMultiplyRepGeneric[Table, Model, Rep],
@@ -210,9 +207,8 @@ object KPoi {
       })
 
       val dataMap = titleMap
-        .map {
-          case (key, value) =>
-            (key, cells.get(value))
+        .map { case (key, value) =>
+          (key, cells.get(value))
         }
         .collect { case (key, Some(value)) => (key, value) }
       func.read(dataMap, rowIndex)

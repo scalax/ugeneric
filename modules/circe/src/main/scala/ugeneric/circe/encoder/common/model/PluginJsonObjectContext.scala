@@ -1,6 +1,6 @@
 package ugeneric.circe.encoder
 
-import zsg.{Context3, Plus3, ZsgTuple0}
+import zsg.{Context3, Plus3}
 import io.circe.Json
 import ugeneric.circe.NameTranslator
 
@@ -13,10 +13,6 @@ class PluginJsonObjectContext extends Context3[PluginJsonObjectContent] {
       val data2 = p.takeTail3(data)
       x.getAppender(data1, y.getAppender(data2, l, np), np)
     }
-  }
-
-  override val start: PluginJsonObjectContent[ZsgTuple0, ZsgTuple0, ZsgTuple0] = new PluginJsonObjectContent[ZsgTuple0, ZsgTuple0, ZsgTuple0] {
-    override def getAppender(data: ZsgTuple0, l: List[(String, Json)], p: Option[NameTranslator]): List[(String, Json)] = l
   }
 }
 

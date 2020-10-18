@@ -12,8 +12,8 @@ abstract class PluginJsonObjectContent[I, Name, T] {
 
 object PluginJsonObjectContent {
 
-  implicit final def zsgCirceImplicit[T, N <: StringName](
-    implicit t: ByNameImplicit[Encoder[T]],
+  implicit final def zsgCirceImplicit[T, N <: StringName](implicit
+    t: ByNameImplicit[Encoder[T]],
     g: GenericColumnName[N]
   ): PluginJsonObjectContent[PropertyTag[T], ColumnName[N], T] = new PluginJsonObjectContent[PropertyTag[T], ColumnName[N], T] {
     override def getAppender(data: T, l: List[(String, Json)], p: Option[NameTranslator]): List[(String, Json)] = {

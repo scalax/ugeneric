@@ -1,7 +1,7 @@
 package org.scalax.ugeneric.slick.mutiply
 
 import slick.ast.Node
-import zsg.{Context7, Plus7, ZsgTuple0}
+import zsg.{Context7, Plus7}
 
 class InsertOrUpdateContext extends Context7[InsertOrUpdateRep] {
   override def append[X1, X2, X3, X4, X5, X6, X7, Y1, Y2, Y3, Y4, Y5, Y6, Y7, Z1, Z2, Z3, Z4, Z5, Z6, Z7](
@@ -15,14 +15,6 @@ class InsertOrUpdateContext extends Context7[InsertOrUpdateRep] {
       override def fieldPlus(data: Z5, l: List[Any], polyType: Z6): List[Any] =
         x.fieldPlus(p.takeHead5(data), y.fieldPlus(p.takeTail5(data), l, p.takeTail6(polyType)), p.takeHead6(polyType))
     }
-
-  override val start: InsertOrUpdateRep[ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0] = {
-    new InsertOrUpdateRep[ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0] {
-      override def pack(u: ZsgTuple0): ZsgTuple0                                            = u
-      override def node(rep: ZsgTuple0, l: List[Node], polyType: ZsgTuple0): List[Node]     = l
-      override def fieldPlus(data: ZsgTuple0, l: List[Any], polyType: ZsgTuple0): List[Any] = l
-    }
-  }
 }
 
 object InsertOrUpdateContext {

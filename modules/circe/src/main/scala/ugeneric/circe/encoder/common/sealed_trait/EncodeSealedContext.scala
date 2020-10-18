@@ -1,6 +1,6 @@
 package ugeneric.circe.encoder
 
-import zsg.{Context3, Plus3, ZsgTuple0}
+import zsg.{Context3, Plus3}
 import io.circe.Json
 
 class EncodeSealedContext[H] extends Context3[EncodeSealedTraitSelector[H]#JsonEncoder] {
@@ -17,10 +17,6 @@ class EncodeSealedContext[H] extends Context3[EncodeSealedTraitSelector[H]#JsonE
       val a  = x.subClassToJsonOpt(model, cx, ax)
       a.orElse(y.subClassToJsonOpt(model, cy, yx))
     }
-  }
-
-  override val start: EncodeSealedTraitSelector[H]#JsonEncoder[ZsgTuple0, ZsgTuple0, ZsgTuple0] = new con.JsonEncoder[ZsgTuple0, ZsgTuple0, ZsgTuple0] {
-    override def subClassToJsonOpt(model: H, classTags: ZsgTuple0, labelled: ZsgTuple0): Option[(String, Json)] = Option.empty
   }
 }
 

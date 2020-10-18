@@ -2,7 +2,7 @@ package ugeneric.circe.encoder
 
 import java.util
 
-import zsg.{Context3, Plus3, ZsgTuple0}
+import zsg.{Context3, Plus3}
 import io.circe.Json
 
 class JsonObjectContext extends Context3[JsonObjectContent] {
@@ -15,10 +15,6 @@ class JsonObjectContext extends Context3[JsonObjectContent] {
       x.getAppender(data1, l)
       y.getAppender(data2, l)
     }
-  }
-
-  override val start: JsonObjectContent[ZsgTuple0, ZsgTuple0, ZsgTuple0] = new JsonObjectContent[ZsgTuple0, ZsgTuple0, ZsgTuple0] {
-    override def getAppender(data: ZsgTuple0, l: util.LinkedHashMap[String, Json]): Unit = ()
   }
 }
 

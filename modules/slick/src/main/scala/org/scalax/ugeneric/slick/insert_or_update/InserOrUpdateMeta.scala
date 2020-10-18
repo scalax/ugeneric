@@ -11,8 +11,8 @@ object InserOrUpdateMeta {
   def needIgnore(i: Boolean): NeedIgnore = NeedIgnore(ignore = i)
 
   object NeedIgnore {
-    implicit def slickRepNodeApplication[F <: ShapeLevel, Rep, Data, Out, PolyTag, PolyType](
-      implicit dd: Shape[F, Rep, Data, Out]
+    implicit def slickRepNodeApplication[F <: ShapeLevel, Rep, Data, Out, PolyTag, PolyType](implicit
+      dd: Shape[F, Rep, Data, Out]
     ): InsertOrUpdateRep[PropertyTag[Rep], PropertyTag[Data], PropertyTag[NeedIgnore], Rep, Data, NeedIgnore, Out] =
       new InsertOrUpdateRep[PropertyTag[Rep], PropertyTag[Data], PropertyTag[NeedIgnore], Rep, Data, NeedIgnore, Out] {
         override def node(rep: Out, l: List[Node], n: NeedIgnore): List[Node]      = if (n.ignore) l else dd.packedShape.toNode(rep) :: l

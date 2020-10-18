@@ -1,6 +1,6 @@
 package ugeneric.circe.encoder
 
-import zsg.{Context3, Plus3, ZsgTuple0}
+import zsg.{Context3, Plus3}
 import io.circe.Json
 import ugeneric.circe.NameTranslator
 
@@ -17,10 +17,6 @@ class PluginEncodeSealedContext[H] extends Context3[PluginEncodeSealedTraitSelec
       val a     = x.subClassToJsonOpt(model, plus.takeHead2(classTags), nameX, i)
       a.orElse(y.subClassToJsonOpt(model, plus.takeTail2(classTags), nameY, i))
     }
-  }
-
-  override val start: PluginEncodeSealedTraitSelector[H]#JsonEncoder[ZsgTuple0, ZsgTuple0, ZsgTuple0] = new con.JsonEncoder[ZsgTuple0, ZsgTuple0, ZsgTuple0] {
-    override def subClassToJsonOpt(model: H, classTags: ZsgTuple0, name: ZsgTuple0, i: Option[NameTranslator]): Option[(String, Json)] = Option.empty
   }
 }
 

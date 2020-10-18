@@ -15,8 +15,8 @@ trait RepNode[RepTag, DataTag, RepType, DataType, EncodeRef, Packed] extends Any
 
 object RepNode {
 
-  implicit def slickRepNodeApplication[F <: ShapeLevel, Rep, Data, Out](
-    implicit dd: Shape[F, Rep, Data, Out]
+  implicit def slickRepNodeApplication[F <: ShapeLevel, Rep, Data, Out](implicit
+    dd: Shape[F, Rep, Data, Out]
   ): RepNode[PropertyTag[Rep], PropertyTag[Data], Rep, Data, Any, Out] =
     new RepNode[PropertyTag[Rep], PropertyTag[Data], Rep, Data, Any, Out] {
       override def node(rep: Out, l: List[Node]): List[Node]               = dd.packedShape.toNode(rep) :: l
