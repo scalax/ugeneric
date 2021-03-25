@@ -4,7 +4,7 @@ import zsg.PropertyTag
 import io.circe.{Encoder, Json}
 import ugeneric.circe.NameTranslator
 import zsg.macros.ByNameImplicit
-import zsg.macros.single.{ColumnName, GenericColumnName, StringName}
+import zsg.macros.single.{ColumnName, GenericColumnName}
 
 abstract class PluginJsonObjectContent[I, Name, T] {
   def getAppender(data: T, l: List[(String, Json)], p: Option[NameTranslator]): List[(String, Json)]
@@ -12,7 +12,7 @@ abstract class PluginJsonObjectContent[I, Name, T] {
 
 object PluginJsonObjectContent {
 
-  implicit final def zsgCirceImplicit[T, N <: StringName](implicit
+  implicit final def zsgCirceImplicit[T, N](implicit
     t: ByNameImplicit[Encoder[T]],
     g: GenericColumnName[N]
   ): PluginJsonObjectContent[PropertyTag[T], ColumnName[N], T] = new PluginJsonObjectContent[PropertyTag[T], ColumnName[N], T] {

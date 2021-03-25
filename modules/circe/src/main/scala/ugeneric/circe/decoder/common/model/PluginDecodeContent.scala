@@ -1,6 +1,6 @@
 package ugeneric.circe.decoder
 
-import zsg.macros.single.{ColumnName, DefaultValue, GenericColumnName, StringName}
+import zsg.macros.single.{ColumnName, DefaultValue, GenericColumnName}
 import zsg.macros.ByNameImplicit
 import zsg.PropertyTag
 import io.circe._
@@ -12,7 +12,7 @@ trait PluginDecodeContent[N, Name, Model, DefaultValue] extends Any {
 
 object PluginDecodeContent {
 
-  implicit def zsgDecoderContent[T, N <: StringName](implicit
+  implicit def zsgDecoderContent[T, N](implicit
     dd: ByNameImplicit[Decoder[T]],
     genName: GenericColumnName[N]
   ): PluginDecodeContent[PropertyTag[T], ColumnName[N], T, DefaultValue[T]] = {

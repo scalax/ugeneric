@@ -3,7 +3,7 @@ package ugeneric.circe.decoder
 import zsg.macros.ByNameImplicit
 import zsg.PropertyTag
 import io.circe._
-import zsg.macros.single.{ColumnName, GenericColumnName, StringName}
+import zsg.macros.single.{ColumnName, GenericColumnName}
 
 trait DecodeContent[N, Name, Model] extends Any {
   def getDecoder: Decoder[Model]
@@ -11,7 +11,7 @@ trait DecodeContent[N, Name, Model] extends Any {
 
 object DecodeContent {
 
-  implicit def ugenericDecoder[Model, N <: StringName](implicit
+  implicit def ugenericDecoder[Model, N](implicit
     dd: ByNameImplicit[Decoder[Model]],
     genName: GenericColumnName[N]
   ): DecodeContent[PropertyTag[Model], ColumnName[N], Model] = new DecodeContent[PropertyTag[Model], ColumnName[N], Model] {
