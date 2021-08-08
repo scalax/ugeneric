@@ -1,7 +1,10 @@
-val circe          = (project in (file(".") / "modules" / "circe"))
-val circeBenchmark = (project in (file(".") / "modules" / "circe" / "benchmark")).dependsOn(circe).aggregate(circe)
-val slick          = (project in (file(".") / "modules" / "slick"))
-val poi            = (project in (file(".") / "modules" / "poi")).dependsOn(circe)
+val rootFile       = file(".")
+val modulesFile    = rootFile / "modules"
+val circeFile      = modulesFile / "circe"
+val circe          = project in circeFile
+val circeBenchmark = (project in circeFile / "benchmark").dependsOn(circe).aggregate(circe)
+val slick          = project in modulesFile / "slick"
+// val poi            = (project in (file(".") / "modules" / "poi")).dependsOn(circe)
 
 UGenericSettings.scalaVersionSetting
 
@@ -11,4 +14,4 @@ addCommandAlias("jmh3", "circeBenchmark/jmh:run -i 3 -wi 3 -f 1 -t 1 ugeneric.ci
 
 addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
 
-val ugeneric = (project in file(".")).dependsOn(circe, slick, poi).aggregate(circe, slick, poi)
+val ugeneric = (project in rootFile).dependsOn(circe, slick).aggregate(circe, slick)

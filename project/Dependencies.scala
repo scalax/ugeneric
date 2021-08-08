@@ -3,18 +3,11 @@ import sbt.Keys._
 
 object Dependencies {
 
-  val zsgVersion = "0.0.4-SNAP2020101801"
-  val zsg = Seq(
-    resolvers += Resolver.bintrayRepo("scalax", "zsg"),
-    libraryDependencies ++= List(
-      "org.scalax" %% "zsg-macros" % zsgVersion,
-      "org.scalax" %% "zsg-debug"  % zsgVersion // ,
-      // "org.scalax" %% "zsg-scala-tuple" % zsgVersion
-    )
-  )
+  val zsgVersion = "0.0.5-SNAP2021080902"
+  val zsg        = Seq("org.scalax" %% "zsg-macros" % zsgVersion)
 
-  val slickVersion = "3.3.2"
-  val slick = List(
+  val slickVersion = "3.3.3"
+  val slick = Seq(
     "com.typesafe.slick" %% "slick"         % slickVersion,
     "com.typesafe.slick" %% "slick-codegen" % slickVersion,
     "com.h2database"      % "h2"            % "1.4.200"
@@ -25,7 +18,7 @@ object Dependencies {
   val shapeless = "com.chuusai" %% "shapeless" % "2.3.3"
 
   val circe_2_11_version = "0.11.2"
-  val circe_2_13_version = "0.13.0"
+  val circe_2_13_version = "0.14.1"
   def circe(scalaVersionM: String) = CrossVersion.partialVersion(scalaVersionM) match {
     case Some((2, 11)) =>
       List(
@@ -36,7 +29,7 @@ object Dependencies {
       )
     case Some((2, _)) =>
       List(
-        "io.circe" %% "circe-derivation" % "0.13.0-M4",
+        "io.circe" %% "circe-derivation" % "0.13.0-M5",
         "io.circe" %% "circe-core"       % circe_2_13_version,
         "io.circe" %% "circe-generic"    % circe_2_13_version,
         "io.circe" %% "circe-parser"     % circe_2_13_version

@@ -1,21 +1,20 @@
 package ugeneric.circe.encoder
 
-import zsg.{Context3, Plus3}
+import zsg.{Context, Plus, TypeHList}
 import io.circe.Json
 import ugeneric.circe.NameTranslator
 
-class PluginEncodeSealedContext[H] extends Context3[PluginEncodeSealedTraitSelector[H]#JsonEncoder] {
+class PluginEncodeSealedContext[H] extends Context[PluginEncodeSealedTraitSelector[H]] {
   private val con = PluginEncodeSealedTraitSelector[H]
-
-  override def append[X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3](
-    x: PluginEncodeSealedTraitSelector[H]#JsonEncoder[X1, X2, X3],
-    y: PluginEncodeSealedTraitSelector[H]#JsonEncoder[Y1, Y2, Y3]
-  )(plus: Plus3[X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3]): PluginEncodeSealedTraitSelector[H]#JsonEncoder[Z1, Z2, Z3] = new con.JsonEncoder[Z1, Z2, Z3] {
-    override def subClassToJsonOpt(model: H, classTags: Z2, name: Z3, i: Option[NameTranslator]): Option[(String, Json)] = {
-      val nameX = plus.takeHead3(name)
-      val nameY = plus.takeTail3(name)
-      val a     = x.subClassToJsonOpt(model, plus.takeHead2(classTags), nameX, i)
-      a.orElse(y.subClassToJsonOpt(model, plus.takeTail2(classTags), nameY, i))
+  override def append[X <: TypeHList, Y <: TypeHList, Z <: TypeHList](
+    x: PluginEncodeSealedTraitSelector[H]#JsonEncoder[X#Head, X#Tail#Head],
+    y: PluginEncodeSealedTraitSelector[H]#JsonEncoder[Y#Head, Y#Tail#Head]
+  )(plus: Plus[X, Y, Z]): PluginEncodeSealedTraitSelector[H]#JsonEncoder[Z#Head, Z#Tail#Head] = new con.JsonEncoder[Z#Head, Z#Tail#Head] {
+    override def subClassToJsonOpt(model: H, classTags: Z#Head, name: Z#Tail#Head, i: Option[NameTranslator]): Option[(String, Json)] = {
+      val nameX = plus.tail.takeHead(name)
+      val nameY = plus.tail.takeTail(name)
+      val a     = x.subClassToJsonOpt(model, plus.takeHead(classTags), nameX, i)
+      a.orElse(y.subClassToJsonOpt(model, plus.takeTail(classTags), nameY, i))
     }
   }
 }

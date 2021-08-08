@@ -1,25 +1,30 @@
 package ugeneric.circe.encoder
 
-import zsg.PropertyTag
+import zsg.{Application, PropertyTag, TagMerge2, TypeFunction, TypeHList, TypeHList1}
 import io.circe.{Encoder, Json}
 import ugeneric.circe.NameTranslator
 import zsg.macros.ByNameImplicit
-import zsg.macros.single.{ColumnName, GenericColumnName, StringName}
+import zsg.macros.single.ColumnName
+import zsg.macros.utils.GenericColumnName
 
-abstract class PluginJsonObjectContent[I, Name, T] {
-  def getAppender(data: T, l: List[(String, Json)], p: Option[NameTranslator]): List[(String, Json)]
+class PluginJsonObjectTypeContext extends TypeFunction {
+  override type H[T <: TypeHList] = PluginJsonObjectContent[T#Head]
 }
-
-object PluginJsonObjectContent {
-
-  implicit final def zsgCirceImplicit[T, N <: StringName](implicit
+object PluginJsonObjectTypeContext {
+  implicit final def zsgCirceImplicit[T, N <: String](implicit
     t: ByNameImplicit[Encoder[T]],
     g: GenericColumnName[N]
-  ): PluginJsonObjectContent[PropertyTag[T], ColumnName[N], T] = new PluginJsonObjectContent[PropertyTag[T], ColumnName[N], T] {
-    override def getAppender(data: T, l: List[(String, Json)], p: Option[NameTranslator]): List[(String, Json)] = {
-      val nameI = p.map(_.tran(g.value)).getOrElse(g.value)
-      (nameI, t.value(data)) :: l
+  ): Application[PluginJsonObjectTypeContext, PluginJsonObjectContext, TagMerge2[PropertyTag[T], ColumnName[N]], TypeHList1[T]] =
+    new Application[PluginJsonObjectTypeContext, PluginJsonObjectContext, TagMerge2[PropertyTag[T], ColumnName[N]], TypeHList1[T]] {
+      override def application(context: PluginJsonObjectContext): PluginJsonObjectContent[T] = new PluginJsonObjectContent[T] {
+        override def getAppender(data: T, l: List[(String, Json)], p: Option[NameTranslator]): List[(String, Json)] = {
+          val nameI = p.map(_.tran(g.value)).getOrElse(g.value)
+          (nameI, t.value(data)) :: l
+        }
+      }
     }
-  }
+}
 
+abstract class PluginJsonObjectContent[T] {
+  def getAppender(data: T, l: List[(String, Json)], p: Option[NameTranslator]): List[(String, Json)]
 }
