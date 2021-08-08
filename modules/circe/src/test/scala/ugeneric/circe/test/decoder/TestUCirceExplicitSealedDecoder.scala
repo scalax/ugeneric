@@ -5,8 +5,10 @@ import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 import io.circe.syntax._
 import ugeneric.circe.UCirce
-import ugeneric.circe.decoder.DecodeSealedApplication
+import ugeneric.circe.decoder.{DecodeSealedApplication, DecodeSealedContext, DecodeSealedTraitSelector}
 import ugeneric.circe.test.decoder.model.{NamedSealed, SimpleSealed}
+import zsg.{Application, TypeHList1}
+import zsg.macros.single.SealedTag
 
 class TestUCirceExplicitSealedDecoder extends AnyFunSpec with Matchers {
 
@@ -14,9 +16,16 @@ class TestUCirceExplicitSealedDecoder extends AnyFunSpec with Matchers {
     implicit val decodeTest01: Decoder[NamedSealed.Test01]       = UCirce.decodeCaseClass
     implicit val decodeTest02: Decoder[NamedSealed.Test02.type]  = Decoder.instance(_ => Right(NamedSealed.Test02))
     implicit val decodeTest04: Decoder[NamedSealed.ParentTest04] = UCirce.decodeCaseClass
-    implicit val decodeTest03 = DecodeSealedApplication[NamedSealed.ParentTest03, NamedSealed.ParentTrait2]((name, cursor) =>
-      cursor.get("Test03")(decodeTest04).right.map(s => NamedSealed.ParentTest03(s.i1, s.i2.toLong))
-    )
+    implicit val decodeTest03: Application[DecodeSealedTraitSelector[NamedSealed.ParentTrait2], DecodeSealedContext[NamedSealed.ParentTrait2], SealedTag[
+      NamedSealed.ParentTest03
+    ], TypeHList1[String]] = new Application[DecodeSealedTraitSelector[NamedSealed.ParentTrait2], DecodeSealedContext[NamedSealed.ParentTrait2], SealedTag[
+      NamedSealed.ParentTest03
+    ], TypeHList1[String]] {
+      override def application(context: DecodeSealedContext[NamedSealed.ParentTrait2]): DecodeSealedTraitSelector[NamedSealed.ParentTrait2]#JsonDecoder[String] =
+        DecodeSealedApplication[NamedSealed.ParentTest03, NamedSealed.ParentTrait2]((name, cursor) =>
+          cursor.get("Test03")(decodeTest04).right.map(s => NamedSealed.ParentTest03(s.i1, s.i2.toLong))
+        )
+    }
     implicit val decodeParentTrait: Decoder[NamedSealed.ParentTrait2] = UCirce.decodeSealed
   }
 
