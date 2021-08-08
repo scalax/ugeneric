@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.slick.mutiply
 
-import zsg.{Context6, Plus6, ZsgTuple0}
+import zsg.{Context6, Plus6}
 import slick.ast.Node
 
 class RepContext extends Context6[RepNode] {
@@ -22,16 +22,6 @@ class RepContext extends Context6[RepNode] {
     override def buildParams(extract: Any => Z4): Z6 = p.plus6(x.buildParams(extract.andThen(p.takeHead4)), y.buildParams(extract.andThen(p.takeTail4)))
     override def pack(u: Z3): Z6                     = p.plus6(x.pack(p.takeHead3(u)), y.pack(p.takeTail3(u)))
   }
-
-  override val start: RepNode[ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0] =
-    new RepNode[ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0] {
-      override def node(rep: ZsgTuple0, l: List[Node]): List[Node]                     = l
-      override def fieldPlus(data: ZsgTuple0, l: List[Any]): List[Any]                 = l
-      override def fieldTail(l: List[Any]): (ZsgTuple0, List[Any])                     = (ZsgTuple0.value, l)
-      override def encodeRef(rep: ZsgTuple0, path: Node, index: Int): (ZsgTuple0, Int) = (ZsgTuple0.value, index)
-      override def buildParams(extract: Any => ZsgTuple0): ZsgTuple0                   = ZsgTuple0.value
-      override def pack(u: ZsgTuple0): ZsgTuple0                                       = u
-    }
 }
 
 object RepContext {

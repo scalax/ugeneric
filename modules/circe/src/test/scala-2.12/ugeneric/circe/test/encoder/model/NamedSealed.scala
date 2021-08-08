@@ -2,8 +2,10 @@ package ugeneric.circe.test.encoder.model
 
 import io.circe.Encoder
 import io.circe.syntax._
-import ugeneric.circe.encoder.EncodeSealedApplication
+import ugeneric.circe.encoder.{EncodeSealedApplication, EncodeSealedContext, EncodeSealedTraitSelector}
 import ugeneric.circe.{UCirce, VersionCompat}
+import zsg.macros.single.SealedTag
+import zsg.{Application, TypeHList2}
 
 object NamedSealed {
 
@@ -12,10 +14,16 @@ object NamedSealed {
     private implicit val test01Encoder: VersionCompat.ObjectEncoderType[Test01]             = UCirce.encodeCaseClass
     private implicit val test02Encoder: Encoder[Test02.type]                                = UCirce.encodeCaseObject
     private implicit val parentTest04Encoder: VersionCompat.ObjectEncoderType[ParentTest04] = UCirce.encodeCaseClass
-    private implicit val parentTest03Encoder /*: EncodeSealedApplication[enImpl2.ParentTest03, enImpl2.ParentTrait2]*/ =
-      EncodeSealedApplication[NamedSealed.ParentTest03, NamedSealed.ParentTrait2]((name, value) =>
-        ("Test03", NamedSealed.ParentTest04(value.i1, value.i2.toString).asJson)
-      )
+    private implicit val parentTest03Encoder: Application[EncodeSealedTraitSelector[NamedSealed.ParentTrait2], EncodeSealedContext[NamedSealed.ParentTrait2], SealedTag[
+      NamedSealed.ParentTest03
+    ], TypeHList2[Class[NamedSealed.ParentTest03], String]] = new Application[EncodeSealedTraitSelector[NamedSealed.ParentTrait2], EncodeSealedContext[
+      NamedSealed.ParentTrait2
+    ], SealedTag[NamedSealed.ParentTest03], TypeHList2[Class[NamedSealed.ParentTest03], String]] {
+      override def application(context: EncodeSealedContext[ParentTrait2]): EncodeSealedTraitSelector[ParentTrait2]#JsonEncoder[Class[ParentTest03], String] =
+        EncodeSealedApplication[NamedSealed.ParentTest03, NamedSealed.ParentTrait2]((name, value) =>
+          ("Test03", NamedSealed.ParentTest04(value.i1, value.i2.toString).asJson)
+        )
+    }
     implicit val parentTrait2Encoder: VersionCompat.ObjectEncoderType[ParentTrait2] = UCirce.encodeSealed
   }
 

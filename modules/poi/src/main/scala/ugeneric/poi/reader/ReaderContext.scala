@@ -1,6 +1,6 @@
 package org.scalax.kirito.poi.reader
 
-import zsg.{Context5, Plus3, Plus5, ZsgTuple0}
+import zsg.{Context5, Plus5}
 import cats.data.Validated
 import net.scalax.cpoi.content.CellContentAbs
 
@@ -18,17 +18,6 @@ class ReaderContext extends Context5[ReaderContent] {
       new RowReader[Z3] {
         override def read(data: Map[String, CellContentAbs], rowIndex: Int): Validated[rowMessageContent, Z3] = {
           x.getValue(xx1, zz1).read(data, rowIndex).product(y.getValue(yy1, zz2).read(data, rowIndex)).map { case (i1, i2) => p.plus3(i1, i2) }
-        }
-      }
-    }
-  }
-
-  override def start: ReaderContent[ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0] = new ReaderContent[ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0] {
-    override def getNames(name: ZsgTuple0, rep: ZsgTuple0, col: List[String]): List[String] = col
-    override def getValue(name: ZsgTuple0, defaultValue: ZsgTuple0): RowReader[ZsgTuple0] = {
-      new RowReader[ZsgTuple0] {
-        override def read(data: Map[String, CellContentAbs], rowIndex: Int): Validated[rowMessageContent, ZsgTuple0] = {
-          Validated.valid(ZsgTuple0.value)
         }
       }
     }

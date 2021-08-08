@@ -20,8 +20,8 @@ object WriterMeta {
   sealed trait ImplicitRequireOrNot
   class RequireImplicit extends ImplicitRequireOrNot
   object RequireImplicit {
-    implicit def untypedApplication[H](
-      implicit writer: CellWriter[H]
+    implicit def untypedApplication[H](implicit
+      writer: CellWriter[H]
     ): RowWriterContent[PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[H], H, String, FieldMetaWithNotType[RequireImplicit]] =
       new RowWriterContent[PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[H], H, String, FieldMetaWithNotType[RequireImplicit]] {
         override def appendColumnTitle(name: String, rep: FieldMetaWithNotType[RequireImplicit], titles: List[String]): List[String] = {
@@ -38,8 +38,8 @@ object WriterMeta {
         }
       }
 
-    implicit def typedApplication[H, I](
-      implicit writer: CellWriter[I]
+    implicit def typedApplication[H, I](implicit
+      writer: CellWriter[I]
     ): RowWriterContent[PropertyTag[FieldMetaWithType[RequireImplicit, H, I]], PropertyTag[H], H, String, FieldMetaWithType[RequireImplicit, H, I]] =
       new RowWriterContent[PropertyTag[FieldMetaWithType[RequireImplicit, H, I]], PropertyTag[H], H, String, FieldMetaWithType[RequireImplicit, H, I]] {
         override def appendColumnTitle(name: String, rep: FieldMetaWithType[RequireImplicit, H, I], titles: List[String]): List[String] = {

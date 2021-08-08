@@ -18,8 +18,8 @@ object ReaderMeta {
 
   class RequireImplicit extends ImplicitRequireOrNot
   object RequireImplicit {
-    implicit def asunaPoiUntypedReader[T](
-      implicit dd: ByNameImplicit[CellReader[T]]
+    implicit def asunaPoiUntypedReader[T](implicit
+      dd: ByNameImplicit[CellReader[T]]
     ): ReaderContent[PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[T], T, String, FieldMetaWithNotType[RequireImplicit]] = {
       def getName(rep: FieldMetaWithNotType[RequireImplicit], name: String): String = rep.fieldNameMeta.getOrElse(name)
       new ReaderContent[PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[T], T, String, FieldMetaWithNotType[RequireImplicit]] {
@@ -46,8 +46,8 @@ object ReaderMeta {
       }
     }
 
-    implicit def asunaPoiTypedReader[R, T](
-      implicit dd: ByNameImplicit[CellReader[R]]
+    implicit def asunaPoiTypedReader[R, T](implicit
+      dd: ByNameImplicit[CellReader[R]]
     ): ReaderContent[PropertyTag[FieldMeta[RequireImplicit, R, T]], PropertyTag[T], T, String, FieldMeta[RequireImplicit, R, T]] = {
       def value(rep: FieldMeta[RequireImplicit, R, T]): Option[T]               = rep.cellReaderMeta.map(_ => throw new Exception("Require 列必须不能提供字面量或 CellReader"))
       def takeName(rep: FieldMeta[RequireImplicit, R, T], name: String): String = rep.fieldNameMeta.getOrElse(name)

@@ -1,28 +1,29 @@
 package ugeneric.circe.decoder
 
-import zsg.{Context3, Plus3, ZsgTuple0}
+import zsg.{Application, Context, Plus, PropertyTag, TagMerge2, TypeFunction, TypeHList, TypeHList1}
 import io.circe.Decoder
+import zsg.macros.ByNameImplicit
+import zsg.macros.single.ColumnName
+import zsg.macros.utils.GenericColumnName
 
-class DecodeContext extends Context3[DecodeContent] {
-
-  private val zeroValue                       = Right(ZsgTuple0.value)
-  private val zeroDecoder: Decoder[ZsgTuple0] = Decoder.instance { _ => zeroValue }
-
-  override def append[X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3](x: DecodeContent[X1, X2, X3], y: DecodeContent[Y1, Y2, Y3])(
-    p: Plus3[X1, X2, X3, Y1, Y2, Y3, Z1, Z2, Z3]
-  ): DecodeContent[Z1, Z2, Z3] = new DecodeContent[Z1, Z2, Z3] {
-    override def getDecoder: Decoder[Z3] = {
-      for {
-        x1 <- x.getDecoder
-        y1 <- y.getDecoder
-      } yield p.plus3(x1, y1)
+class DecoderTypeContext extends TypeFunction {
+  override type H[I <: TypeHList] = Decoder[I#Head]
+}
+object DecoderTypeContext {
+  implicit def ugenericDecoder[Model, Name <: String](implicit
+    name: GenericColumnName[Name],
+    dd: ByNameImplicit[Decoder[Model]]
+  ): Application[DecoderTypeContext, DecodeContext, TagMerge2[PropertyTag[Model], ColumnName[Name]], TypeHList1[Model]] =
+    new Application[DecoderTypeContext, DecodeContext, TagMerge2[PropertyTag[Model], ColumnName[Name]], TypeHList1[Model]] {
+      override def application(context: DecodeContext): Decoder[Model] = Decoder.instance(_.get(name.value)(dd.value))
     }
-  }
+}
 
-  override val start: DecodeContent[ZsgTuple0, ZsgTuple0, ZsgTuple0] = new DecodeContent[ZsgTuple0, ZsgTuple0, ZsgTuple0] {
-    override def getDecoder: Decoder[ZsgTuple0] = zeroDecoder
-  }
-
+class DecodeContext extends Context[DecoderTypeContext] {
+  override def append[X <: TypeHList, Y <: TypeHList, Z <: TypeHList](x: Decoder[X#Head], y: Decoder[Y#Head])(plus: Plus[X, Y, Z]): Decoder[Z#Head] = for {
+    x1 <- x
+    y1 <- y
+  } yield plus.plus(x1, y1)
 }
 
 object DecodeContext {

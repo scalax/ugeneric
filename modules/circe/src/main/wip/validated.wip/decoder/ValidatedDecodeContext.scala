@@ -1,6 +1,6 @@
 package org.scalax.ugeneric.circe.decoder
 
-import zsg.{Context6, Plus6, ZsgTuple0}
+import zsg.{Context6, Plus6}
 import cats.data.Validated
 import io.circe.ACursor
 
@@ -24,16 +24,6 @@ object ValidatedDecodeContext extends Context6[ValidatedDecodeContent] {
             val y3 = y.getValue(yy1, yy2, zz2).getValue(json)
             x3.product(y3).map { case (xx3, yy3) => p.plus3(xx3, yy3) }
           }
-        }
-      }
-    }
-  }
-
-  override val start: ValidatedDecodeContent[ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0] = {
-    new ValidatedDecodeContent[ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0] {
-      override def getValue(name: ZsgTuple0, defaultValue: ZsgTuple0, rep: ZsgTuple0): ValidatedDecoder[ZsgTuple0] = {
-        new ValidatedDecoder[ZsgTuple0] {
-          override def getValue(json: ACursor): Validated[errorMessage, ZsgTuple0] = Validated.valid(ZsgTuple0.value)
         }
       }
     }

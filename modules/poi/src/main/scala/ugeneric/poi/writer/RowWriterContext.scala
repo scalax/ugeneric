@@ -1,6 +1,6 @@
 package org.scalax.kirito.poi.writer
 
-import zsg.{Context5, Plus5, ZsgTuple0}
+import zsg.{Context5, Plus5}
 import net.scalax.cpoi.content.CellDataAbs
 
 class RowWriterContext extends Context5[RowWriterContent] {
@@ -57,12 +57,6 @@ class RowWriterContext extends Context5[RowWriterContent] {
       }
     }
   }
-
-  override def start: RowWriterContent[ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0] =
-    new RowWriterContent[ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0, ZsgTuple0] {
-      override def appendColumnTitle(names: ZsgTuple0, rep: ZsgTuple0, titles: List[String]): List[String]                                     = titles
-      override def appendField(tt: ZsgTuple0, name: ZsgTuple0, rep: ZsgTuple0, data: List[(String, CellDataAbs)]): List[(String, CellDataAbs)] = data
-    }
 }
 
 object RowWriterContext {

@@ -22,8 +22,8 @@ object ValidateDecorderMeta {
 
   class RequireImplicit extends ImplicitRequireOrNot
   object RequireImplicit {
-    implicit def asunaCirceUntypedReader[T](
-      implicit dd: ByNameImplicit[Decoder[T]]
+    implicit def asunaCirceUntypedReader[T](implicit
+      dd: ByNameImplicit[Decoder[T]]
     ): ValidatedDecodeContent[PropertyTag[FieldMetaWithNotType[RequireImplicit]], PropertyTag[T], T, String, DefaultValue[T], FieldMetaWithNotType[
       RequireImplicit
     ]] = {
@@ -108,8 +108,8 @@ object ValidateDecorderMeta {
         }
       }*/
 
-    implicit def asunaCirceTypedReader[R, T](
-      implicit dd: ByNameImplicit[Decoder[R]]
+    implicit def asunaCirceTypedReader[R, T](implicit
+      dd: ByNameImplicit[Decoder[R]]
     ): ValidatedDecodeContent[PropertyTag[FieldMeta[RequireImplicit, R, T]], PropertyTag[T], T, String, DefaultValue[T], FieldMeta[RequireImplicit, R, T]] = {
       def value(rep: FieldMeta[RequireImplicit, R, T]): Option[T]               = rep.decoderMeta.map(_ => throw new Exception("Require 列必须不能提供字面量或 Decoder"))
       def takeName(rep: FieldMeta[RequireImplicit, R, T], name: String): String = rep.fieldNameMeta.getOrElse(name)
